@@ -40,7 +40,107 @@ http://localhost:9000/config
 15:50:32.525 [work-3-2] INFO  io.netstrap.test.filter.LogFilter - GET-/hello
 15:50:32.526 [work-3-2] INFO  io.netstrap.test.filter.LogFilter - hello netstrap
 15:50:38.316 [work-3-3] INFO  io.netstrap.test.filter.LogFilter - GET-/config
-15:50:38.413 [work-3-3] INFO  io.netstrap.test.filter.LogFilter - {"accessKey":"1000000000","accessValue":"20000000000","indexes":100,"requestUri":"http://www.forexample.com"}
+15:50:38.413 [work-3-3] INFO  io.netstrap.test.filter.LogFilter - 
+
+{"accessKey":"1000000000","accessValue":"20000000000","indexes":100,"requestUri":"http://www.forexample.com"}
+
+```
+
+#### 核心示例
+
+1.Controller示例代码
+
+```
+/**
+ * @Description 控制器示例
+ * @author minghu.zhang
+ * @date 2018/11/29 11:01
+ */
+@RestController
+@Log4j2
+public class HelloController {
+
+    private final WechatConfig config;
+
+    @Autowired
+    public HelloController(WechatConfig config) {
+        this.config = config;
+    }
+
+    /**
+     * 打印字符串
+     */
+    @GetMapping("/hello")
+    public void hello(HttpRequest request, HttpResponse response) {
+        response.setBody(HttpBody.wrap("hello netstrap".getBytes()));
+    }
+
+    /**
+     * 打印字符串
+     */
+    @PostMapping("/hi")
+    public String hi(HttpRequest request, HttpResponse response) {
+        return "hi netstrap";
+    }
+
+    /**
+     * 打印配置对象
+     */
+    @GetMapping("/config")
+    public WechatConfig config(HttpRequest request, HttpResponse response) {
+        return config;
+    }
+
+}
+```
+
+2.Filter示例代码
+```
+/**
+ * @Description 打印Log
+ * @author minghu.zhang
+ * @date 2018/11/29 14:05
+ */
+@Filterable
+@Log4j2
+public class LogFilter implements WebFilter {
+
+    @Override
+    public boolean doBefore(HttpRequest request, HttpResponse response) throws Exception {
+        log.info(request.getMethod().name()+"-"+request.getUri());
+        return true;
+    }
+
+    @Override
+    public boolean doAfter(HttpRequest request, HttpResponse response) throws Exception {
+        log.info(new String(response.getBody().getBytes()));
+        response.addHeader("Content-Type","application/json");
+        return true;
+    }
+
+}
+
+```
+
+3.Config示例代码
+
+```
+/**
+ * @Description 微信配置
+ * @author minghu.zhang
+ * @date 2018/11/29 14:07
+ */
+@Configurable
+@Prefix("wechat")
+@Data
+public class WechatConfig {
+
+    private String accessKey;
+    private String accessValue;
+    private int    indexes;
+    private String requestUri;
+
+}
 
 ```
 
