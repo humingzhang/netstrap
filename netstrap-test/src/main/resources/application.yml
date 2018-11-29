@@ -1,0 +1,19 @@
+server:
+  ip: 0.0.0.0
+  port: 9000
+  name: test
+  abc: 2
+
+spring:
+  data:
+    version: 100
+
+wechat:
+  accessKey: 1000000000
+  accessValue: 20000000000
+  indexes: 100
+  requestUri: http://www.forexample.com
+
+#netty:
+#  boss: 2
+#  work: 4
