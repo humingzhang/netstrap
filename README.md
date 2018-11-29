@@ -48,14 +48,23 @@ http://localhost:9000/config
 
 #### 核心示例
 
-1.Controller示例代码
+1.Server启动示例
 
 ```
-/**
- * @Description 控制器示例
- * @author minghu.zhang
- * @date 2018/11/29 11:01
- */
+@NetstrapApplication
+@Log4j2
+public class DemoApplication {
+
+    public static void main(String[] args) {
+        NetstrapBootApplication.run(DemoApplication.class, args);
+    }
+
+}
+```
+
+2.Controller示例代码
+
+```
 @RestController
 @Log4j2
 public class HelloController {
@@ -75,32 +84,11 @@ public class HelloController {
         response.setBody(HttpBody.wrap("hello netstrap".getBytes()));
     }
 
-    /**
-     * 打印字符串
-     */
-    @PostMapping("/hi")
-    public String hi(HttpRequest request, HttpResponse response) {
-        return "hi netstrap";
-    }
-
-    /**
-     * 打印配置对象
-     */
-    @GetMapping("/config")
-    public WechatConfig config(HttpRequest request, HttpResponse response) {
-        return config;
-    }
-
 }
 ```
 
-2.Filter示例代码
+3.Filter示例代码
 ```
-/**
- * @Description 打印Log
- * @author minghu.zhang
- * @date 2018/11/29 14:05
- */
 @Filterable
 @Log4j2
 public class LogFilter implements WebFilter {
@@ -122,14 +110,9 @@ public class LogFilter implements WebFilter {
 
 ```
 
-3.Config示例代码
+4.Config示例代码
 
 ```
-/**
- * @Description 微信配置
- * @author minghu.zhang
- * @date 2018/11/29 14:07
- */
 @Configurable
 @Prefix("wechat")
 @Data
@@ -156,6 +139,10 @@ Avg(ms):51
 Sent(kb/s):3120kb/s
 Received(kb/s):600kb/s
 ```
+
+#### 打包部署
+
+Test默认使用了SpringBoot打包插件，当然也可以使用assembly进行打包。引入打包插件之后，mvn package 就可以打成可执行的jar！
 
 #### 参与贡献
 
