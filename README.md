@@ -144,6 +144,19 @@ public class WechatConfig {
 
 ```
 
+#### 压力测试（Jmeter4）
+
+```
+Qps(q/s):17765.931202223765
+Error:0%
+Samples:1022607
+Min(ms):0
+Max(ms):9263
+Avg(ms):51
+Sent(kb/s):3120kb/s
+Received(kb/s):600kb/s
+```
+
 #### 参与贡献
 
 1. Fork 本项目
