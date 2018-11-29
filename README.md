@@ -1,4 +1,4 @@
-# netstrap
+# Netstrap
 
 #### 项目介绍
 简单实现 SpringBoot（李鬼） + Netty 的web框架, 学习Netty和SpringBoot 的第一选择，当然，若你想用于生产环境，请联系我。。 
