@@ -30,9 +30,9 @@
 
 #### 调用方法
 
-http://localhost:9000/hi
-http://localhost:9000/hello
-http://localhost:9000/config
+http://localhost:9000/hi          <br/>
+http://localhost:9000/hello       <br/>
+http://localhost:9000/config      <br/>
 
 ```
 15:50:23.709 [work-3-1] INFO  io.netstrap.test.filter.LogFilter - GET-/hi
