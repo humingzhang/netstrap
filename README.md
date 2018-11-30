@@ -30,19 +30,11 @@
 
 #### 调用方法
 
-http://localhost:9000/hi          <br/>
 http://localhost:9000/hello       <br/>
-http://localhost:9000/config      <br/>
 
 ```
-15:50:23.709 [work-3-1] INFO  io.netstrap.test.filter.LogFilter - GET-/hi
-15:50:23.709 [work-3-1] INFO  io.netstrap.test.filter.LogFilter - Method Not Allowed
 15:50:32.525 [work-3-2] INFO  io.netstrap.test.filter.LogFilter - GET-/hello
 15:50:32.526 [work-3-2] INFO  io.netstrap.test.filter.LogFilter - hello netstrap
-15:50:38.316 [work-3-3] INFO  io.netstrap.test.filter.LogFilter - GET-/config
-15:50:38.413 [work-3-3] INFO  io.netstrap.test.filter.LogFilter - 
-
-{"accessKey":"1000000000","accessValue":"20000000000","indexes":100,"requestUri":"http://www.forexample.com"}
 
 ```
 
