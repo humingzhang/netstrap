@@ -19,7 +19,7 @@ public class FileResourceReader implements ConfigHandler.ResourceReader {
     public InputStream load(String path) {
         try {
             return new FileInputStream(path);
-        } finally {
+        } catch (Exception e) {
             throw new RuntimeException("the file \""+path+"\" isn't exits.");
         }
     }
