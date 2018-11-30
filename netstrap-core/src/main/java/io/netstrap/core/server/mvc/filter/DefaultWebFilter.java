@@ -6,6 +6,9 @@ import io.netstrap.core.server.http.datagram.HttpResponse;
 import io.netstrap.core.server.mvc.Filterable;
 import io.netstrap.core.server.mvc.WebFilter;
 import org.javatuples.Pair;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -32,6 +35,16 @@ public class DefaultWebFilter implements WebFilter {
     private ClassFactory factory;
 
     /**
+     * 对象工厂
+     */
+    private final ApplicationContext context;
+
+    @Autowired
+    public DefaultWebFilter(ConfigurableApplicationContext context) {
+        this.context = context;
+    }
+
+    /**
      * 初始化过滤器
      */
     @PostConstruct
@@ -47,7 +60,7 @@ public class DefaultWebFilter implements WebFilter {
         List<Pair<Integer, Class<?>>> ordered = getOrderedList();
 
         for (Pair<Integer, Class<?>> pair : ordered) {
-            WebFilter filter = (WebFilter) pair.getValue1().newInstance();
+            WebFilter filter = (WebFilter) context.getBean(pair.getValue1());
             filters.add(filter);
         }
     }
