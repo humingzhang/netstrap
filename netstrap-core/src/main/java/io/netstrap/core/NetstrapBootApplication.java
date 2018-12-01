@@ -255,7 +255,7 @@ public class NetstrapBootApplication {
      */
     private NetstrapSpringRunListeners getRunListener() {
 
-        NetstrapSpringRunListeners netstrapSpringRunListeners = null;
+        NetstrapSpringRunListeners netstrapSpringRunListeners;
         try {
             List<Class<?>> listenerClasses = factory.getClassByInterface(NetstrapSpringRunListener.class);
 
