@@ -14,6 +14,7 @@ import io.netstrap.core.server.mvc.router.RouterFactory;
 import io.netstrap.core.server.netty.NettyServer;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -247,7 +248,8 @@ public class NetstrapBootApplication {
      * 创建Spring容器
      */
     private ConfigurableApplicationContext createApplicationContext(String config,String[] packages) {
-        return new ClassPathXmlApplicationContext(new String[]{config},new AnnotationConfigApplicationContext(packages));
+        ApplicationContext parent = new AnnotationConfigApplicationContext(packages);
+        return new ClassPathXmlApplicationContext(new String[]{config},parent);
     }
 
     /**
