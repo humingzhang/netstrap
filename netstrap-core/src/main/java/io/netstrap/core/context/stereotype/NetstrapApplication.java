@@ -15,7 +15,11 @@ public @interface NetstrapApplication {
 
     /**
      * 待扫描的包名列表
-     * @return
      */
     String[] packages() default {};
+
+    /**
+     * 默认spring配置文件
+     */
+    String[] configLocations() default {"classpath*:application.xml"};
 }

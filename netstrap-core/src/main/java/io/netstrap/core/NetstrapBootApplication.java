@@ -91,8 +91,7 @@ public class NetstrapBootApplication {
             throw new RuntimeException("Please check your Annotation \"@NetstrapApplication\"  And add it!");
         }
 
-        Map<String,String> bootArgs = parseBootArgs(args);
-        return new NetstrapBootApplication(clz).run(bootArgs);
+        return new NetstrapBootApplication(clz).run(clz.getAnnotation(NetstrapApplication.class).configLocations());
     }
 
     /**
@@ -148,7 +147,7 @@ public class NetstrapBootApplication {
      *
      * @return
      */
-    private ConfigurableApplicationContext run(Map<String,String> bootArgs) {
+    private ConfigurableApplicationContext run(String[] configLocations) {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         NetstrapSpringRunListeners listeners = getRunListener();
@@ -159,10 +158,9 @@ public class NetstrapBootApplication {
         listeners.starting();
         try {
             //构建Xml配置文件和注解配置
-            String config = bootArgs.getOrDefault("config","classpath*:application.xml");
             String[] packages = basePackages.toArray(new String[]{});
             //创建上下文
-            context = createApplicationContext(config,packages);
+            context = createApplicationContext(configLocations,packages);
             prepareContext(context, new StandardEnvironment());
             //Spring容器初始化完毕（包括引入的Spring组件）之后调用
             listeners.contextPrepare(context);
@@ -247,9 +245,9 @@ public class NetstrapBootApplication {
     /**
      * 创建Spring容器
      */
-    private ConfigurableApplicationContext createApplicationContext(String config,String[] packages) {
+    private ConfigurableApplicationContext createApplicationContext(String[] configLocations,String[] packages) {
         ApplicationContext parent = new AnnotationConfigApplicationContext(packages);
-        return new ClassPathXmlApplicationContext(new String[]{config},parent);
+        return new ClassPathXmlApplicationContext(configLocations,parent);
     }
 
     /**
