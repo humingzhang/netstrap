@@ -21,5 +21,5 @@ public @interface NetstrapApplication {
     /**
      * 默认spring配置文件
      */
-    String[] configLocations() default {"classpath*:application.xml"};
+    String[] configLocations() default {"classpath*:config.xml"};
 }
