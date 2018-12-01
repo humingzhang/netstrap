@@ -1,6 +1,6 @@
 package io.netstrap.core.server;
 
-import io.netstrap.core.server.constants.ProtocolType;
+import io.netstrap.core.server.enums.ProtocolType;
 import io.netstrap.core.server.stats.Stats;
 
 /**

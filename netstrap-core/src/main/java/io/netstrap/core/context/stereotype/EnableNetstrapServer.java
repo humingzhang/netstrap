@@ -1,7 +1,7 @@
 package io.netstrap.core.context.stereotype;
 
-import io.netstrap.core.server.constants.ProtocolType;
-import io.netstrap.core.server.constants.ServerType;
+import io.netstrap.core.server.enums.ProtocolType;
+import io.netstrap.core.server.enums.ServerType;
 
 import java.lang.annotation.*;
 

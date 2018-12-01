@@ -1,6 +1,6 @@
 package io.netstrap.core.server.mina;
 
-import io.netstrap.core.server.constants.ProtocolType;
+import io.netstrap.core.server.enums.ProtocolType;
 import io.netstrap.core.server.Server;
 import io.netstrap.core.server.stats.Stats;
 import io.netstrap.core.server.stereotype.NetstrapServer;

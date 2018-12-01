@@ -1,4 +1,4 @@
-package io.netstrap.core.server.constants;
+package io.netstrap.core.server.enums;
 
 /**
  * 协议类型

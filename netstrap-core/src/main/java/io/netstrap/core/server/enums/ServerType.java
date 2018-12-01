@@ -1,4 +1,4 @@
-package io.netstrap.core.server.constants;
+package io.netstrap.core.server.enums;
 
 /**
  * 网络服务框架
