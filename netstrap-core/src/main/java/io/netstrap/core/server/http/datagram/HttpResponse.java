@@ -1,6 +1,8 @@
 package io.netstrap.core.server.http.datagram;
 
+import io.netstrap.core.server.http.Keepalive;
 import io.netstrap.core.server.http.wrapper.HttpBody;
+import io.netty.handler.codec.http.HttpVersion;
 import lombok.Data;
 
 import java.util.HashMap;
@@ -44,9 +46,8 @@ public abstract class HttpResponse {
      *
      * @return this
      */
-    public HttpResponse addHeader(String key, String value) {
-        this.header.put(key, value);
-        return this;
+    public void addHeader(String key, Object value) {
+        this.header.put(key, value.toString());
     }
 
     /**
@@ -55,6 +56,7 @@ public abstract class HttpResponse {
      * @return this
      */
     public HttpResponse setBody(HttpBody body) {
+        addHeader("Content-Length",body.getBytes().length);
         this.body = body;
         return this;
     }
@@ -70,5 +72,4 @@ public abstract class HttpResponse {
     public boolean isWritable() {
         return writable;
     }
-
 }

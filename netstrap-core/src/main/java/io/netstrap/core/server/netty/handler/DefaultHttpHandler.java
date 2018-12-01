@@ -9,6 +9,7 @@ import io.netty.channel.*;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
+import io.netty.handler.codec.http.HttpVersion;
 import io.netty.util.concurrent.EventExecutor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,8 +61,8 @@ public class DefaultHttpHandler extends ChannelInboundHandlerAdapter {
                 .parseParam()
                 .parseBody();
         //创建响应对象
-        HttpResponse response = new NettyHttpResponse(context.channel());
-        //执行业务解析
+        HttpResponse response = new NettyHttpResponse(context.channel())
+                                .keepAlive(req.protocolVersion(),request.getHeader());
 
         context.channel().eventLoop().execute(()->{
             try {

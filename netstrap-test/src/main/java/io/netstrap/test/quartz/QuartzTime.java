@@ -17,6 +17,6 @@ public class QuartzTime {
 	 */
 	@Scheduled(cron="0/3 * * * * ?")
 	public void loopSayHello() {
-		System.out.println("hello ... world");
+		//TODO
 	}
 }

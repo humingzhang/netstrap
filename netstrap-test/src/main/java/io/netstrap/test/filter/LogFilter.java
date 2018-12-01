@@ -17,13 +17,13 @@ import sun.rmi.runtime.Log;
 public class LogFilter implements WebFilter {
 
     @Override
-    public boolean doBefore(HttpRequest request, HttpResponse response) throws Exception {
+    public boolean doBefore(HttpRequest request, HttpResponse response) {
         log.info(request.getMethod().name()+"-"+request.getUri());
         return true;
     }
 
     @Override
-    public boolean doAfter(HttpRequest request, HttpResponse response) throws Exception {
+    public boolean doAfter(HttpRequest request, HttpResponse response) {
         log.info(new String(response.getBody().getBytes()));
         response.addHeader("Content-Type","application/json");
         return true;

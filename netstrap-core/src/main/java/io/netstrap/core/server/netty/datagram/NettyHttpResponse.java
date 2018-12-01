@@ -1,5 +1,6 @@
 package io.netstrap.core.server.netty.datagram;
 
+import io.netstrap.core.server.http.Keepalive;
 import io.netstrap.core.server.http.datagram.HttpResponse;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -9,6 +10,7 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.handler.codec.http.*;
 import lombok.Builder;
 
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -39,7 +41,7 @@ public class NettyHttpResponse extends HttpResponse {
     public void write() {
         if(isWritable()) {
             createResponse();
-            addHeader();
+            addHeaders();
             writeFlush();
         } else {
             throw new RuntimeException("Response data can not be repeated output. ");
@@ -62,10 +64,11 @@ public class NettyHttpResponse extends HttpResponse {
     /**
      * 添加头信息
      */
-    private void addHeader() {
+    private void addHeaders() {
         for (String key : getHeader().keySet()) {
             response.headers().add(key, getHeader().get(key));
         }
+        addHeader("Content-Length",getBody().getBytes());
     }
 
     /**
@@ -79,6 +82,27 @@ public class NettyHttpResponse extends HttpResponse {
         }
 
         setWritable(false);
+    }
+
+
+    /**
+     * 设置keep-alive
+     */
+    public HttpResponse keepAlive(HttpVersion httpVersion, Map<String, String> header) {
+
+        String connection = header.getOrDefault("Connection", Keepalive.CLOSE_ALIVE).toLowerCase();
+        //设置keep-alive
+        if((httpVersion.equals(HttpVersion.HTTP_1_1) && !connection.equals(Keepalive.CLOSE_ALIVE))) {
+            setKeepAlive(true);
+        } else if(httpVersion.equals(HttpVersion.HTTP_1_0) && connection.equals(Keepalive.KEEP_ALIVE)) {
+            setKeepAlive(true);
+        }
+
+        if(isKeepAlive()) {
+            addHeader("Connection",Keepalive.KEEP_ALIVE);
+        }
+
+        return this;
     }
 
 }
