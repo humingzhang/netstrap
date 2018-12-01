@@ -26,5 +26,5 @@ public @interface Configurable {
      * 配置文件名
      * @return String
      */
-    String   path()    default "/application.yml";
+    String   path()    default "/config.yml";
 }
