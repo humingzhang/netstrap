@@ -1,7 +1,8 @@
-package io.netstrap.core.context.enums;
+package io.netstrap.core.server.constants;
 
 /**
  * 协议类型
+ *
  * @author minghu.zhang
  * @date 2018/11/07
  */
@@ -15,7 +16,7 @@ public enum ProtocolType {
      */
     SOCKET,
     /**
-     * websocket协议
+     * web_socket协议
      */
-    WEBSOCKET
+    WEB_SOCKET
 }

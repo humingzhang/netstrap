@@ -4,13 +4,12 @@ import io.netstrap.common.NetstrapConstant;
 import io.netstrap.common.factory.ClassFactory;
 import io.netstrap.core.context.NetstrapSpringRunListener;
 import io.netstrap.core.context.NetstrapSpringRunListeners;
-import io.netstrap.core.context.enums.ProtocolType;
-import io.netstrap.core.context.enums.ServerType;
+import io.netstrap.core.server.constants.ProtocolType;
+import io.netstrap.core.server.constants.ServerType;
 import io.netstrap.core.context.stereotype.EnableNetstrapServer;
 import io.netstrap.core.context.stereotype.NetstrapApplication;
 import io.netstrap.core.server.Server;
 import io.netstrap.core.server.mina.MinaServer;
-import io.netstrap.core.server.mvc.filter.DefaultWebFilter;
 import io.netstrap.core.server.mvc.router.RouterFactory;
 import io.netstrap.core.server.netty.NettyServer;
 import lombok.Data;
@@ -19,6 +18,7 @@ import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -28,8 +28,7 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StopWatch;
 
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Netstrap启动类
@@ -48,7 +47,7 @@ public class NetstrapBootApplication {
     /**
      * 启动主类
      */
-    private Class<?> mainClass;
+    private Class<?> clz;
     /**
      * 网络服务框架
      */
@@ -74,31 +73,47 @@ public class NetstrapBootApplication {
     /**
      * 构建启动类
      */
-    private NetstrapBootApplication(Class<?> mainClass) {
-        this.mainClass = mainClass;
+    private NetstrapBootApplication(Class<?> clz) {
+        this.clz = clz;
         setBaseScanPackages();
         //获取类加载器
         this.factory = ClassFactory.getInstance(basePackages.toArray(new String[]{}));
         //设置容器初始化类和监听类
-        setInitializersAndListeners();
+        setInitializerAndListeners();
     }
 
     /**
      * 启动Netstrap服务
      */
-    public static ConfigurableApplicationContext run(Class<?> mainClass, String[] args) {
-
-        if (!mainClass.isAnnotationPresent(NetstrapApplication.class)) {
+    public static ConfigurableApplicationContext run(Class<?> clz, String[] args) {
+        if (!clz.isAnnotationPresent(NetstrapApplication.class)) {
             throw new RuntimeException("Please check your Annotation \"@NetstrapApplication\"  And add it!");
         }
 
-        return new NetstrapBootApplication(mainClass).run(args);
+        Map<String,String> bootArgs = parseBootArgs(args);
+        return new NetstrapBootApplication(clz).run(bootArgs);
     }
+
+    /**
+     * 解析启动参数
+     */
+    private static Map<String,String> parseBootArgs(String[] args) {
+        Map<String,String> bootArgs = new HashMap<>(8);
+        for(String key:args) {
+            String[] nameValues = key.split("=");
+            if(nameValues.length != 2) {
+                throw new RuntimeException("Incorrect parameter attribute values .");
+            }
+            bootArgs.put(nameValues[0].substring(2),nameValues[1]);
+        }
+        return bootArgs;
+    }
+
 
     /**
      * 设置容器初始化类和监听类
      */
-    public void setInitializersAndListeners() {
+    private void setInitializerAndListeners() {
         try {
             List<Class<?>> initializerClassList = factory.getClassByInterface(ApplicationContextInitializer.class);
             for (Class<?> clz : initializerClassList) {
@@ -120,14 +135,10 @@ public class NetstrapBootApplication {
      */
     private void setBaseScanPackages() {
         NetstrapApplication mainClassAnnotation =
-                mainClass.getAnnotation(NetstrapApplication.class);
-
-        for (String pkg : mainClassAnnotation.packages()) {
-            basePackages.add(pkg);
-        }
-
+                clz.getAnnotation(NetstrapApplication.class);
+        basePackages.addAll(Arrays.asList(mainClassAnnotation.packages()));
         basePackages.add(NetstrapConstant.DEFAULT_SCAN);
-        basePackages.add(mainClass.getPackage().getName());
+        basePackages.add(clz.getPackage().getName());
     }
 
 
@@ -136,7 +147,7 @@ public class NetstrapBootApplication {
      *
      * @return
      */
-    private ConfigurableApplicationContext run(String[] args) {
+    private ConfigurableApplicationContext run(Map<String,String> bootArgs) {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         NetstrapSpringRunListeners listeners = getRunListener();
@@ -146,7 +157,11 @@ public class NetstrapBootApplication {
          */
         listeners.starting();
         try {
-            context = createApplicationContext(basePackages.toArray(new String[]{}));
+            //构建Xml配置文件和注解配置
+            String config = bootArgs.getOrDefault("config","classpath*:application.xml");
+            String[] packages = basePackages.toArray(new String[]{});
+            //创建上下文
+            context = createApplicationContext(config,packages);
             prepareContext(context, new StandardEnvironment());
             //Spring容器初始化完毕（包括引入的Spring组件）之后调用
             listeners.contextPrepare(context);
@@ -181,8 +196,8 @@ public class NetstrapBootApplication {
         ServerType serverType;
         ProtocolType protocol;
 
-        if (mainClass.isAnnotationPresent(EnableNetstrapServer.class)) {
-            enableServer = mainClass.getAnnotation(EnableNetstrapServer.class);
+        if (clz.isAnnotationPresent(EnableNetstrapServer.class)) {
+            enableServer = clz.getAnnotation(EnableNetstrapServer.class);
             serverType = enableServer.serverType();
             protocol = enableServer.protocol();
         } else {
@@ -231,10 +246,8 @@ public class NetstrapBootApplication {
     /**
      * 创建Spring容器
      */
-    protected ConfigurableApplicationContext createApplicationContext(String... packages) {
-        AnnotationConfigApplicationContext context =
-                new AnnotationConfigApplicationContext(packages);
-        return context;
+    private ConfigurableApplicationContext createApplicationContext(String config,String[] packages) {
+        return new ClassPathXmlApplicationContext(new String[]{config},new AnnotationConfigApplicationContext(packages));
     }
 
     /**

@@ -1,7 +1,7 @@
 package io.netstrap.core.server.netty;
 
 import io.netstrap.common.NetstrapConstant;
-import io.netstrap.core.context.enums.ProtocolType;
+import io.netstrap.core.server.constants.ProtocolType;
 import io.netstrap.core.server.Server;
 import io.netstrap.core.server.netty.initializer.HttpChannelInitializer;
 import io.netstrap.core.server.stats.Stats;
@@ -11,7 +11,6 @@ import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
-import io.netty.channel.epoll.EpollChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.ResourceLeakDetector;
@@ -96,7 +95,7 @@ public class NettyServer implements Server {
             bootstrap.childHandler(httpChannelInitializer);
         } else if (protocol.equals(ProtocolType.SOCKET)) {
             //TODO
-        } else if (protocol.equals(ProtocolType.WEBSOCKET)) {
+        } else if (protocol.equals(ProtocolType.WEB_SOCKET)) {
             //TODO
         }
     }
