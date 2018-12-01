@@ -119,6 +119,10 @@ public class WechatConfig {
 
 ```
 
+#### 打包部署
+
+Test默认使用了SpringBoot打包插件，当然也可以使用assembly进行打包。引入打包插件之后，mvn package 就可以打成可执行的jar！
+
 #### 压力测试
 
 环境准备
@@ -151,7 +155,3 @@ Running 1m test @ http://127.0.0.1:9000
 Requests/sec:  48436.05
 Transfer/sec:      3.97MB
 ```
-
-#### 打包部署
-
-Test默认使用了SpringBoot打包插件，当然也可以使用assembly进行打包。引入打包插件之后，mvn package 就可以打成可执行的jar！
