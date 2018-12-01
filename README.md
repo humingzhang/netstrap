@@ -1,7 +1,7 @@
 # Netstrap
 
 #### 项目介绍
-简单实现 SpringBoot（李鬼） + Netty 的web框架, 学习Netty和SpringBoot 的第一选择，当然，若你想用于生产环境，请联系我。。 
+基于Spring Boot 和 Netty 实现的WEB开发框架，使用XML配置文件整合Spring模块，去除Starter依赖，完整实现了一套生产可用的WEB容器。 
 
 
 #### 使用说明
@@ -119,26 +119,39 @@ public class WechatConfig {
 
 ```
 
-#### 压力测试（Jmeter4）
+#### 压力测试
 
+环境准备
 ```
-Qps(q/s):17765.931202223765
+java -jar -server -d64 ./netstrap-test-0.1.jar >> /dev/null &
+```
+
+1.Jmeter4
+```
+Qps(q/s):43344.2
 Error:0%
-Samples:1022607
+Samples:951623
 Min(ms):0
-Max(ms):9263
-Avg(ms):51
-Sent(kb/s):3120kb/s
-Received(kb/s):600kb/s
+Max(ms):275
+Avg(ms):9
+Sent(kb/s):7617kb/s
+Received(kb/s):4636kb/s
+```
+2.WRK
+```
+wrk -c 100 -t 100 -d 60s http://127.0.0.1:9000
+Running 1m test @ http://127.0.0.1:9000
+  100 threads and 100 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     2.11ms    2.52ms 205.33ms   95.37%
+    Req/Sec   488.09     58.11     1.63k    77.26%
+  2908384 requests in 1.00m, 238.53MB read
+  Socket errors: connect 0, read 2908335, write 0, timeout 0
+  Non-2xx or 3xx responses: 2908384
+Requests/sec:  48436.05
+Transfer/sec:      3.97MB
 ```
 
 #### 打包部署
 
 Test默认使用了SpringBoot打包插件，当然也可以使用assembly进行打包。引入打包插件之后，mvn package 就可以打成可执行的jar！
-
-#### 参与贡献
-
-1. Fork 本项目
-2. 新建 Feat_xxx 分支
-3. 提交代码
-4. 新建 Pull Request
