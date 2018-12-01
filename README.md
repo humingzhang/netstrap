@@ -143,15 +143,14 @@ Received(kb/s):4636kb/s
 ```
 2.WRK
 ```
-wrk -c 100 -t 100 -d 60s http://127.0.0.1:9000
-Running 1m test @ http://127.0.0.1:9000
+[root@xtsj ~]# wrk -c 100 -t 100 -d 60s -T 3s http://127.0.0.1:9000/hello
+Running 1m test @ http://127.0.0.1:9000/hello
   100 threads and 100 connections
   Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency     2.11ms    2.52ms 205.33ms   95.37%
-    Req/Sec   488.09     58.11     1.63k    77.26%
-  2908384 requests in 1.00m, 238.53MB read
-  Socket errors: connect 0, read 2908335, write 0, timeout 0
-  Non-2xx or 3xx responses: 2908384
-Requests/sec:  48436.05
-Transfer/sec:      3.97MB
+    Latency     2.02ms    1.21ms  24.36ms   75.37%
+    Req/Sec   500.16     56.61     1.18k    75.39%
+  2979430 requests in 1.00m, 241.52MB read
+  Socket errors: connect 0, read 2979374, write 0, timeout 0
+Requests/sec:  49625.03
+Transfer/sec:      4.02MB
 ```
