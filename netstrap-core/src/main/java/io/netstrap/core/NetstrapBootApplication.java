@@ -95,22 +95,6 @@ public class NetstrapBootApplication {
     }
 
     /**
-     * 解析启动参数
-     */
-    private static Map<String,String> parseBootArgs(String[] args) {
-        Map<String,String> bootArgs = new HashMap<>(8);
-        for(String key:args) {
-            String[] nameValues = key.split("=");
-            if(nameValues.length != 2) {
-                throw new RuntimeException("Incorrect parameter attribute values .");
-            }
-            bootArgs.put(nameValues[0].substring(2),nameValues[1]);
-        }
-        return bootArgs;
-    }
-
-
-    /**
      * 设置容器初始化类和监听类
      */
     private void setInitializerAndListeners() {
