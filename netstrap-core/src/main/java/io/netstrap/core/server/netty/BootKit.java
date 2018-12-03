@@ -40,7 +40,7 @@ class BootKit {
      * @param boss 连接线程数
      * @param work 工作线程数
      */
-    public BootKit createServerBootstrap(int boss, int work) {
+    void createServerBootstrap(int boss, int work) {
         bootstrap = new ServerBootstrap();
         if(epollIsAvailable()) {
             createEpollGroup(boss,work);
@@ -53,7 +53,6 @@ class BootKit {
                 .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
                 .childOption(ChannelOption.SO_KEEPALIVE, true);
 
-        return this;
     }
 
     /**
