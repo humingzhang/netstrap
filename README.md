@@ -150,7 +150,7 @@ Running 1m test @ http://127.0.0.1:9000/hello
     Latency     2.02ms    1.21ms  24.36ms   75.37%
     Req/Sec   500.16     56.61     1.18k    75.39%
   2979430 requests in 1.00m, 241.52MB read
-  Socket errors: connect 0, read 2979374, write 0, timeout 0
+  Socket errors: connect 0, read 2979374 此处结果?, write 0, timeout 0
 Requests/sec:  49625.03
 Transfer/sec:      4.02MB
 ```
