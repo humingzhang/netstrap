@@ -11,6 +11,8 @@ import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
+import io.netty.channel.epoll.EpollEventLoopGroup;
+import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.ResourceLeakDetector;
@@ -29,10 +31,12 @@ import org.springframework.util.StringUtils;
 public class NettyServer implements Server {
 
     /**
+     * bootstrap工具类
+     */
+    private BootKit bootKit = BootKit.of();
+    /**
      * 线程组
      */
-    private EventLoopGroup    bossGroup;
-    private EventLoopGroup    workGroup;
     private ChannelFuture     sync;
     private final NettyConfig nettyServerConfig;
     /**
@@ -54,23 +58,15 @@ public class NettyServer implements Server {
     public void start(ProtocolType protocol) throws InterruptedException {
         ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.DISABLED);
 
-        status.setCode(Stats.Code.START);
-        /**
-         * 创建NIO线程组
-         */
-        bossGroup = new NioEventLoopGroup(nettyServerConfig.getBoss(),new DefaultThreadFactory("boss"));
-        workGroup = new NioEventLoopGroup(nettyServerConfig.getWork(),new DefaultThreadFactory("work"));
+        int boss = nettyServerConfig.getBoss();
+        int work = nettyServerConfig.getWork();
 
-        ServerBootstrap bootstrap = new ServerBootstrap();
-        bootstrap.group(bossGroup, workGroup)
-                .channel(NioServerSocketChannel.class)
-                .option(ChannelOption.TCP_NODELAY, true)
-                .option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
-                .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
-                .childOption(ChannelOption.SO_KEEPALIVE, true);
+        //创建线程组
+        bootKit.createServerBootstrap(boss, work);
+        ServerBootstrap bootstrap = bootKit.getBootstrap();
 
         // 绑定处理器
-        applyChildHandler(bootstrap,protocol);
+        applyChildHandler(bootstrap, protocol);
 
         // 绑定端口
         int port  = nettyServerConfig.getPort();
@@ -82,7 +78,20 @@ public class NettyServer implements Server {
             sync = bootstrap.bind(ip,port).sync();
         }
 
+        status.setCode(Stats.Code.START);
         log.info("The server bind IP:"+ip+" , PORT:" + port);
+    }
+
+    /**
+     * 是否支持epoll
+     */
+    private boolean epollIsAvailable() {
+        try {
+            Object obj = Class.forName("io.netty.channel.epoll.Epoll").getMethod("isAvailable").invoke(null);
+            return null != obj && Boolean.valueOf(obj.toString()) && System.getProperty("os.name").toLowerCase().contains("linux");
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     /**
@@ -104,8 +113,8 @@ public class NettyServer implements Server {
     public void stop() {
         log.info("The server has stopped.");
         status.setCode(Stats.Code.STOP);
-        bossGroup.shutdownGracefully();
-        workGroup.shutdownGracefully();
+        bootKit.getBossGroup().shutdownGracefully();
+        bootKit.getWorkGroup().shutdownGracefully();
     }
 
     @Override
