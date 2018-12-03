@@ -83,21 +83,7 @@ public class NettyServer implements Server {
     }
 
     /**
-     * 是否支持epoll
-     */
-    private boolean epollIsAvailable() {
-        try {
-            Object obj = Class.forName("io.netty.channel.epoll.Epoll").getMethod("isAvailable").invoke(null);
-            return null != obj && Boolean.valueOf(obj.toString()) && System.getProperty("os.name").toLowerCase().contains("linux");
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    /**
      * 设置网络IO处理，默认实现HTTP
-     * @param bootstrap
-     * @param protocol
      */
     private void applyChildHandler(ServerBootstrap bootstrap, ProtocolType protocol) {
         if(protocol.equals(ProtocolType.HTTP)) {
