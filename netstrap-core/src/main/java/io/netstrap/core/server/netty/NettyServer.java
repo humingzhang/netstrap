@@ -38,6 +38,9 @@ public class NettyServer implements Server {
      * 线程组
      */
     private ChannelFuture     sync;
+    /**
+     * netty配置
+     */
     private final NettyConfig nettyServerConfig;
     /**
      * 服务状态
