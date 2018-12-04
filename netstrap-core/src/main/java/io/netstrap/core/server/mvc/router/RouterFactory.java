@@ -129,8 +129,9 @@ public class RouterFactory {
     private void buildArguments(Method method) {
         DefaultParameterNameDiscoverer discover = new DefaultParameterNameDiscoverer();
         String[] parameterNames = discover.getParameterNames(method);
+        //TODO 构建参数对象
         for(String name:parameterNames) {
-
+            //RequestParam\RequestForm\RequestHeader\RequestBody\RequestAttribute\RequestContext(ip,uri)
         }
     }
 

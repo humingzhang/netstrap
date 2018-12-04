@@ -25,6 +25,7 @@ public abstract class HttpRequest {
      * 请求方法
      */
     private HttpMethod method;
+
     /**
      * 请求URI
      */
