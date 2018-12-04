@@ -8,6 +8,7 @@ import io.netstrap.core.server.stats.Stats;
 import io.netstrap.core.server.stereotype.NetstrapServer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
@@ -35,7 +36,7 @@ public class NettyServer implements Server {
      */
     private BootKit bootKit = BootKit.of();
     /**
-     * 线程组
+     * The result of an asynchronous {@link Channel} I/O operation.
      */
     private ChannelFuture     sync;
     /**
