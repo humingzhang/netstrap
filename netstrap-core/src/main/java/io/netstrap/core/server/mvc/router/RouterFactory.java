@@ -6,6 +6,7 @@ import io.netstrap.core.server.mvc.controller.DefaultErrorController;
 import io.netstrap.core.server.mvc.stereotype.*;
 import lombok.Data;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Method;
@@ -123,7 +124,18 @@ public class RouterFactory {
     }
 
     /**
-     * 构建路由对象
+     * 构建参数对象
+     */
+    private void buildArguments(Method method) {
+        DefaultParameterNameDiscoverer discover = new DefaultParameterNameDiscoverer();
+        String[] parameterNames = discover.getParameterNames(method);
+        for(String name:parameterNames) {
+
+        }
+    }
+
+    /**
+     * 构建路由对象、//TODO 实现组合注解
      */
     private void buildMethod(Object invoker, Method method, String groupUri, String slash) {
         Router router = new Router();

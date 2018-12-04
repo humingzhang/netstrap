@@ -20,27 +20,31 @@ public abstract class HttpRequest {
      * 远程地址
      */
     private String ip;
+
     /**
      * 请求方法
      */
     private HttpMethod method;
-
     /**
      * 请求URI
      */
     private String uri;
+
     /**
      * 请求头
      */
     private Map<String, String> header;
+
     /**
      * 请求链接参数
      */
     private Map<String, String> param;
+
     /**
      * 请求体
      */
     private HttpBody body;
+
     /**
      * 表单对象
      */
@@ -97,42 +101,49 @@ public abstract class HttpRequest {
 
     /**
      * 解析IP
+     *
      * @return this;
      */
     public abstract HttpRequest parseIp();
 
     /**
      * 解析URI
+     *
      * @return this;
      */
     public abstract HttpRequest parseUri();
 
     /**
      * 解析Header
+     *
      * @return this;
      */
     public abstract HttpRequest parseHeader();
 
     /**
      * 解析Body
+     *
      * @return this;
      */
     public abstract HttpRequest parseBody();
 
     /**
      * 解析请求参数
+     *
      * @return this;
      */
     public abstract HttpRequest parseParam();
 
     /**
      * 解析请求方法
+     *
      * @return this;
      */
     public abstract HttpRequest parseMethod();
 
     /**
      * 释放内存
+     *
      * @return this;
      */
     public abstract HttpRequest release();
