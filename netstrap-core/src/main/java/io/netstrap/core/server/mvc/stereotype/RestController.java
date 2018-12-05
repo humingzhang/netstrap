@@ -13,5 +13,4 @@ import java.lang.annotation.*;
 @Component
 @Documented
 public @interface RestController {
-
 }

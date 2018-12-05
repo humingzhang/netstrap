@@ -1,6 +1,7 @@
 package io.netstrap.core.server.mvc.stereotype;
 
 import io.netstrap.core.server.http.HttpMethod;
+import org.springframework.core.annotation.AliasFor;
 
 import java.lang.annotation.*;
 
@@ -13,9 +14,9 @@ import java.lang.annotation.*;
 @Documented
 @RequestMapping(method = HttpMethod.GET)
 public @interface GetMapping {
-    String value();
     /**
-     * METHOD
+     * uri
      */
-    HttpMethod[] method() default {HttpMethod.GET};
+    @AliasFor(annotation = RequestMapping.class)
+    String value();
 }

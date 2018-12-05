@@ -7,6 +7,7 @@ import io.netstrap.core.server.mvc.stereotype.*;
 import lombok.Data;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.DefaultParameterNameDiscoverer;
+import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Method;
@@ -136,40 +137,16 @@ public class RouterFactory {
     }
 
     /**
-     * 构建路由对象、//TODO 实现组合注解
+     * 构建路由对象 TODO 实现组合注解
      */
     private void buildMethod(Object invoker, Method method, String groupUri, String slash) {
         Router router = new Router();
         router.setInvoker(invoker);
         method.setAccessible(true);
-        HttpMethod[] httpMethods = {};
-        String mappingUri = "";
 
-        if(method.isAnnotationPresent(RequestMapping.class)) {
-            RequestMapping mapping = method.getDeclaredAnnotation(RequestMapping.class);
-            httpMethods = mapping.method();
-            mappingUri = mapping.value();
-        } else if(method.isAnnotationPresent(GetMapping.class)) {
-            GetMapping mapping = method.getDeclaredAnnotation(GetMapping.class);
-            httpMethods = mapping.method();
-            mappingUri = mapping.value();
-        } else if(method.isAnnotationPresent(DeleteMapping.class)) {
-            DeleteMapping mapping = method.getDeclaredAnnotation(DeleteMapping.class);
-            httpMethods = mapping.method();
-            mappingUri = mapping.value();
-        } else if(method.isAnnotationPresent(PostMapping.class)) {
-            PostMapping mapping = method.getDeclaredAnnotation(PostMapping.class);
-            httpMethods = mapping.method();
-            mappingUri = mapping.value();
-        } else if(method.isAnnotationPresent(PutMapping.class)) {
-            PutMapping mapping = method.getDeclaredAnnotation(PutMapping.class);
-            httpMethods = mapping.method();
-            mappingUri = mapping.value();
-        } else if(method.isAnnotationPresent(PatchMapping.class)) {
-            PatchMapping mapping = method.getDeclaredAnnotation(PatchMapping.class);
-            httpMethods = mapping.method();
-            mappingUri = mapping.value();
-        }
+        RequestMapping mapping = AnnotatedElementUtils.findMergedAnnotation(method, RequestMapping.class);
+        HttpMethod[] httpMethods = mapping.method();
+        String mappingUri = mapping.value();
 
         if (!StringUtils.isEmpty(mappingUri)) {
             mappingUri = (mappingUri.startsWith(slash) ? mappingUri : slash + mappingUri);

@@ -4,6 +4,7 @@ import io.netstrap.core.server.http.HttpStatus;
 import io.netstrap.core.server.http.datagram.HttpRequest;
 import io.netstrap.core.server.http.datagram.HttpResponse;
 import io.netstrap.core.server.http.wrapper.HttpBody;
+import io.netstrap.core.server.mvc.stereotype.GetMapping;
 import io.netstrap.core.server.mvc.stereotype.RequestMapping;
 import io.netstrap.core.server.mvc.stereotype.RestController;
 
@@ -51,37 +52,37 @@ public class DefaultErrorController {
      */
     public static final String INTERNAL_SERVICE_ERROR = "/ERROR/INTERNAL_SERVICE_ERROR";
 
-    @RequestMapping(value = BAD_REQUEST)
+    @GetMapping(BAD_REQUEST)
     public void badRequest(HttpRequest request, HttpResponse response) {
         response.setStatus(HttpStatus.BAD_REQUEST);
         response.setBody(HttpBody.wrap("Bad Request".getBytes()));
     }
 
-    @RequestMapping(value = FORBIDDEN)
+    @GetMapping(FORBIDDEN)
     public void forbidden(HttpRequest request, HttpResponse response) {
         response.setStatus(HttpStatus.FORBIDDEN);
         response.setBody(HttpBody.wrap("Forbidden".getBytes()));
     }
 
-    @RequestMapping(value = INTERNAL_SERVICE_ERROR)
+    @GetMapping(INTERNAL_SERVICE_ERROR)
     public void internalServiceError(HttpRequest request, HttpResponse response) {
         response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         response.setBody(HttpBody.wrap("Internal Service Error".getBytes()));
     }
 
-    @RequestMapping(value = METHOD_NOT_ALLOWED)
+    @GetMapping(METHOD_NOT_ALLOWED)
     public void methodNotAllowed(HttpRequest request, HttpResponse response) {
         response.setStatus(HttpStatus.METHOD_NOT_ALLOWED);
         response.setBody(HttpBody.wrap("Method Not Allowed".getBytes()));
     }
 
-    @RequestMapping(value = NOT_FOUND)
+    @GetMapping(NOT_FOUND)
     public void notFound(HttpRequest request, HttpResponse response) {
         response.setStatus(HttpStatus.NOT_FOUND);
         response.setBody(HttpBody.wrap("Not Found".getBytes()));
     }
 
-    @RequestMapping(value = UNAUTHORIZED)
+    @GetMapping(UNAUTHORIZED)
     public void unauthorized(HttpRequest request, HttpResponse response) {
         response.setStatus(HttpStatus.UNAUTHORIZED);
         response.setBody(HttpBody.wrap("Unauthorized".getBytes()));

@@ -1,6 +1,7 @@
 package io.netstrap.core.server.mvc.stereotype;
 
 import io.netstrap.core.server.http.HttpMethod;
+import org.springframework.core.annotation.AliasFor;
 
 import java.lang.annotation.*;
 
@@ -11,10 +12,11 @@ import java.lang.annotation.*;
 @Target(value={ElementType.TYPE,ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
+@RequestMapping(method = HttpMethod.DELETE)
 public @interface DeleteMapping {
-    String value();
     /**
-     * METHOD
+     * uri
      */
-    HttpMethod[] method() default {HttpMethod.DELETE};
+    @AliasFor(annotation = RequestMapping.class)
+    String value();
 }
