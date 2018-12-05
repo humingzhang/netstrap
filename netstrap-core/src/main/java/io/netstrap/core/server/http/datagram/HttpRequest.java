@@ -1,6 +1,5 @@
 package io.netstrap.core.server.http.datagram;
 
-import com.sun.xml.internal.ws.client.RequestContext;
 import io.netstrap.core.server.http.HttpMethod;
 import io.netstrap.core.server.http.wrapper.HttpBody;
 import io.netstrap.core.server.http.wrapper.HttpForm;
@@ -62,7 +61,7 @@ public abstract class HttpRequest {
     /**
      * 获取上下文参数
      */
-    public Map<String,String> getRequestContext() {
+    public Map<String, String> getRequestContext() {
         return requestContext;
     }
 
@@ -96,6 +95,7 @@ public abstract class HttpRequest {
 
     /**
      * 解析上下文参数
+     *
      * @return this;
      */
     public abstract HttpRequest parseContext();

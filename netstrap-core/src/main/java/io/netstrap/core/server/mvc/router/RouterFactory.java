@@ -4,40 +4,37 @@ import io.netstrap.common.factory.ClassFactory;
 import io.netstrap.core.server.http.HttpMethod;
 import io.netstrap.core.server.mvc.controller.DefaultErrorController;
 import io.netstrap.core.server.mvc.stereotype.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.core.annotation.AnnotatedElementUtils;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
- * 路由单例
+ * 路由工厂
  *
  * @author minghu.zhang
  * @date 2018/11/09
  */
+@Component
 public class RouterFactory {
 
     /**
      * 调用模型
      */
-    private final static Map<String, Router> ROUTERS = new HashMap<>(8);
+    private final static Map<String, InvokeAction> ROUTERS = new HashMap<>(8);
 
     /**
      * 类工厂
      */
     private ClassFactory factory;
-
-    /**
-     * 路由工厂
-     */
-    private static RouterFactory routerFactory;
-
 
     /**
      * Spring上下文
@@ -47,34 +44,16 @@ public class RouterFactory {
     /**
      * 构造函数
      */
-    private RouterFactory(ApplicationContext context, ClassFactory factory) {
+    @Autowired
+    private RouterFactory(ApplicationContext context) {
         this.context = context;
-        this.factory = factory;
+        this.factory = ClassFactory.getInstance();
     }
 
     /**
-     * 获取路由工厂
+     * 初始化MVC
      */
-    public static RouterFactory get() {
-        return routerFactory;
-    }
-
-    /**
-     * 获取单例路由
-     */
-    public static void of(ApplicationContext context, ClassFactory factory) {
-        if (Objects.isNull(routerFactory)) {
-            synchronized (RouterFactory.class) {
-                if (Objects.isNull(routerFactory)) {
-                    routerFactory = new RouterFactory(context, factory).init();
-                }
-            }
-        }
-    }
-
-    /**
-     * 初始化路由信息
-     */
+    @PostConstruct
     private RouterFactory init() {
         initDefault();
         initRouter();
@@ -138,7 +117,7 @@ public class RouterFactory {
      * 构建路由对象
      */
     private void buildMethod(Object invoker, Method method, String groupUri, String slash) {
-        Router router = new Router();
+        InvokeAction router = new InvokeAction();
         router.setInvoker(invoker);
         method.setAccessible(true);
 
@@ -160,16 +139,16 @@ public class RouterFactory {
     /**
      * 添加路由模型
      */
-    private void put(String uri, Router router) {
+    private void put(String uri, InvokeAction router) {
         ROUTERS.put(uri, router);
     }
 
     /**
      * 获取路由
      */
-    public Router get(String uri) {
+    public InvokeAction get(String uri) {
 
-        Router router;
+        InvokeAction router;
         if (!ROUTERS.containsKey(uri)) {
             router = getNotFoundRouter();
         } else {
@@ -182,42 +161,42 @@ public class RouterFactory {
     /**
      * 405
      */
-    public Router getMethodNotAllowedRouter() {
+    public InvokeAction getMethodNotAllowedRouter() {
         return get(DefaultErrorController.METHOD_NOT_ALLOWED);
     }
 
     /**
      * 500
      */
-    public Router getInternalServiceErrorRouter() {
+    public InvokeAction getInternalServiceErrorRouter() {
         return get(DefaultErrorController.INTERNAL_SERVICE_ERROR);
     }
 
     /**
      * 400
      */
-    public Router getBadRequestRouter() {
+    public InvokeAction getBadRequestRouter() {
         return get(DefaultErrorController.BAD_REQUEST);
     }
 
     /**
      * 404
      */
-    public Router getNotFoundRouter() {
+    public InvokeAction getNotFoundRouter() {
         return get(DefaultErrorController.NOT_FOUND);
     }
 
     /**
      * 403
      */
-    public Router getForbiddenRouter() {
+    public InvokeAction getForbiddenRouter() {
         return get(DefaultErrorController.FORBIDDEN);
     }
 
     /**
      * 401
      */
-    public Router getUnauthorizedRouter() {
+    public InvokeAction getUnauthorizedRouter() {
         return get(DefaultErrorController.UNAUTHORIZED);
     }
 }

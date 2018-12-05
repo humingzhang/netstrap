@@ -7,7 +7,7 @@ import io.netstrap.core.server.http.datagram.HttpResponse;
 import io.netstrap.core.server.http.wrapper.HttpBody;
 import io.netstrap.core.server.mvc.Dispatcher;
 import io.netstrap.core.server.mvc.filter.DefaultWebFilter;
-import io.netstrap.core.server.mvc.router.Router;
+import io.netstrap.core.server.mvc.router.InvokeAction;
 import io.netstrap.core.server.mvc.router.RouterFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,17 +24,23 @@ import java.util.Objects;
 public class DefaultHttpDispatcher extends Dispatcher {
 
     /**
+     * 路由工厂
+     */
+    private final RouterFactory factory;
+
+    /**
      * 构造函数注入
      */
     @Autowired
-    public DefaultHttpDispatcher(DefaultWebFilter webFilter) {
+    public DefaultHttpDispatcher(DefaultWebFilter webFilter, RouterFactory factory) {
         super(webFilter);
+        this.factory = factory;
     }
 
     @Override
     protected void dispatcher(HttpRequest request, HttpResponse response) {
         String uri = request.getRequestContext().get("uri");
-        Router router = RouterFactory.get().get(uri);
+        InvokeAction router = factory.get(uri);
         if (router.getUri().equals(uri)) {
             //检查method
             HttpMethod requestMethod = request.getMethod();
@@ -46,7 +52,7 @@ public class DefaultHttpDispatcher extends Dispatcher {
                 }
             }
             if (methodNotAllowed) {
-                router = RouterFactory.get().getMethodNotAllowedRouter();
+                router = factory.getMethodNotAllowedRouter();
             }
         }
 
@@ -56,7 +62,7 @@ public class DefaultHttpDispatcher extends Dispatcher {
     /**
      * 执行调用
      */
-    private void doInvoke(Router router, HttpRequest request, HttpResponse response) {
+    private void doInvoke(InvokeAction router, HttpRequest request, HttpResponse response) {
         //执行调用
         final Object result;
         try {
@@ -72,7 +78,7 @@ public class DefaultHttpDispatcher extends Dispatcher {
             }
         } catch (Exception e) {
             e.getCause().printStackTrace();
-            doInvoke(RouterFactory.get().getInternalServiceErrorRouter(), request, response);
+            doInvoke(factory.getInternalServiceErrorRouter(), request, response);
         }
     }
 }

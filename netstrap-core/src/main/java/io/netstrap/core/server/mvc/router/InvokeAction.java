@@ -1,10 +1,5 @@
 package io.netstrap.core.server.mvc.router;
 
-/**
- * @author minghu.zhang
- * @Description TODO
- * @date 2018/12/5 11:36
- */
 
 import io.netstrap.core.server.http.HttpMethod;
 import lombok.Data;
@@ -12,12 +7,13 @@ import lombok.Data;
 import java.lang.reflect.Method;
 
 /**
- * 路由数据模型
+ * 调用模型
+ *
  * @author minghu.zhang
  * @date 2018/12/05
  */
 @Data
-public class Router {
+public class InvokeAction {
     /**
      * 当前映射的URI
      */

@@ -4,13 +4,12 @@ import io.netstrap.common.NetstrapConstant;
 import io.netstrap.common.factory.ClassFactory;
 import io.netstrap.core.context.NetstrapSpringRunListener;
 import io.netstrap.core.context.NetstrapSpringRunListeners;
-import io.netstrap.core.server.enums.ProtocolType;
-import io.netstrap.core.server.enums.ServerType;
 import io.netstrap.core.context.stereotype.EnableNetstrapServer;
 import io.netstrap.core.context.stereotype.NetstrapApplication;
 import io.netstrap.core.server.Server;
+import io.netstrap.core.server.enums.ProtocolType;
+import io.netstrap.core.server.enums.ServerType;
 import io.netstrap.core.server.mina.MinaServer;
-import io.netstrap.core.server.mvc.router.RouterFactory;
 import io.netstrap.core.server.netty.NettyServer;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
@@ -29,7 +28,9 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StopWatch;
 
 import java.lang.reflect.Constructor;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Netstrap启动类
@@ -148,8 +149,6 @@ public class NetstrapBootApplication {
             prepareContext(context, new StandardEnvironment());
             //Spring容器初始化完毕（包括引入的Spring组件）之后调用
             listeners.contextPrepare(context);
-            //初始化MVC
-            RouterFactory.of(context, factory);
             //启动网络服务
             networkServiceStartup(context);
             //停止监控
