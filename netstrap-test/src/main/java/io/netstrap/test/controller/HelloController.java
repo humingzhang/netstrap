@@ -5,12 +5,12 @@ import io.netstrap.core.server.http.datagram.HttpResponse;
 import io.netstrap.core.server.mvc.stereotype.RestController;
 import io.netstrap.core.server.mvc.stereotype.mapping.GetMapping;
 import io.netstrap.core.server.mvc.stereotype.mapping.PostMapping;
-import io.netstrap.core.server.mvc.stereotype.parameter.FormValue;
+import io.netstrap.core.server.mvc.stereotype.parameter.RequestBody;
 import io.netstrap.test.config.WechatConfig;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * @Description 控制器示例
@@ -32,10 +32,10 @@ public class HelloController {
      * 打印字符串
      */
     @PostMapping("/hello")
-    public String hello(@FormValue Integer[] as) {
-        for(int s:as) {
-            System.out.println(s);
-        }
+    public String hello(@RequestBody Map map) {
+        map.forEach((key,value) -> {
+            System.out.println(key+","+value);
+        });
         return "hello netstrap";
     }
 

@@ -13,7 +13,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @NameAlias(type = ParamType.REQUEST_BODY)
-public @interface RequsetBody {
+public @interface RequestBody {
 
     /**
      * 参数名
