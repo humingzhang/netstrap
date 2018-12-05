@@ -1,6 +1,7 @@
 package io.netstrap.config;
 
 import io.netstrap.common.factory.ClassFactory;
+import io.netstrap.common.tool.Convertible;
 import io.netstrap.config.policy.ProtocolPolicy;
 import io.netstrap.config.stereotype.Configurable;
 import io.netstrap.config.stereotype.Prefix;
@@ -116,7 +117,7 @@ public class ConfigHandler {
         }
 
         String value = properties.get(key);
-        if(convertible(field.getType())) {
+        if(Convertible.convertible(field.getType())) {
             if (Objects.nonNull(value)) {
                 field.set(instance, ConvertUtils.convert(value, field.getType()));
             }
@@ -141,33 +142,6 @@ public class ConfigHandler {
         }
 
         return express.substring(2,express.length()-1);
-    }
-
-    /**
-     * 判断clz是否可转换
-     */
-    private boolean convertible(Class<?> clz) {
-
-        if(clz.equals(Integer.class) || clz.equals(int.class)) {
-            return true;
-        } else if(clz.equals(Byte.class) || clz.equals(byte.class)) {
-            return true;
-        } else if(clz.equals(Double.class) || clz.equals(double.class)) {
-            return true;
-        } else if(clz.equals(Float.class) || clz.equals(float.class)) {
-            return true;
-        } else if(clz.equals(Character.class) || clz.equals(char.class)) {
-            return true;
-        } else if(clz.equals(Short.class) || clz.equals(short.class)) {
-            return true;
-        } else if(clz.equals(Boolean.class) || clz.equals(boolean.class) ) {
-            return true;
-        } else if(clz.equals(String.class)) {
-            return true;
-        } else {
-            return false;
-        }
-
     }
 
     /**

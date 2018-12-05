@@ -5,7 +5,9 @@ import io.netstrap.core.server.http.wrapper.HttpBody;
 import io.netstrap.core.server.http.wrapper.HttpForm;
 import lombok.Data;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Http请求数据报文
@@ -24,7 +26,7 @@ public abstract class HttpRequest {
     /**
      * 附加参数（通常是Filter设置）
      */
-    private Map<String, String> requestAttribute;
+    private Map<String, Object> requestAttribute;
 
     /**
      * 请求上下文参数
@@ -91,6 +93,26 @@ public abstract class HttpRequest {
      */
     public HttpForm getRequestForm() {
         return requestForm;
+    }
+
+    /**
+     * 设置参数
+     */
+    public void setAttribute(String key,Object value) {
+        if(Objects.isNull(requestAttribute)) {
+            requestAttribute = new HashMap<>(8);
+        }
+        requestAttribute.put(key,value);
+    }
+
+    /**
+     * 获取参数
+     */
+    public <N>N getAttribute(String key) {
+        if(Objects.isNull(requestAttribute)) {
+            requestAttribute = new HashMap<>(8);
+        }
+        return (N) requestAttribute.get(key);
     }
 
     /**

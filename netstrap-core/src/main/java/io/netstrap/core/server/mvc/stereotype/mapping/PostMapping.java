@@ -1,4 +1,4 @@
-package io.netstrap.core.server.mvc.stereotype;
+package io.netstrap.core.server.mvc.stereotype.mapping;
 
 import io.netstrap.core.server.http.HttpMethod;
 import org.springframework.core.annotation.AliasFor;

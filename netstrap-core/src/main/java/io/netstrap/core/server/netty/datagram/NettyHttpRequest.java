@@ -200,7 +200,6 @@ public class NettyHttpRequest extends HttpRequest {
             List<InterfaceHttpData> inputs = decoder.getBodyHttpDatas();
 
             for (InterfaceHttpData input : inputs) {
-
                 if (input instanceof MixedFileUpload) {
                     MixedFileUpload data = (MixedFileUpload) input;
                     form.upload(input.getName(), data);

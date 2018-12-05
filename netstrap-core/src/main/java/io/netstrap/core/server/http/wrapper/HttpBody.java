@@ -1,7 +1,7 @@
 package io.netstrap.core.server.http.wrapper;
 
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Http请求头
@@ -33,8 +33,8 @@ public class HttpBody {
      * 获取字符串
      * @return
      */
-    public String getString() throws UnsupportedEncodingException {
-        return new String(getBytes(),"UTF-8");
+    public String getString() {
+        return new String(getBytes(), StandardCharsets.UTF_8);
     }
 
     /**

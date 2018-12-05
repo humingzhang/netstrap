@@ -15,6 +15,10 @@ import java.lang.reflect.Method;
 @Data
 public class InvokeAction {
     /**
+     * 参数映射
+     */
+    private ParamMapping[] mappings;
+    /**
      * 当前映射的URI
      */
     private String uri;

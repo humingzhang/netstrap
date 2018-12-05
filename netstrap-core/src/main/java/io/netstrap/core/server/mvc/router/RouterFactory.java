@@ -2,8 +2,11 @@ package io.netstrap.core.server.mvc.router;
 
 import io.netstrap.common.factory.ClassFactory;
 import io.netstrap.core.server.http.HttpMethod;
+import io.netstrap.core.server.http.ParamType;
 import io.netstrap.core.server.mvc.controller.DefaultErrorController;
 import io.netstrap.core.server.mvc.stereotype.*;
+import io.netstrap.core.server.mvc.stereotype.mapping.RequestMapping;
+import io.netstrap.core.server.mvc.stereotype.parameter.NameAlias;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.DefaultParameterNameDiscoverer;
@@ -13,9 +16,8 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Parameter;
+import java.util.*;
 
 /**
  * 路由工厂
@@ -102,18 +104,6 @@ public class RouterFactory {
     }
 
     /**
-     * 构建参数对象
-     */
-    private void buildArguments(Method method) {
-        DefaultParameterNameDiscoverer discover = new DefaultParameterNameDiscoverer();
-        String[] parameterNames = discover.getParameterNames(method);
-        //TODO 构建参数对象
-        for (String name : parameterNames) {
-
-        }
-    }
-
-    /**
      * 构建路由对象
      */
     private void buildMethod(Object invoker, Method method, String groupUri, String slash) {
@@ -122,18 +112,70 @@ public class RouterFactory {
         method.setAccessible(true);
 
         RequestMapping mapping = AnnotatedElementUtils.findMergedAnnotation(method, RequestMapping.class);
-        assert mapping != null;
+        if(Objects.nonNull(mapping)) {
+            HttpMethod[] httpMethods = mapping.method();
+            String mappingUri = mapping.value();
 
-        HttpMethod[] httpMethods = mapping.method();
-        String mappingUri = mapping.value();
-
-        if (!StringUtils.isEmpty(mappingUri)) {
-            mappingUri = (mappingUri.startsWith(slash) ? mappingUri : slash + mappingUri);
-            router.setAction(method);
-            router.setMethods(httpMethods);
-            router.setUri(groupUri + mappingUri);
-            put(router.getUri(), router);
+            if (!StringUtils.isEmpty(mappingUri)) {
+                mappingUri = (mappingUri.startsWith(slash) ? mappingUri : slash + mappingUri);
+                router.setAction(method);
+                router.setMethods(httpMethods);
+                router.setUri(groupUri + mappingUri);
+                put(router.getUri(), router);
+                ParamMapping[] mappings = buildArguments(method);
+                router.setMappings(mappings);
+            }
         }
+    }
+
+    /**
+     * 构建参数对象
+     * 解析参数来源，封装处理类
+     */
+    private ParamMapping[] buildArguments(Method method) {
+
+        List<ParamMapping> mappings = new ArrayList<>(8);
+
+        //指定默认参数名，并创建mapping对象
+        DefaultParameterNameDiscoverer discover = new DefaultParameterNameDiscoverer();
+        String[] parameterNames = discover.getParameterNames(method);
+        for (String name : parameterNames) {
+            ParamMapping mapping = new ParamMapping();
+            mapping.setAlisName(name);
+            mappings.add(mapping);
+        }
+
+        Parameter[] parameters = method.getParameters();
+        for(int i=0;i<parameters.length;i++) {
+            Parameter parameter = parameters[i];
+            ParamMapping mapping = mappings.get(i);
+
+            //指定参数别名
+            Class<?> type = parameter.getType();
+            NameAlias alias = AnnotatedElementUtils.findMergedAnnotation(parameter, NameAlias.class);
+            String aliasName = "";
+            ParamType paramType;
+            if(Objects.nonNull(alias)) {
+                aliasName = alias.value();
+                paramType = alias.type();
+            } else {
+                paramType = ParamType.REQUEST_PARAM;
+            }
+
+            //setParamName
+            if(!StringUtils.isEmpty(aliasName)) {
+                mapping.setAlisName(aliasName);
+            }
+
+            //setParamType
+            if(Objects.nonNull(paramType)) {
+                mapping.setParamType(paramType);
+            }
+
+            mapping.setType(type);
+        }
+
+        return mappings.toArray(new ParamMapping[]{});
     }
 
     /**
