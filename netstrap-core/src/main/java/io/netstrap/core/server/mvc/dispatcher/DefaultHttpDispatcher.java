@@ -1,5 +1,6 @@
 package io.netstrap.core.server.mvc.dispatcher;
 
+import io.netstrap.common.tool.Convertible;
 import io.netstrap.common.tool.JsonTool;
 import io.netstrap.core.server.exception.ParameterParseException;
 import io.netstrap.core.server.http.HttpMethod;
@@ -74,7 +75,7 @@ public class DefaultHttpDispatcher extends Dispatcher {
             result = router.getAction().invoke(router.getInvoker(), parameters);
             if (Objects.nonNull(result)) {
                 byte[] body;
-                if (result instanceof String) {
+                if (Convertible.convertible(result.getClass())) {
                     body = ((String) result).getBytes();
                 } else {
                     body = JsonTool.obj2json(result).getBytes();
@@ -118,26 +119,32 @@ public class DefaultHttpDispatcher extends Dispatcher {
                 switch (mapping.getParamType()) {
                     case REQUEST_PARAM:
                         baseValue = request.getRequestParam().get(alias);
-                        if (type.equals(String.class)) {
-                            value = baseValue;
-                        } else {
-                            value = ConvertUtils.convert(baseValue, type);
+                        if(Objects.nonNull(baseValue)) {
+                            if (type.equals(String.class)) {
+                                value = baseValue;
+                            } else {
+                                value = ConvertUtils.convert(baseValue, type);
+                            }
                         }
                         break;
                     case REQUEST_HEADER:
                         baseValue = request.getRequestHeader().get(alias);
-                        if (type.equals(String.class)) {
-                            value = baseValue;
-                        } else {
-                            value = ConvertUtils.convert(baseValue, type);
+                        if(Objects.nonNull(baseValue)) {
+                            if (type.equals(String.class)) {
+                                value = baseValue;
+                            } else {
+                                value = ConvertUtils.convert(baseValue, type);
+                            }
                         }
                         break;
                     case REQUEST_CONTEXT:
                         baseValue = request.getRequestContext().get(alias);
-                        if (type.equals(String.class)) {
-                            value = baseValue;
-                        } else {
-                            value = ConvertUtils.convert(baseValue, type);
+                        if(Objects.nonNull(baseValue)) {
+                            if (type.equals(String.class)) {
+                                value = baseValue;
+                            } else {
+                                value = ConvertUtils.convert(baseValue, type);
+                            }
                         }
                         break;
                     case REQUEST_ATTRIBUTE:
@@ -151,6 +158,7 @@ public class DefaultHttpDispatcher extends Dispatcher {
                         }
                         break;
                     case REQUEST_FORM:
+                        //TODO 
                         break;
                     case REQUEST_BODY:
                         baseValue = request.getRequestBody().getString();

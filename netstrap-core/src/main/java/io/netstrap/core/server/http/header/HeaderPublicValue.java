@@ -5,7 +5,7 @@ package io.netstrap.core.server.http.header;
  * @author minghu.zhang
  * @date 2018/11/08
  */
-public interface HeaderValue {
+public interface HeaderPublicValue {
 
     /**
      * keep-alive

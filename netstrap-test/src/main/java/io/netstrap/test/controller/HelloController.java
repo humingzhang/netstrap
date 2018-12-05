@@ -1,5 +1,7 @@
 package io.netstrap.test.controller;
 
+import io.netstrap.core.server.http.header.HeaderPublicValue;
+import io.netstrap.core.server.mvc.stereotype.parameter.HeaderValue;
 import io.netstrap.test.config.WechatConfig;
 import io.netstrap.core.server.http.datagram.HttpRequest;
 import io.netstrap.core.server.http.datagram.HttpResponse;
@@ -30,8 +32,8 @@ public class HelloController {
      * 打印字符串
      */
     @GetMapping("/hello")
-    public void hello(HttpRequest request, HttpResponse response) {
-        response.setBody(HttpBody.wrap("hello netstrap".getBytes()));
+    public String hello() {
+        return "hello netstrap";
     }
 
     /**

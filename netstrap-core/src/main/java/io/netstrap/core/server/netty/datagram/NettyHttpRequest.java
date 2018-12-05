@@ -2,7 +2,7 @@ package io.netstrap.core.server.netty.datagram;
 
 
 import io.netstrap.common.encrypt.MD5;
-import io.netstrap.core.server.http.header.HeaderKey;
+import io.netstrap.core.server.http.header.HeaderPublicKey;
 import io.netstrap.core.server.http.datagram.HttpRequest;
 import io.netstrap.core.server.http.HttpMethod;
 import io.netstrap.core.server.http.wrapper.HttpBody;
@@ -15,7 +15,6 @@ import io.netty.handler.codec.http.multipart.Attribute;
 import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
 import io.netty.handler.codec.http.multipart.InterfaceHttpData;
 import io.netty.handler.codec.http.multipart.MixedFileUpload;
-import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -161,7 +160,7 @@ public class NettyHttpRequest extends HttpRequest {
         if (Objects.isNull(getRequestBody()) || Objects.isNull(getRequestForm())) {
             //POST请求需要解析请求体
             if (POST.equals(getMethod())) {
-                String type = getRequestHeader().get(HeaderKey.CONTENT_TYPE);
+                String type = getRequestHeader().get(HeaderPublicKey.CONTENT_TYPE);
                 try {
                     boolean isForm = type.contains("form");
                     if (isForm) {
