@@ -4,7 +4,6 @@ import io.netstrap.common.factory.ClassFactory;
 import io.netstrap.core.server.http.HttpMethod;
 import io.netstrap.core.server.mvc.controller.DefaultErrorController;
 import io.netstrap.core.server.mvc.stereotype.*;
-import lombok.Data;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.core.annotation.AnnotatedElementUtils;
@@ -63,7 +62,7 @@ public class RouterFactory {
     /**
      * 获取单例路由
      */
-    public static RouterFactory of(ApplicationContext context, ClassFactory factory) {
+    public static void of(ApplicationContext context, ClassFactory factory) {
         if (Objects.isNull(routerFactory)) {
             synchronized (RouterFactory.class) {
                 if (Objects.isNull(routerFactory)) {
@@ -71,7 +70,6 @@ public class RouterFactory {
                 }
             }
         }
-        return routerFactory;
     }
 
     /**
@@ -131,7 +129,7 @@ public class RouterFactory {
         DefaultParameterNameDiscoverer discover = new DefaultParameterNameDiscoverer();
         String[] parameterNames = discover.getParameterNames(method);
         //TODO 构建参数对象
-        for(String name:parameterNames) {
+        for (String name : parameterNames) {
 
         }
     }
@@ -145,6 +143,8 @@ public class RouterFactory {
         method.setAccessible(true);
 
         RequestMapping mapping = AnnotatedElementUtils.findMergedAnnotation(method, RequestMapping.class);
+        assert mapping != null;
+
         HttpMethod[] httpMethods = mapping.method();
         String mappingUri = mapping.value();
 
@@ -219,28 +219,5 @@ public class RouterFactory {
      */
     public Router getUnauthorizedRouter() {
         return get(DefaultErrorController.UNAUTHORIZED);
-    }
-
-    /**
-     * 路由数据模型
-     */
-    @Data
-    public class Router {
-        /**
-         * 当前映射的URI
-         */
-        private String uri;
-        /**
-         * 调用对象
-         */
-        private Object invoker;
-        /**
-         * 调用方法
-         */
-        private Method action;
-        /**
-         * 支持的HTTP方法
-         */
-        private HttpMethod[] methods;
     }
 }

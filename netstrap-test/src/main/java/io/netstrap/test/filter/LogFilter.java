@@ -18,7 +18,7 @@ public class LogFilter implements WebFilter {
 
     @Override
     public boolean doBefore(HttpRequest request, HttpResponse response) {
-        log.info(request.getMethod().name()+"-"+request.getUri());
+        log.info(request.getMethod().name()+"-"+request.getRequestContext().get("uri"));
         return true;
     }
 
