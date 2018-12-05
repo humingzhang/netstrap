@@ -1,6 +1,7 @@
 package io.netstrap.core.server.netty.datagram;
 
 
+import io.netstrap.common.encrypt.MD5;
 import io.netstrap.core.server.http.header.HeaderKey;
 import io.netstrap.core.server.http.datagram.HttpRequest;
 import io.netstrap.core.server.http.HttpMethod;
@@ -52,34 +53,56 @@ public class NettyHttpRequest extends HttpRequest {
         this.context = context;
     }
 
-    @Override
-    public HttpRequest parseIp() {
-        setIp(context.channel().remoteAddress().toString().replaceAll("/", "")
-                .split(":")[0]);
-        return this;
+    /**
+     * 获取远程IP
+     */
+    private String getRemoteIp() {
+        return context.channel().remoteAddress().toString().replaceAll("/", "")
+                .split(":")[0];
+    }
+
+    /**
+     * 获取请求URI
+     */
+    public String getRequestUri() {
+        String uri = request.uri();
+        String split = "?";
+        if (uri.contains(split)) {
+            uri = uri.substring(0, request.uri().indexOf(split));
+        }
+
+        try {
+            uri = URLDecoder.decode(uri, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        return uri;
+    }
+
+    /**
+     * 获取请求ID
+     */
+    public String getRequestId() {
+        return MD5.encrypt16(context.channel().id().asLongText());
     }
 
     @Override
-    public HttpRequest parseUri() {
-        if (StringUtils.isEmpty(getUri())) {
-            String uri = request.uri();
-            String split = "?";
-            if (uri.contains(split)) {
-                uri = uri.substring(0, request.uri().indexOf(split));
-            }
+    public HttpRequest parseContext() {
 
-            try {
-                setUri(URLDecoder.decode(uri, "utf-8"));
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+        if (Objects.isNull(getRequestContext())) {
+            Map<String, String> context = new HashMap<>(3);
+            context.put("ip",getRemoteIp());
+            context.put("uri",getRequestUri());
+            context.put("id",getRequestId());
         }
+
         return this;
     }
 
     @Override
     public HttpRequest parseHeader() {
-        if (Objects.isNull(getHeader())) {
+        if (Objects.isNull(getRequestHeader())) {
             Map<String, String> headers = new HashMap<>(8);
             List<Map.Entry<String, String>> entryList = request.headers().entries();
 
@@ -87,14 +110,14 @@ public class NettyHttpRequest extends HttpRequest {
                 String key = entry.getKey();
                 headers.put(key, entry.getValue());
             }
-            setHeader(headers);
+            setRequestHeader(headers);
         }
         return this;
     }
 
     @Override
     public HttpRequest parseParam() {
-        if (Objects.isNull(getParam())) {
+        if (Objects.isNull(getRequestParam())) {
             Map<String, String> httpParams = new HashMap<>(8);
             Map<String, List<String>> queryParams = new QueryStringDecoder(request.uri())
                     .parameters();
@@ -102,7 +125,7 @@ public class NettyHttpRequest extends HttpRequest {
             for (Map.Entry<String, List<String>> entry : queryParams.entrySet()) {
                 httpParams.put(entry.getKey(), entry.getValue().get(0));
             }
-            setParam(httpParams);
+            setRequestParam(httpParams);
         }
         return this;
     }
@@ -124,7 +147,7 @@ public class NettyHttpRequest extends HttpRequest {
 
     @Override
     public HttpRequest release() {
-        if(request.refCnt() > 0) {
+        if (request.refCnt() > 0) {
             request.release();
         }
         return this;
@@ -132,16 +155,16 @@ public class NettyHttpRequest extends HttpRequest {
 
     @Override
     public HttpRequest parseBody() {
-        if (Objects.isNull(getBody()) || Objects.isNull(getForm())) {
+        if (Objects.isNull(getRequestBody()) || Objects.isNull(getRequestForm())) {
             //POST请求需要解析请求体
             if (POST.equals(getMethod())) {
-                String type = getHeader().get(HeaderKey.CONTENT_TYPE);
+                String type = getRequestHeader().get(HeaderKey.CONTENT_TYPE);
                 try {
                     boolean isForm = type.contains("form");
                     if (isForm) {
-                        decodeForm();
+                        decodeRequestForm();
                     } else {
-                        decodeBody();
+                        decodeRequestBody();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -154,21 +177,21 @@ public class NettyHttpRequest extends HttpRequest {
     /**
      * 解析Body
      */
-    private void decodeBody() {
-        if (Objects.isNull(getBody())) {
+    private void decodeRequestBody() {
+        if (Objects.isNull(getRequestBody())) {
             ByteBuf content = request.content();
             byte[] body = new byte[content.readableBytes()];
             content.getBytes(0, body);
             content.release();
-            setBody(HttpBody.wrap(body));
+            setRequestBody(HttpBody.wrap(body));
         }
     }
 
     /**
      * 解析Form
      */
-    private void decodeForm() throws IOException {
-        if (Objects.isNull(getForm())) {
+    private void decodeRequestForm() throws IOException {
+        if (Objects.isNull(getRequestForm())) {
             HttpForm form = new HttpForm();
             HttpPostRequestDecoder decoder = new HttpPostRequestDecoder(request);
             List<InterfaceHttpData> inputs = decoder.getBodyHttpDatas();
@@ -185,7 +208,7 @@ public class NettyHttpRequest extends HttpRequest {
                     form.param(data.getName(), data.getValue());
                 }
             }
-            setForm(form);
+            setRequestForm(form);
         }
     }
 

@@ -132,12 +132,12 @@ public class RouterFactory {
         String[] parameterNames = discover.getParameterNames(method);
         //TODO 构建参数对象
         for(String name:parameterNames) {
-            //RequestParam\RequestForm\RequestHeader\RequestBody\RequestAttribute\RequestContext(ip,uri)
+
         }
     }
 
     /**
-     * 构建路由对象 TODO 实现组合注解
+     * 构建路由对象
      */
     private void buildMethod(Object invoker, Method method, String groupUri, String slash) {
         Router router = new Router();

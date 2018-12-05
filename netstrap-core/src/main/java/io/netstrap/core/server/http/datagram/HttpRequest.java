@@ -1,5 +1,6 @@
 package io.netstrap.core.server.http.datagram;
 
+import com.sun.xml.internal.ws.client.RequestContext;
 import io.netstrap.core.server.http.HttpMethod;
 import io.netstrap.core.server.http.wrapper.HttpBody;
 import io.netstrap.core.server.http.wrapper.HttpForm;
@@ -17,46 +18,39 @@ import java.util.Map;
 public abstract class HttpRequest {
 
     /**
-     * 远程地址
-     */
-    private String ip;
-
-    /**
      * 请求方法
      */
     private HttpMethod method;
 
     /**
-     * 请求URI
+     * 附加参数（通常是Filter设置）
      */
-    private String uri;
+    private Map<String, String> requestAttribute;
+
+    /**
+     * 请求上下文参数
+     */
+    private Map<String, String> requestContext;
 
     /**
      * 请求头
      */
-    private Map<String, String> header;
+    private Map<String, String> requestHeader;
 
     /**
      * 请求链接参数
      */
-    private Map<String, String> param;
+    private Map<String, String> requestParam;
 
     /**
      * 请求体
      */
-    private HttpBody body;
+    private HttpBody requestBody;
 
     /**
      * 表单对象
      */
-    private HttpForm form;
-
-    /**
-     * 获取调用IP
-     */
-    public String getIp() {
-        return ip;
-    }
+    private HttpForm requestForm;
 
     /**
      * 获取请求方法
@@ -66,53 +60,45 @@ public abstract class HttpRequest {
     }
 
     /**
-     * 获取请求URI
+     * 获取上下文参数
      */
-    public String getUri() {
-        return uri;
+    public Map<String,String> getRequestContext() {
+        return requestContext;
     }
 
     /**
      * 获取请求头
      */
-    public Map<String, String> getHeader() {
-        return header;
+    public Map<String, String> getRequestHeader() {
+        return requestHeader;
     }
 
     /**
      * 获取链接参数
      */
-    public Map<String, String> getParam() {
-        return param;
+    public Map<String, String> getRequestParam() {
+        return requestParam;
     }
 
     /**
      * 获取请求体
      */
-    public HttpBody getBody() {
-        return body;
+    public HttpBody getRequestBody() {
+        return requestBody;
     }
 
     /**
      * 获取表单参数
      */
-    public HttpForm getForm() {
-        return form;
+    public HttpForm getRequestForm() {
+        return requestForm;
     }
 
     /**
-     * 解析IP
-     *
+     * 解析上下文参数
      * @return this;
      */
-    public abstract HttpRequest parseIp();
-
-    /**
-     * 解析URI
-     *
-     * @return this;
-     */
-    public abstract HttpRequest parseUri();
+    public abstract HttpRequest parseContext();
 
     /**
      * 解析Header
