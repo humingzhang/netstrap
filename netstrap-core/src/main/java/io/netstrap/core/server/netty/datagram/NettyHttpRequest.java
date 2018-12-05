@@ -92,9 +92,12 @@ public class NettyHttpRequest extends HttpRequest {
 
         if (Objects.isNull(getRequestContext())) {
             Map<String, String> context = new HashMap<>(3);
+
             context.put("ip",getRemoteIp());
             context.put("uri",getRequestUri());
             context.put("id",getRequestId());
+
+            setRequestContext(context);
         }
 
         return this;

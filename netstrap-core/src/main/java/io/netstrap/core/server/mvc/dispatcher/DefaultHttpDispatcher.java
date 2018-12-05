@@ -24,11 +24,6 @@ import java.util.Objects;
 public class DefaultHttpDispatcher extends Dispatcher {
 
     /**
-     * 获取路由工厂
-     */
-    private static RouterFactory factory = RouterFactory.get();
-
-    /**
      * 构造函数注入
      */
     @Autowired
@@ -39,7 +34,7 @@ public class DefaultHttpDispatcher extends Dispatcher {
     @Override
     protected void dispatcher(HttpRequest request, HttpResponse response) {
         String uri = request.getRequestContext().get("uri");
-        Router router = factory.get(uri);
+        Router router = RouterFactory.get().get(uri);
         if (router.getUri().equals(uri)) {
             //检查method
             HttpMethod requestMethod = request.getMethod();
@@ -51,7 +46,7 @@ public class DefaultHttpDispatcher extends Dispatcher {
                 }
             }
             if (methodNotAllowed) {
-                router = factory.getMethodNotAllowedRouter();
+                router = RouterFactory.get().getMethodNotAllowedRouter();
             }
         }
 
