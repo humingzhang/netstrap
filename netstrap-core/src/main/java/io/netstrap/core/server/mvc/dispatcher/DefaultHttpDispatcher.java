@@ -164,28 +164,19 @@ public class DefaultHttpDispatcher extends Dispatcher {
                 value = convertValueType(request.getAttribute(alias), type);
                 break;
             case REQUEST_FORM:
-
-                if(type.isArray()) {
-                    Class<?> componentType = type.getComponentType();
-
-                    if(Convertible.convertible(componentType)) {
-                        value = convertValueType(request.getRequestForm()
-                                .getParams(alias).toArray(),componentType);
-                    } else if(componentType.equals(MixedFileUpload.class)) {
-                        value = request.getRequestForm()
-                                .getUploads(alias).toArray(new MixedFileUpload[]{});
+                if(request.getMethod().equals(HttpMethod.POST)) {
+                    if (Convertible.convertible(type)) {
+                        value = convertValueType(request.getRequestForm().getParam(alias), type);
+                    } else if (type.equals(MixedFileUpload.class)) {
+                        value = request.getRequestForm().getUpload(alias);
                     }
-
-                } else if(Convertible.convertible(type)) {
-                    value = convertValueType(request.getRequestForm().getParam(alias), type);
-                } else if(type.equals(MixedFileUpload.class)) {
-                    value = request.getRequestForm().getUpload(alias);
                 }
-
                 break;
             case REQUEST_BODY:
-                baseValue = request.getRequestBody().getString();
-                value = JsonTool.json2obj(baseValue.toString(), type);
+                if(request.getMethod().equals(HttpMethod.POST)) {
+                    baseValue = request.getRequestBody().getString();
+                    value = JsonTool.json2obj(baseValue.toString(), type);
+                }
                 break;
             default:
                 break;

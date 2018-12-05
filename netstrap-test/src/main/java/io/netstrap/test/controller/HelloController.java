@@ -5,6 +5,7 @@ import io.netstrap.core.server.http.datagram.HttpResponse;
 import io.netstrap.core.server.mvc.stereotype.RestController;
 import io.netstrap.core.server.mvc.stereotype.mapping.GetMapping;
 import io.netstrap.core.server.mvc.stereotype.mapping.PostMapping;
+import io.netstrap.core.server.mvc.stereotype.parameter.FormValue;
 import io.netstrap.test.config.WechatConfig;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,11 @@ public class HelloController {
     /**
      * 打印字符串
      */
-    @GetMapping("/hello")
-    public String hello(List<Integer> ns) {
+    @PostMapping("/hello")
+    public String hello(@FormValue Integer[] as) {
+        for(int s:as) {
+            System.out.println(s);
+        }
         return "hello netstrap";
     }
 
