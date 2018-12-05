@@ -15,8 +15,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.*;
 
 /**
@@ -149,33 +152,31 @@ public class RouterFactory {
         for(int i=0;i<parameters.length;i++) {
             Parameter parameter = parameters[i];
             ParamMapping mapping = mappings.get(i);
-
-            //指定参数别名
-            Class<?> type = parameter.getType();
-            NameAlias alias = AnnotatedElementUtils.findMergedAnnotation(parameter, NameAlias.class);
-            String aliasName = "";
-            ParamType paramType;
-            if(Objects.nonNull(alias)) {
-                aliasName = alias.value();
-                paramType = alias.type();
-            } else {
-                paramType = ParamType.REQUEST_PARAM;
-            }
-
-            //setParamName
-            if(!StringUtils.isEmpty(aliasName)) {
-                mapping.setAlisName(aliasName);
-            }
-
-            //setParamType
-            if(Objects.nonNull(paramType)) {
-                mapping.setParamType(paramType);
-            }
-
-            mapping.setType(type);
+            buildParamMapping(parameter,mapping);
         }
 
         return mappings.toArray(new ParamMapping[]{});
+    }
+
+    private void buildParamMapping(Parameter parameter,ParamMapping mapping) {
+        //指定参数别名
+        Class<?> type = parameter.getType();
+        NameAlias alias = AnnotatedElementUtils.findMergedAnnotation(parameter, NameAlias.class);
+        String aliasName = "";
+        ParamType paramType;
+        if(Objects.nonNull(alias)) {
+            aliasName = alias.value();
+            paramType = alias.type();
+        } else {
+            paramType = ParamType.REQUEST_PARAM;
+        }
+
+        if(!StringUtils.isEmpty(aliasName)) {
+            mapping.setAlisName(aliasName);
+        }
+
+        mapping.setParamType(paramType);
+        mapping.setType(type);
     }
 
     /**

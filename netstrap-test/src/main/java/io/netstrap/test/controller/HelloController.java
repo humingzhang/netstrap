@@ -1,16 +1,15 @@
 package io.netstrap.test.controller;
 
-import io.netstrap.core.server.http.header.HeaderPublicValue;
-import io.netstrap.core.server.mvc.stereotype.parameter.HeaderValue;
-import io.netstrap.test.config.WechatConfig;
 import io.netstrap.core.server.http.datagram.HttpRequest;
 import io.netstrap.core.server.http.datagram.HttpResponse;
-import io.netstrap.core.server.http.wrapper.HttpBody;
+import io.netstrap.core.server.mvc.stereotype.RestController;
 import io.netstrap.core.server.mvc.stereotype.mapping.GetMapping;
 import io.netstrap.core.server.mvc.stereotype.mapping.PostMapping;
-import io.netstrap.core.server.mvc.stereotype.RestController;
+import io.netstrap.test.config.WechatConfig;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  * @Description 控制器示例
@@ -32,7 +31,7 @@ public class HelloController {
      * 打印字符串
      */
     @GetMapping("/hello")
-    public String hello() {
+    public String hello(List<Integer> ns) {
         return "hello netstrap";
     }
 

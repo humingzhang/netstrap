@@ -12,11 +12,17 @@ import io.netstrap.core.server.mvc.filter.DefaultWebFilter;
 import io.netstrap.core.server.mvc.router.InvokeAction;
 import io.netstrap.core.server.mvc.router.ParamMapping;
 import io.netstrap.core.server.mvc.router.RouterFactory;
+import io.netty.handler.codec.http.multipart.MixedFileUpload;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -83,8 +89,8 @@ public class DefaultHttpDispatcher extends Dispatcher {
                 response.setBody(HttpBody.wrap(body));
             }
         } catch (Exception e) {
-            request.setAttribute("message",e.getMessage());
-            if(e instanceof ParameterParseException) {
+            request.setAttribute("message", e.getMessage());
+            if (e instanceof ParameterParseException) {
                 doInvoke(factory.getBadRequestRouter(), request, response);
             } else {
                 doInvoke(factory.getInternalServiceErrorRouter(), request, response);
@@ -93,7 +99,7 @@ public class DefaultHttpDispatcher extends Dispatcher {
     }
 
     /**
-     * 解析参数
+     * 解析调用参数
      */
     private Object[] parseParameter(ParamMapping[] mappings, HttpRequest request, HttpResponse response) {
         Object[] parameters = new Object[mappings.length];
@@ -111,63 +117,8 @@ public class DefaultHttpDispatcher extends Dispatcher {
                     parameters[i] = response;
                     continue;
                 }
-
-                String alias = mapping.getAlisName();
-                Object baseValue;
-                Object value = null;
-                //解析参数类型
-                switch (mapping.getParamType()) {
-                    case REQUEST_PARAM:
-                        baseValue = request.getRequestParam().get(alias);
-                        if(Objects.nonNull(baseValue)) {
-                            if (type.equals(String.class)) {
-                                value = baseValue;
-                            } else {
-                                value = ConvertUtils.convert(baseValue, type);
-                            }
-                        }
-                        break;
-                    case REQUEST_HEADER:
-                        baseValue = request.getRequestHeader().get(alias);
-                        if(Objects.nonNull(baseValue)) {
-                            if (type.equals(String.class)) {
-                                value = baseValue;
-                            } else {
-                                value = ConvertUtils.convert(baseValue, type);
-                            }
-                        }
-                        break;
-                    case REQUEST_CONTEXT:
-                        baseValue = request.getRequestContext().get(alias);
-                        if(Objects.nonNull(baseValue)) {
-                            if (type.equals(String.class)) {
-                                value = baseValue;
-                            } else {
-                                value = ConvertUtils.convert(baseValue, type);
-                            }
-                        }
-                        break;
-                    case REQUEST_ATTRIBUTE:
-                        baseValue = request.getAttribute(alias);
-                        if(Objects.nonNull(baseValue)) {
-                            if (type.equals(String.class)) {
-                                value = baseValue;
-                            } else {
-                                value = ConvertUtils.convert(baseValue, type);
-                            }
-                        }
-                        break;
-                    case REQUEST_FORM:
-                        //TODO 
-                        break;
-                    case REQUEST_BODY:
-                        baseValue = request.getRequestBody().getString();
-                        value = JsonTool.json2obj(baseValue.toString(), type);
-                        break;
-                    default:
-                        break;
-                }
-                parameters[i] = value;
+                //解析参数
+                parameters[i] = parseValue(mapping, request, type);
             }
 
         } catch (Exception e) {
@@ -175,6 +126,81 @@ public class DefaultHttpDispatcher extends Dispatcher {
         }
 
         return parameters;
+    }
+
+    /**
+     * 类型转换
+     */
+    private Object convertValueType(Object baseValue, Class<?> type) {
+        Object value = null;
+        if (Objects.nonNull(baseValue)) {
+            if (type.equals(String.class)) {
+                value = baseValue;
+            } else {
+                value = ConvertUtils.convert(baseValue, type);
+            }
+        }
+        return value;
+    }
+
+    /**
+     * 解析参数值
+     */
+    private Object parseValue(ParamMapping mapping, HttpRequest request, Class<?> type) {
+        String alias = mapping.getAlisName();
+        Object baseValue;
+        Object value = null;
+        switch (mapping.getParamType()) {
+            case REQUEST_PARAM:
+                value = convertValueType(request.getRequestParam().get(alias), type);
+                break;
+            case REQUEST_HEADER:
+                value = convertValueType(request.getRequestHeader().get(alias), type);
+                break;
+            case REQUEST_CONTEXT:
+                value = convertValueType(request.getRequestContext().get(alias), type);
+                break;
+            case REQUEST_ATTRIBUTE:
+                value = convertValueType(request.getAttribute(alias), type);
+                break;
+            case REQUEST_FORM:
+
+                if(type.isArray()) {
+                    Class<?> componentType = type.getComponentType();
+
+                    if(Convertible.convertible(componentType)) {
+                        value = convertValueType(request.getRequestForm()
+                                .getParams(alias).toArray(),componentType);
+                    } else if(componentType.equals(MixedFileUpload.class)) {
+                        value = request.getRequestForm()
+                                .getUploads(alias).toArray(new MixedFileUpload[]{});
+                    }
+
+                } else if(Convertible.convertible(type)) {
+                    value = convertValueType(request.getRequestForm().getParam(alias), type);
+                } else if(type.equals(MixedFileUpload.class)) {
+                    value = request.getRequestForm().getUpload(alias);
+                }
+
+                break;
+            case REQUEST_BODY:
+                baseValue = request.getRequestBody().getString();
+                value = JsonTool.json2obj(baseValue.toString(), type);
+                break;
+            default:
+                break;
+        }
+
+        return value;
+    }
+
+    public static void main(String[] args) {
+        Integer[] array = new Integer[]{};
+
+        if(array.getClass().isArray()) {
+            Class<?> typeParameters = array.getClass().getComponentType();
+            System.out.println(typeParameters);
+        }
     }
 
 }
