@@ -12,8 +12,8 @@ Web development framework based on Spring Boot and Netty. Spring module is integ
 4. 运行Main函数
 
 ```
-15:49:16.204 [main] INFO  io.netstrap.core.server.netty.NettyServer - The server bind IP:0.0.0.0 , PORT:9000
-15:49:16.344 [main] INFO  io.netstrap.core.context.LogoApplicationListener - 
+19:41:57.311 [main] INFO  io.netstrap.core.server.netty.NettyServer - The server bind IP:0.0.0.0 , PORT:9000
+19:41:57.395 [main] INFO  io.netstrap.core.context.LogoApplicationListener - The server started successfully.
                                                                                 
              ***  **                                                            
              ***  **          **             **                                 
