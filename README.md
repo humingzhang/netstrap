@@ -166,7 +166,7 @@ public String hi(HttpRequest request, HttpResponse response) {
 
 #### 打包部署
 
-Test默认使用了SpringBoot打包插件，也可以使用assembly进行打包。引入打包插件后，mvn package 就可以生成可执行jar！
+Test默认使用了SpringBoot打包插件，也可以使用assembly进行打包。引入打包插件后，mvn package 即可生成可执行jar！
 
 #### 压力测试
 
