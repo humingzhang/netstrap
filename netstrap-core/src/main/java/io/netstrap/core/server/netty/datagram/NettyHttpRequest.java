@@ -110,7 +110,7 @@ public class NettyHttpRequest extends HttpRequest {
 
             for (Map.Entry<String, String> entry : entryList) {
                 String key = entry.getKey();
-                headers.put(key, entry.getValue());
+                headers.put(key.toLowerCase(), entry.getValue());
             }
             setRequestHeader(headers);
         }
@@ -127,6 +127,7 @@ public class NettyHttpRequest extends HttpRequest {
             for (Map.Entry<String, List<String>> entry : queryParams.entrySet()) {
                 httpParams.put(entry.getKey(), entry.getValue().get(0));
             }
+
             setRequestParam(httpParams);
         }
         return this;

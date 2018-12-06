@@ -5,8 +5,10 @@ import io.netstrap.core.server.http.datagram.HttpResponse;
 import io.netstrap.core.server.mvc.stereotype.RestController;
 import io.netstrap.core.server.mvc.stereotype.mapping.GetMapping;
 import io.netstrap.core.server.mvc.stereotype.mapping.PostMapping;
+import io.netstrap.core.server.mvc.stereotype.parameter.FormValue;
 import io.netstrap.core.server.mvc.stereotype.parameter.RequestBody;
 import io.netstrap.test.config.WechatConfig;
+import io.netty.handler.codec.http.multipart.MixedFileUpload;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -14,8 +16,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description 控制器示例
  * @author minghu.zhang
+ * @Description 控制器示例
  * @date 2018/11/29 11:01
  */
 @RestController
@@ -34,8 +36,8 @@ public class HelloController {
      */
     @PostMapping("/hello")
     public String hello(@RequestBody Map map) {
-        map.forEach((key,value) -> {
-            System.out.println(key+","+value);
+        map.forEach((key, value) -> {
+            System.out.println(key + "," + value);
         });
         return "hello netstrap";
     }
@@ -53,7 +55,7 @@ public class HelloController {
      * 打印字符串
      */
     @PostMapping("/kalas")
-    public String kalas(List<Integer> ka,List<String> las) {
+    public String kalas(@FormValue List<Integer> ka, @FormValue String[] abc, @FormValue MixedFileUpload[] def) {
         return "hello netstrap";
     }
 
@@ -61,7 +63,7 @@ public class HelloController {
      * 打印字符串
      */
     @PostMapping("/kerry")
-    public String kerry(int[] ka,Double[] abc,List<String> las) {
+    public String kerry(int[] ka, Double[] abc, List<String> las) {
         return "hello netstrap";
     }
 

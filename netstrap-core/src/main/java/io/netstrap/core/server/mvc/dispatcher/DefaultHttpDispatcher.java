@@ -4,9 +4,11 @@ import io.netstrap.common.tool.Convertible;
 import io.netstrap.common.tool.JsonTool;
 import io.netstrap.core.server.exception.ParameterParseException;
 import io.netstrap.core.server.http.HttpMethod;
+import io.netstrap.core.server.http.ParamType;
 import io.netstrap.core.server.http.datagram.HttpRequest;
 import io.netstrap.core.server.http.datagram.HttpResponse;
 import io.netstrap.core.server.http.wrapper.HttpBody;
+import io.netstrap.core.server.http.wrapper.HttpForm;
 import io.netstrap.core.server.mvc.Dispatcher;
 import io.netstrap.core.server.mvc.filter.DefaultWebFilter;
 import io.netstrap.core.server.mvc.router.InvokeAction;
@@ -16,12 +18,9 @@ import io.netty.handler.codec.http.multipart.MixedFileUpload;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -107,18 +106,18 @@ public class DefaultHttpDispatcher extends Dispatcher {
         try {
             for (int i = 0; i < mappings.length; i++) {
                 ParamMapping mapping = mappings[i];
-                Class<?> type = mapping.getParamClass();
-                if (type.equals(HttpRequest.class)) {
+                Class<?> paramClass = mapping.getParamClass();
+                if (paramClass.equals(HttpRequest.class)) {
                     parameters[i] = request;
                     continue;
                 }
 
-                if (type.equals(HttpResponse.class)) {
+                if (paramClass.equals(HttpResponse.class)) {
                     parameters[i] = response;
                     continue;
                 }
                 //解析参数
-                parameters[i] = parseValue(mapping, request, type);
+                parameters[i] = parseValue(mapping, request, paramClass);
             }
 
         } catch (Exception e) {
@@ -146,40 +145,91 @@ public class DefaultHttpDispatcher extends Dispatcher {
     /**
      * 解析参数值
      */
-    private Object parseValue(ParamMapping mapping, HttpRequest request, Class<?> type) {
+    private Object parseValue(ParamMapping mapping, HttpRequest request, Class<?> paramClass) {
         String alias = mapping.getAlisName();
-        Object baseValue;
         Object value = null;
+
         switch (mapping.getContextType()) {
             case REQUEST_PARAM:
-                value = convertValueType(request.getRequestParam().get(alias), type);
+                value = convertValueType(request.getRequestParam().get(alias), paramClass);
                 break;
             case REQUEST_HEADER:
-                value = convertValueType(request.getRequestHeader().get(alias), type);
+                value = convertValueType(request.getRequestHeader().get(alias), paramClass);
                 break;
             case REQUEST_CONTEXT:
-                value = convertValueType(request.getRequestContext().get(alias), type);
+                value = convertValueType(request.getRequestContext().get(alias), paramClass);
                 break;
             case REQUEST_ATTRIBUTE:
-                value = convertValueType(request.getAttribute(alias), type);
+                value = convertValueType(request.getAttribute(alias), paramClass);
                 break;
             case REQUEST_FORM:
-                if(request.getMethod().equals(HttpMethod.POST)) {
-                    if (Convertible.convertible(type)) {
-                        value = convertValueType(request.getRequestForm().getParam(alias), type);
-                    } else if (type.equals(MixedFileUpload.class)) {
-                        value = request.getRequestForm().getUpload(alias);
-                    }
-                }
+                value = formParse(mapping, request);
                 break;
             case REQUEST_BODY:
-                if(request.getMethod().equals(HttpMethod.POST)) {
-                    baseValue = request.getRequestBody().getString();
-                    value = JsonTool.json2obj(baseValue.toString(), type);
+                if (request.getMethod().equals(HttpMethod.POST)) {
+                    Object baseValue = request.getRequestBody().getString();
+                    value = JsonTool.json2obj(baseValue.toString(), paramClass);
                 }
                 break;
             default:
                 break;
+        }
+
+        return value;
+    }
+
+    /**
+     * 表单参数解析
+     */
+    private Object formParse(ParamMapping mapping, HttpRequest request) {
+        Object value = null;
+
+        if (request.getMethod().equals(HttpMethod.POST)) {
+            String alias = mapping.getAlisName();
+            Class<?> paramClass = mapping.getParamClass();
+            HttpForm requestForm = request.getRequestForm();
+            switch (mapping.getParamType()) {
+                case BASE_PARAM:
+                    value = convertValueType(requestForm.getParam(alias), paramClass);
+                    break;
+                case FILE_PARAM:
+                    value = requestForm.getUpload(alias);
+                    break;
+                case LIST_PARAM:
+                    Class<?> genericType = mapping.getGenericType();
+                    if (genericType.equals(MixedFileUpload.class)) {
+                        value = requestForm.getUploads(alias);
+                    } else if (Convertible.convertible(genericType)) {
+                        List<String> params = requestForm.getParams(alias);
+                        if (genericType.equals(String.class)) {
+                            value = params;
+                        } else {
+                            List<Object> values = new ArrayList<>();
+                            for (String param : params) {
+                                values.add(convertValueType(param, genericType));
+                            }
+                            value = paramClass.cast(values);
+                        }
+                    }
+                    break;
+                case ARRAY_PARAM:
+                    if (paramClass.equals(MixedFileUpload.class)) {
+                        value = requestForm.getUploads(alias).toArray(new MixedFileUpload[]{});
+                    } else {
+                        List<String> params = requestForm.getParams(alias);
+                        Object array = Array.newInstance(paramClass, params.size());
+
+                        for (int i = 0; i < params.size(); i++) {
+                            String param = params.get(i);
+                            Array.set(array, i, convertValueType(param, paramClass));
+                        }
+
+                        value = array;
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
 
         return value;

@@ -11,11 +11,11 @@ public interface HeaderPublicKey {
      * 内容类型
      * Content-Type
      */
-    String CONTENT_TYPE      = "Content-Type";
+    String CONTENT_TYPE      = "content-type";
 
     /**
      * 连接方式
      */
-    String CONNECTION        = "Connection";
+    String CONNECTION        = "connection";
 
 }

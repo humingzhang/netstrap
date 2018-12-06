@@ -170,10 +170,6 @@ public class RouterFactory {
             mapping.setParamClass(type);
             if (parameter.getType().isArray()) {
                 Class<?> componentType = parameter.getType().getComponentType();
-//                Object array = Array.newInstance(componentType, 2);
-//                // 赋值
-//                Array.set(array, 0, 1);
-//                Array.set(array, 1, 2);
                 mapping.setParamType(ParamType.ARRAY_PARAM);
                 mapping.setParamClass(componentType);
             } else if (Convertible.convertible(type)) {

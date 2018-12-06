@@ -2,6 +2,7 @@ package io.netstrap.core.server.netty.datagram;
 
 import io.netstrap.core.server.http.Keepalive;
 import io.netstrap.core.server.http.datagram.HttpResponse;
+import io.netstrap.core.server.http.header.HeaderPublicKey;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
@@ -90,7 +91,7 @@ public class NettyHttpResponse extends HttpResponse {
      */
     public HttpResponse keepAlive(HttpVersion httpVersion, Map<String, String> header) {
 
-        String connection = header.getOrDefault("Connection", Keepalive.CLOSE_ALIVE).toLowerCase();
+        String connection = header.getOrDefault(HeaderPublicKey.CONNECTION, Keepalive.CLOSE_ALIVE).toLowerCase();
         //设置keep-alive
         if((httpVersion.equals(HttpVersion.HTTP_1_1) && !connection.equals(Keepalive.CLOSE_ALIVE))) {
             setKeepAlive(true);
@@ -99,7 +100,7 @@ public class NettyHttpResponse extends HttpResponse {
         }
 
         if(isKeepAlive()) {
-            addHeader("Connection",Keepalive.KEEP_ALIVE);
+            addHeader(HeaderPublicKey.CONNECTION,Keepalive.KEEP_ALIVE);
         }
 
         return this;

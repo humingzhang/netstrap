@@ -13,6 +13,14 @@ import java.util.*;
 public class HttpForm {
 
     /**
+     * 默认空列表
+     */
+    private static final List<String> EMPTY_STRING = new ArrayList<>();
+    /**
+     * 默认空列表
+     */
+    private static final List<MixedFileUpload> EMPTY_FILE = new ArrayList<>();
+    /**
      * 表单 参数
      */
     private Map<String, List<String>> params;
@@ -26,7 +34,11 @@ public class HttpForm {
      * @return List<String>
      */
     public List<String> getParams(String key) {
-        return params.get(key);
+        List<String> vs = params.get(key);
+        if(Objects.isNull(vs)) {
+            vs = EMPTY_STRING;
+        }
+        return vs;
     }
 
     /**
@@ -53,7 +65,11 @@ public class HttpForm {
      * @return List<MixedFileUpload>
      */
     public List<MixedFileUpload> getUploads(String key) {
-        return uploads.get(key);
+        List<MixedFileUpload> us = uploads.get(key);
+        if(Objects.isNull(us)) {
+            us = EMPTY_FILE;
+        }
+        return us;
     }
 
     /**
@@ -63,8 +79,8 @@ public class HttpForm {
      */
     public void param(String name,String value) {
 
-        if(Objects.isNull(uploads)) {
-            params = new HashMap(8);
+        if(Objects.isNull(params)) {
+            params = new HashMap<>(8);
         }
 
         if(params.containsKey(name)) {
