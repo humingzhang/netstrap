@@ -74,12 +74,12 @@ public class HelloController {
 
 3.可选参数类型
 ```
-@AttributeValue：获取属性值，这个值在整个生命周期有效，可以在filter设置
-@ContextValue：  获取请求上下文的值，目前只有，uri，ip，id
-@FormValue：     表单值（普通，文件），POST请求有效，目前只支持单个属性，不支持list，不支持数组
-@HeaderValue：   请求头里面的值，通过指定name可以获取到请求头的值
-@ParamValue      请求URL的参数值，参数不能重复
-@RequestBody     请求体，必须为POST请求有效
+@AttributeValue：请求属性值，这个值在整个生命周期有效，可以在filter设置
+@ContextValue：  请求上下文，指定名称可以获取对应的值（uri，ip，id）
+@FormValue：     表单值（普通，文件）
+@HeaderValue：   请求头，通过指定name可获取指定的值
+@ParamValue      请求URL参数，参数不能重复
+@RequestBody     请求体，必须为POST请求有效（默认Json）
 
 ```
 
