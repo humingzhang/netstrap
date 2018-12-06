@@ -107,7 +107,7 @@ public class DefaultHttpDispatcher extends Dispatcher {
         try {
             for (int i = 0; i < mappings.length; i++) {
                 ParamMapping mapping = mappings[i];
-                Class<?> type = mapping.getType();
+                Class<?> type = mapping.getParamClass();
                 if (type.equals(HttpRequest.class)) {
                     parameters[i] = request;
                     continue;
@@ -150,7 +150,7 @@ public class DefaultHttpDispatcher extends Dispatcher {
         String alias = mapping.getAlisName();
         Object baseValue;
         Object value = null;
-        switch (mapping.getParamType()) {
+        switch (mapping.getContextType()) {
             case REQUEST_PARAM:
                 value = convertValueType(request.getRequestParam().get(alias), type);
                 break;
@@ -183,15 +183,6 @@ public class DefaultHttpDispatcher extends Dispatcher {
         }
 
         return value;
-    }
-
-    public static void main(String[] args) {
-        Integer[] array = new Integer[]{};
-
-        if(array.getClass().isArray()) {
-            Class<?> typeParameters = array.getClass().getComponentType();
-            System.out.println(typeParameters);
-        }
     }
 
 }

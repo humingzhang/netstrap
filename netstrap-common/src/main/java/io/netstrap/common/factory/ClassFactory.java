@@ -11,6 +11,7 @@ import java.util.Objects;
 
 /**
  * 通用类工厂
+ *
  * @author minghu.zhang
  * @date 2018/11/02
  */
@@ -30,8 +31,8 @@ public class ClassFactory {
      * 初始化类工厂
      */
     private ClassFactory(String... packages) {
-        for(String pkg:packages) {
-            ClassReader.getClasses(pkg,classes);
+        for (String pkg : packages) {
+            ClassReader.getClasses(pkg, classes);
         }
     }
 
@@ -39,7 +40,7 @@ public class ClassFactory {
      * 获取类工厂
      */
     public static ClassFactory getInstance(String... packages) {
-        if(Objects.isNull(factory)) {
+        if (Objects.isNull(factory)) {
             synchronized (ClassFactory.class) {
                 if (Objects.isNull(factory)) {
                     factory = new ClassFactory(packages);
@@ -58,12 +59,12 @@ public class ClassFactory {
 
         List<Class<?>> annotationList = new ArrayList<>();
 
-        if(Objects.isNull(annotation) || Objects.isNull(factory)) {
+        if (Objects.isNull(annotation) || Objects.isNull(factory)) {
             return annotationList;
         }
 
-        for (Class<?> clz:classes) {
-            if(clz.isAnnotationPresent(annotation)) {
+        for (Class<?> clz : classes) {
+            if (clz.isAnnotationPresent(annotation)) {
                 annotationList.add(clz);
             }
         }
@@ -74,17 +75,17 @@ public class ClassFactory {
     /**
      * 通过包获取类列表
      */
-    public List<Class<?>> getClassByPackage(String _package) {
+    public List<Class<?>> getClassByPackage(String packages) {
 
         List<Class<?>> packaging = new ArrayList<>();
 
-        if(Objects.isNull(_package) || Objects.isNull(factory)) {
+        if (Objects.isNull(packages) || Objects.isNull(factory)) {
             return packaging;
         }
 
-        for (Class<?> clz:classes) {
+        for (Class<?> clz : classes) {
             String pkg = clz.getPackage().getName();
-            if(pkg.startsWith(_package.trim())) {
+            if (pkg.startsWith(packages.trim())) {
                 packaging.add(clz);
             }
         }
@@ -99,8 +100,8 @@ public class ClassFactory {
 
         List<Class<?>> subclasses = new ArrayList<>();
 
-        if(Objects.isNull(interfaces) || !interfaces.isInterface()
-                                      || Objects.isNull(factory)) {
+        if (Objects.isNull(interfaces) || !interfaces.isInterface()
+                || Objects.isNull(factory)) {
             return subclasses;
         }
 

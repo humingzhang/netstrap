@@ -53,7 +53,15 @@ public class HelloController {
      * 打印字符串
      */
     @PostMapping("/kalas")
-    public String kalas(List<Integer> kalas) {
+    public String kalas(List<Integer> ka,List<String> las) {
+        return "hello netstrap";
+    }
+
+    /**
+     * 打印字符串
+     */
+    @PostMapping("/kerry")
+    public String kerry(int[] ka,Double[] abc,List<String> las) {
         return "hello netstrap";
     }
 

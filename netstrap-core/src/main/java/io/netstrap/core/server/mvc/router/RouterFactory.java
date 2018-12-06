@@ -1,12 +1,16 @@
 package io.netstrap.core.server.mvc.router;
 
 import io.netstrap.common.factory.ClassFactory;
+import io.netstrap.common.tool.Convertible;
 import io.netstrap.core.server.http.HttpMethod;
+import io.netstrap.core.server.http.ContextType;
 import io.netstrap.core.server.http.ParamType;
 import io.netstrap.core.server.mvc.controller.DefaultErrorController;
 import io.netstrap.core.server.mvc.stereotype.*;
 import io.netstrap.core.server.mvc.stereotype.mapping.RequestMapping;
 import io.netstrap.core.server.mvc.stereotype.parameter.NameAlias;
+import io.netty.handler.codec.http.multipart.MixedFileUpload;
+import org.apache.commons.beanutils.ConvertUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.DefaultParameterNameDiscoverer;
@@ -15,11 +19,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.util.*;
 
 /**
@@ -115,7 +115,7 @@ public class RouterFactory {
         method.setAccessible(true);
 
         RequestMapping mapping = AnnotatedElementUtils.findMergedAnnotation(method, RequestMapping.class);
-        if(Objects.nonNull(mapping)) {
+        if (Objects.nonNull(mapping)) {
             HttpMethod[] httpMethods = mapping.method();
             String mappingUri = mapping.value();
 
@@ -142,51 +142,90 @@ public class RouterFactory {
         //指定默认参数名，并创建mapping对象
         DefaultParameterNameDiscoverer discover = new DefaultParameterNameDiscoverer();
         String[] parameterNames = discover.getParameterNames(method);
+        assert parameterNames != null;
         for (String name : parameterNames) {
             ParamMapping mapping = new ParamMapping();
             mapping.setAlisName(name);
             mappings.add(mapping);
         }
 
-        Parameter[] parameters = method.getParameters();
-        for(int i=0;i<parameters.length;i++) {
-            Parameter parameter = parameters[i];
-            ParamMapping mapping = mappings.get(i);
-            buildParamMapping(parameter,mapping);
-        }
-
-        Type[] genericParameterTypes = method.getGenericParameterTypes();
-        for (Type type : genericParameterTypes) {
-            if(type instanceof ParameterizedType) {
-                Type[] actualTypeArguments = ((ParameterizedType) type).getActualTypeArguments();
-                for (Type actual:actualTypeArguments) {
-                    System.out.println(method.getName()+"-"+type);
-                }
-            }
-        }
+        //参数映射
+        buildParamTypeMapping(method,mappings);
+        //构建泛型映射
+        buildGenericMapping(method,mappings);
 
         return mappings.toArray(new ParamMapping[]{});
     }
 
-    private void buildParamMapping(Parameter parameter,ParamMapping mapping) {
+    /**
+     * 构建参数类型
+     */
+    private void buildParamTypeMapping(Method method,List<ParamMapping> mappings) {
+        Parameter[] parameters = method.getParameters();
+        for (int i = 0; i < parameters.length; i++) {
+            Parameter parameter = parameters[i];
+            ParamMapping mapping = mappings.get(i);
+            buildParamMapping(parameter, mapping);
+            Class<?> type = parameter.getType();
+            mapping.setParamClass(type);
+            if (parameter.getType().isArray()) {
+                Class<?> componentType = parameter.getType().getComponentType();
+//                Object array = Array.newInstance(componentType, 2);
+//                // 赋值
+//                Array.set(array, 0, 1);
+//                Array.set(array, 1, 2);
+                mapping.setParamType(ParamType.ARRAY_PARAM);
+                mapping.setParamClass(componentType);
+            } else if (Convertible.convertible(type)) {
+                mapping.setParamType(ParamType.BASE_PARAM);
+            } else if (type.equals(MixedFileUpload.class)) {
+                mapping.setParamType(ParamType.FILE_PARAM);
+            } else if (List.class.isAssignableFrom(type)) {
+                mapping.setParamType(ParamType.LIST_PARAM);
+            } else {
+                mapping.setParamType(ParamType.OTHER_PARAM);
+            }
+        }
+    }
+
+    /**
+     * 构建泛型对象
+     */
+    private void buildGenericMapping(Method method,List<ParamMapping> mappings) {
+
+        Type[] parameterTypes = method.getGenericParameterTypes();
+        for (int i = 0; i < parameterTypes.length; i++) {
+            Type parameterType = parameterTypes[i];
+            if (parameterType instanceof ParameterizedType) {
+                Type[] actualType = ((ParameterizedType) parameterType).getActualTypeArguments();
+                if (actualType.length > 0) {
+                    ParamMapping mapping = mappings.get(i);
+                    mapping.setGenericType((Class<?>) actualType[0]);
+                }
+            }
+        }
+    }
+
+    /**
+     * 构建参数对象
+     */
+    private void buildParamMapping(Parameter parameter, ParamMapping mapping) {
         //指定参数别名
-        Class<?> type = parameter.getType();
         NameAlias alias = AnnotatedElementUtils.findMergedAnnotation(parameter, NameAlias.class);
         String aliasName = "";
-        ParamType paramType;
-        if(Objects.nonNull(alias)) {
+        ContextType contextType;
+        if (Objects.nonNull(alias)) {
             aliasName = alias.value();
-            paramType = alias.type();
+            contextType = alias.type();
         } else {
-            paramType = ParamType.REQUEST_PARAM;
+            contextType = ContextType.REQUEST_PARAM;
         }
 
-        if(!StringUtils.isEmpty(aliasName)) {
+        if (!StringUtils.isEmpty(aliasName)) {
             mapping.setAlisName(aliasName);
         }
 
-        mapping.setParamType(paramType);
-        mapping.setType(type);
+        mapping.setContextType(contextType);
     }
 
     /**

@@ -1,6 +1,6 @@
 package io.netstrap.core.server.mvc.stereotype.parameter;
 
-import io.netstrap.core.server.http.ParamType;
+import io.netstrap.core.server.http.ContextType;
 import org.springframework.core.annotation.AliasFor;
 
 import java.lang.annotation.*;
@@ -12,7 +12,7 @@ import java.lang.annotation.*;
 @Target(value={ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@NameAlias(type = ParamType.REQUEST_ATTRIBUTE)
+@NameAlias(type = ContextType.REQUEST_ATTRIBUTE)
 public @interface AttributeValue {
 
     /**

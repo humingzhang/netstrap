@@ -1,5 +1,6 @@
 package io.netstrap.core.server.mvc.router;
 
+import io.netstrap.core.server.http.ContextType;
 import io.netstrap.core.server.http.ParamType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,13 +18,34 @@ public class ParamMapping {
     /**
      * 参数别名
      */
-    private String alisName;
+    private String      alisName;
     /**
      * 参数值类型
      */
-    private Class<?> type;
+    private Class<?>    paramClass;
     /**
      * 参数类型
      */
-    private ParamType paramType;
+    private ContextType contextType;
+
+    /**
+     * 参数类型[基本类型，文件类型，集合类型，数组类型]
+     */
+    private ParamType   paramType;
+
+    /**
+     * 泛型类型[仅支持一个泛型]
+     */
+    private Class<?>    genericType;
+
+    @Override
+    public String toString() {
+        return "ParamMapping{" +
+                "alisName='" + alisName + '\'' +
+                ", paramClass=" + paramClass +
+                ", contextType=" + contextType +
+                ", paramType=" + paramType +
+                ", genericType=" + genericType +
+                '}';
+    }
 }

@@ -11,25 +11,22 @@ public enum ParamType {
     /**
      * URI参数
      */
-    REQUEST_PARAM,
+    BASE_PARAM,
     /**
-     * 请求头
+     * 文件类型
      */
-    REQUEST_HEADER,
+    FILE_PARAM,
     /**
-     * 请求上下文
+     * 集合类型
      */
-    REQUEST_CONTEXT,
+    LIST_PARAM,
     /**
-     * 请求表单
+     * 数组类型
      */
-    REQUEST_FORM,
+    ARRAY_PARAM,
     /**
-     * 请求体
+     * 其它类型
      */
-    REQUEST_BODY,
-    /**
-     * 请求属性
-     */
-    REQUEST_ATTRIBUTE
+    OTHER_PARAM
+
 }

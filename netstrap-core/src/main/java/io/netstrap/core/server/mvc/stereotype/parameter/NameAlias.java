@@ -1,6 +1,6 @@
 package io.netstrap.core.server.mvc.stereotype.parameter;
 
-import io.netstrap.core.server.http.ParamType;
+import io.netstrap.core.server.http.ContextType;
 
 import java.lang.annotation.*;
 
@@ -21,5 +21,5 @@ public @interface NameAlias {
     /**
      * METHOD
      */
-    ParamType type();
+    ContextType type();
 }
