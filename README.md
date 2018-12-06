@@ -73,10 +73,10 @@ public class HelloController {
 
 3.可选参数类型
 ```
-@AttributeValue：请求属性值(eg:filter设置)
-@ContextValue：  请求上下文（uri，ip，id）
-@FormValue：     表单值（普通，文件）
-@HeaderValue：   请求头
+@AttributeValue  请求属性值(eg:filter设置)
+@ContextValue    请求上下文（uri，ip，id）
+@FormValue       表单值（普通，文件）
+@HeaderValue     请求头
 @ParamValue      请求URL参数
 @RequestBody     请求体（默认Json）
 
