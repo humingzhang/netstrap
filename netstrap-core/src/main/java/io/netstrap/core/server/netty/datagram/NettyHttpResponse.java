@@ -69,7 +69,7 @@ public class NettyHttpResponse extends HttpResponse {
         for (String key : getHeader().keySet()) {
             response.headers().add(key, getHeader().get(key));
         }
-        addHeader("Content-Length",getBody().getBytes());
+        addHeader(HeaderPublicKey.CONTENT_LENGTH,getBody().getBytes());
     }
 
     /**
