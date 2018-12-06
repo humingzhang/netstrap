@@ -44,7 +44,8 @@ public class HelloController {
      */
     @PostMapping("/hi")
     public String hi(HttpRequest request, HttpResponse response) {
-        return "hi netstrap";
+        response.setStatus(401);
+        return "hello netstrap";
     }
 
     /**
