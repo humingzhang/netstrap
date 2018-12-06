@@ -9,6 +9,6 @@
 
 	<!-- 打开Spring的Annotation支持 -->
 	<import resource="classpath:spring/*.xml"/>
-	<context:component-scan base-package="io.netstrap"/>
+	<context:component-scan base-package="io.netstrap.test"/>
 
 </beans>

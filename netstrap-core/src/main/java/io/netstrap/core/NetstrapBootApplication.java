@@ -62,7 +62,7 @@ public class NetstrapBootApplication {
     /**
      * 所需扫描的一组package
      */
-    private List<String> basePackages = new ArrayList<>();
+    private String[] basePackages;
     /**
      * Spring应用初始化类
      */
@@ -77,9 +77,9 @@ public class NetstrapBootApplication {
      */
     private NetstrapBootApplication(Class<?> clz) {
         this.clz = clz;
-        setBaseScanPackages();
+        initBaseScanPackages();
         //获取类加载器
-        this.factory = ClassFactory.getInstance(basePackages.toArray(new String[]{}));
+        this.factory = ClassFactory.getInstance(basePackages);
         //设置容器初始化类和监听类
         setInitializerAndListeners();
     }
@@ -118,12 +118,13 @@ public class NetstrapBootApplication {
     /**
      * 设置启动扫描路径
      */
-    private void setBaseScanPackages() {
+    private void initBaseScanPackages() {
         NetstrapApplication mainClassAnnotation =
                 clz.getAnnotation(NetstrapApplication.class);
-        basePackages.addAll(Arrays.asList(mainClassAnnotation.packages()));
-        basePackages.add(NetstrapConstant.DEFAULT_SCAN);
-        basePackages.add(clz.getPackage().getName());
+        List<String> packages = new ArrayList<>(Arrays.asList(NetstrapConstant.DEFAULT_SCAN));
+        packages.addAll(Arrays.asList(mainClassAnnotation.packages()));
+        packages.add(clz.getPackage().getName());
+        basePackages = packages.toArray(new String[]{});
     }
 
 
@@ -142,10 +143,9 @@ public class NetstrapBootApplication {
          */
         listeners.starting();
         try {
-            //构建Xml配置文件和注解配置
-            String[] packages = basePackages.toArray(new String[]{});
+
             //创建上下文
-            context = createApplicationContext(configLocations,packages);
+            context = createApplicationContext(configLocations,basePackages);
             prepareContext(context, new StandardEnvironment());
             //Spring容器初始化完毕（包括引入的Spring组件）之后调用
             listeners.contextPrepare(context);

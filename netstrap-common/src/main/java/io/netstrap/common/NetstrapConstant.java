@@ -10,7 +10,7 @@ public interface NetstrapConstant {
     /**
      * 类扫描器和Spring默认扫描路径
      */
-   String DEFAULT_SCAN = "io.netstrap";
+   String[] DEFAULT_SCAN = {"io.netstrap.core","io.netstrap.config",};
 
     /**
      * 默认绑定地址

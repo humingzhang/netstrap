@@ -10,6 +10,7 @@ import io.netstrap.test.config.WechatConfig;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,6 +46,14 @@ public class HelloController {
     @PostMapping("/hi")
     public String hi(HttpRequest request, HttpResponse response) {
         response.setStatus(401);
+        return "hello netstrap";
+    }
+
+    /**
+     * 打印字符串
+     */
+    @PostMapping("/kalas")
+    public String kalas(List<Integer> kalas) {
         return "hello netstrap";
     }
 

@@ -155,6 +155,16 @@ public class RouterFactory {
             buildParamMapping(parameter,mapping);
         }
 
+        Type[] genericParameterTypes = method.getGenericParameterTypes();
+        for (Type type : genericParameterTypes) {
+            if(type instanceof ParameterizedType) {
+                Type[] actualTypeArguments = ((ParameterizedType) type).getActualTypeArguments();
+                for (Type actual:actualTypeArguments) {
+                    System.out.println(method.getName()+"-"+type);
+                }
+            }
+        }
+
         return mappings.toArray(new ParamMapping[]{});
     }
 
