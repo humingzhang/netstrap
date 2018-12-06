@@ -110,7 +110,7 @@ public class NettyHttpRequest extends HttpRequest {
 
             for (Map.Entry<String, String> entry : entryList) {
                 String key = entry.getKey();
-                headers.put(key.toLowerCase(), entry.getValue());
+                headers.put(key, entry.getValue());
             }
             setRequestHeader(headers);
         }
@@ -161,7 +161,8 @@ public class NettyHttpRequest extends HttpRequest {
         if (Objects.isNull(getRequestBody()) || Objects.isNull(getRequestForm())) {
             //POST请求需要解析请求体
             if (POST.equals(getMethod())) {
-                String type = getRequestHeader().get(HeaderPublicKey.CONTENT_TYPE);
+
+                String type = getRequestHeader().getOrDefault(HeaderPublicKey.CONTENT_TYPE,"");
                 try {
                     boolean isForm = type.contains("form");
                     if (isForm) {
