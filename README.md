@@ -197,3 +197,5 @@ Running 1m test @ http://127.0.0.1:9000/hello
 Requests/sec:  49625.03
 Transfer/sec:      4.02MB
 ```
+
+注意：暂不支持链接参数！
