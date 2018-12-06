@@ -146,6 +146,7 @@ public class NetstrapBootApplication {
 
             //创建上下文
             context = createApplicationContext(configLocations,basePackages);
+            //准备Context
             prepareContext(context, new StandardEnvironment());
             //Spring容器初始化完毕（包括引入的Spring组件）之后调用
             listeners.contextPrepare(context);
