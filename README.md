@@ -1,7 +1,7 @@
 # Netstrap
 
 #### 项目介绍
-基于Spring Boot 和 Netty 实现的WEB开发框架，使用XML配置文件整合Spring模块，去除Starter依赖，完整实现了一套生产可用的WEB容器。 
+Web development framework based on Spring Boot and Netty. Spring module is integrated with XML configuration file, Starter dependency is removed, and a set of web containers for production is fully realized.
 
 
 #### 使用说明
