@@ -12,7 +12,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * @Description Logo打印
+ * Logo打印
+ *
  * @author minghu.zhang
  * @date 2018/11/29 14:37
  */
@@ -22,7 +23,7 @@ public class LogoApplicationListener implements ApplicationListener {
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
 
-        if(event instanceof StartedApplicationEvent) {
+        if (event instanceof StartedApplicationEvent) {
             printLogo();
         }
 
@@ -64,7 +65,7 @@ public class LogoApplicationListener implements ApplicationListener {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if(logoStream != null) {
+            if (logoStream != null) {
                 try {
                     logoStream.close();
                 } catch (IOException e) {

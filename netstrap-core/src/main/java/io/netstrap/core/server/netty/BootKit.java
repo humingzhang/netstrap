@@ -13,6 +13,7 @@ import lombok.Data;
 
 /**
  * NettyStrap工具
+ *
  * @author minghu.zhang
  * @date 2018/12/3 11:24
  */
@@ -20,13 +21,14 @@ import lombok.Data;
 class BootKit {
 
     private ServerBootstrap bootstrap;
-    private EventLoopGroup  bossGroup;
-    private EventLoopGroup  workGroup;
+    private EventLoopGroup bossGroup;
+    private EventLoopGroup workGroup;
 
     /**
      * private constructor
      */
-    private BootKit(){}
+    private BootKit() {
+    }
 
     /**
      * 获取单例对象
@@ -37,15 +39,16 @@ class BootKit {
 
     /**
      * 创建bootstrap
+     *
      * @param boss 连接线程数
      * @param work 工作线程数
      */
     void createServerBootstrap(int boss, int work) {
         bootstrap = new ServerBootstrap();
-        if(epollIsAvailable()) {
-            createEpollGroup(boss,work);
+        if (epollIsAvailable()) {
+            createEpollGroup(boss, work);
         } else {
-            createNioGroup(boss,work);
+            createNioGroup(boss, work);
         }
 
         bootstrap.option(ChannelOption.TCP_NODELAY, true)
@@ -58,20 +61,20 @@ class BootKit {
     /**
      * 创建epoll线程组
      */
-    private void createEpollGroup(int boss,int work) {
-        bossGroup   = new EpollEventLoopGroup(boss, new DefaultThreadFactory("epoll-boss@"));
+    private void createEpollGroup(int boss, int work) {
+        bossGroup = new EpollEventLoopGroup(boss, new DefaultThreadFactory("epoll-boss@"));
         workGroup = new EpollEventLoopGroup(work, new DefaultThreadFactory("epoll-worker@"));
-        bootstrap.group(bossGroup,workGroup)
+        bootstrap.group(bossGroup, workGroup)
                 .channel(EpollServerSocketChannel.class);
     }
 
     /**
      * 创建NIO线程组
      */
-    private void createNioGroup(int boss,int work) {
+    private void createNioGroup(int boss, int work) {
         bossGroup = new NioEventLoopGroup(boss, new DefaultThreadFactory("nio-boss@"));
         workGroup = new NioEventLoopGroup(work, new DefaultThreadFactory("nio-work@"));
-        bootstrap.group(bossGroup,workGroup)
+        bootstrap.group(bossGroup, workGroup)
                 .channel(NioServerSocketChannel.class);
     }
 

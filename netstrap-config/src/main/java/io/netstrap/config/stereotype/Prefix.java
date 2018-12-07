@@ -4,9 +4,10 @@ import java.lang.annotation.*;
 
 /**
  * 定义默认获取参数的前缀
+ *
  * @author minghu.zhang
  */
-@Target(value=ElementType.TYPE)
+@Target(value = ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface Prefix {

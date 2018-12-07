@@ -6,17 +6,18 @@ import org.springframework.stereotype.Component;
 
 /**
  * 定时器测试
+ *
  * @author minghu.zhang
  */
 @Component
 @Log4j2
 public class QuartzTime {
-	
-	/**
-	 * 执行刷新间隔
-	 */
-	@Scheduled(cron="0/3 * * * * ?")
-	public void loopSayHello() {
-		//TODO
-	}
+
+    /**
+     * 执行刷新间隔
+     */
+    @Scheduled(cron = "0/3 * * * * ?")
+    public void loopSayHello() {
+        //TODO
+    }
 }

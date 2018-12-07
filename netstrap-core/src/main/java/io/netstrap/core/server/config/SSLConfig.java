@@ -5,6 +5,7 @@ import lombok.Data;
 
 /**
  * SSL配置
+ *
  * @author minghu.zhang
  * @date 2018/11/07
  */
@@ -18,9 +19,9 @@ public class SSLConfig {
     /**
      * jks密码
      */
-    private String  jksPwd;
+    private String jksPwd;
     /**
      * jks密钥路径
      */
-    private String  jksPath;
+    private String jksPath;
 }

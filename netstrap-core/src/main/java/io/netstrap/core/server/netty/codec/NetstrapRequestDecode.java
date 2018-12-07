@@ -1,6 +1,5 @@
 package io.netstrap.core.server.netty.codec;
 
-import io.netty.channel.ChannelHandler;
 import io.netty.handler.codec.http.HttpRequestDecoder;
 
 /**

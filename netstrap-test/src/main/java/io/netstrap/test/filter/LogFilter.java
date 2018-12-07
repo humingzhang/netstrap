@@ -8,7 +8,8 @@ import lombok.extern.log4j.Log4j2;
 import sun.rmi.runtime.Log;
 
 /**
- * @Description 打印Log
+ * 打印Log
+ *
  * @author minghu.zhang
  * @date 2018/11/29 14:05
  */
@@ -18,14 +19,14 @@ public class LogFilter implements WebFilter {
 
     @Override
     public boolean doBefore(HttpRequest request, HttpResponse response) {
-        log.info(request.getMethod().name()+"-"+request.getRequestContext().get("uri"));
+        log.info(request.getMethod().name() + "-" + request.getRequestContext().get("uri"));
         return true;
     }
 
     @Override
     public boolean doAfter(HttpRequest request, HttpResponse response) {
         log.info(new String(response.getBody().getBytes()));
-        response.addHeader("Content-Type","application/json");
+        response.addHeader("Content-Type", "application/json");
         return true;
     }
 

@@ -150,9 +150,9 @@ public class RouterFactory {
         }
 
         //参数映射
-        buildParamTypeMapping(method,mappings);
+        buildParamTypeMapping(method, mappings);
         //构建泛型映射
-        buildGenericMapping(method,mappings);
+        buildGenericMapping(method, mappings);
 
         return mappings.toArray(new ParamMapping[]{});
     }
@@ -160,7 +160,7 @@ public class RouterFactory {
     /**
      * 构建参数类型
      */
-    private void buildParamTypeMapping(Method method,List<ParamMapping> mappings) {
+    private void buildParamTypeMapping(Method method, List<ParamMapping> mappings) {
         Parameter[] parameters = method.getParameters();
         for (int i = 0; i < parameters.length; i++) {
             Parameter parameter = parameters[i];
@@ -187,7 +187,7 @@ public class RouterFactory {
     /**
      * 构建泛型对象
      */
-    private void buildGenericMapping(Method method,List<ParamMapping> mappings) {
+    private void buildGenericMapping(Method method, List<ParamMapping> mappings) {
 
         Type[] parameterTypes = method.getGenericParameterTypes();
         for (int i = 0; i < parameterTypes.length; i++) {

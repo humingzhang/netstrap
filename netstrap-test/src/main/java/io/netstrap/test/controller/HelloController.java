@@ -16,8 +16,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 控制器示例
+ *
  * @author minghu.zhang
- * @Description 控制器示例
  * @date 2018/11/29 11:01
  */
 @RestController

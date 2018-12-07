@@ -8,6 +8,7 @@ import java.io.InputStream;
 
 /**
  * 类路径资源读取
+ *
  * @author minghu.zhang
  * @date 2018/11/02
  */

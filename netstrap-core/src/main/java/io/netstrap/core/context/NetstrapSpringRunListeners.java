@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * 执行一组Spring运行监听器
+ *
  * @author minghu.zhang
  * @date 2018/11/03
  */
@@ -26,25 +27,25 @@ public class NetstrapSpringRunListeners {
     }
 
     public void starting() {
-        for (NetstrapSpringRunListener listener:listeners) {
+        for (NetstrapSpringRunListener listener : listeners) {
             listener.starting();
         }
     }
 
     public void contextPrepare(ConfigurableApplicationContext context) {
-        for (NetstrapSpringRunListener listener:listeners) {
+        for (NetstrapSpringRunListener listener : listeners) {
             listener.contextPrepare(context);
         }
     }
 
     public void started(ConfigurableApplicationContext context) {
-        for (NetstrapSpringRunListener listener:listeners) {
+        for (NetstrapSpringRunListener listener : listeners) {
             listener.started(context);
         }
     }
 
     public void failed(ConfigurableApplicationContext context, Throwable exception) {
-        for (NetstrapSpringRunListener listener:listeners) {
+        for (NetstrapSpringRunListener listener : listeners) {
             callFailedListener(listener, context, exception);
         }
     }
@@ -53,15 +54,13 @@ public class NetstrapSpringRunListeners {
                                     ConfigurableApplicationContext context, Throwable exception) {
         try {
             listener.failed(context, exception);
-        }
-        catch (Throwable ex) {
+        } catch (Throwable ex) {
             if (exception == null) {
                 ReflectionUtils.rethrowRuntimeException(ex);
             }
             if (log.isDebugEnabled()) {
                 log.error("Error handling failed", ex);
-            }
-            else {
+            } else {
                 String message = ex.getMessage();
                 message = (message != null) ? message : "no error message";
                 log.warn("Error handling failed (" + message + ")");

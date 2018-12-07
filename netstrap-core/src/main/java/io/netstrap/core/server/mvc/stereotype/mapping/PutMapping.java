@@ -7,9 +7,10 @@ import java.lang.annotation.*;
 
 /**
  * 标识PUT请求
+ *
  * @author minghu.zhang
  */
-@Target(value={ElementType.TYPE,ElementType.METHOD})
+@Target(value = {ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @RequestMapping(method = HttpMethod.PUT)

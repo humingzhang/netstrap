@@ -145,7 +145,7 @@ public class NetstrapBootApplication {
         try {
 
             //创建上下文
-            context = createApplicationContext(configLocations,basePackages);
+            context = createApplicationContext(configLocations, basePackages);
             //准备Context
             prepareContext(context, new StandardEnvironment());
             //Spring容器初始化完毕（包括引入的Spring组件）之后调用
@@ -229,9 +229,9 @@ public class NetstrapBootApplication {
     /**
      * 创建Spring容器
      */
-    private ConfigurableApplicationContext createApplicationContext(String[] configLocations,String[] packages) {
+    private ConfigurableApplicationContext createApplicationContext(String[] configLocations, String[] packages) {
         ApplicationContext parent = new AnnotationConfigApplicationContext(packages);
-        return new ClassPathXmlApplicationContext(configLocations,parent);
+        return new ClassPathXmlApplicationContext(configLocations, parent);
     }
 
     /**

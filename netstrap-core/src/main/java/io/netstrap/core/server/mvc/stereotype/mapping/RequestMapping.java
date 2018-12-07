@@ -6,9 +6,10 @@ import java.lang.annotation.*;
 
 /**
  * 标识REQUEST请求
+ *
  * @author minghu.zhang
  */
-@Target(value={ElementType.TYPE,ElementType.METHOD})
+@Target(value = {ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface RequestMapping {

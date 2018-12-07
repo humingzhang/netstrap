@@ -4,6 +4,7 @@ import lombok.Data;
 
 /**
  * 服务状态
+ *
  * @author minghu.zhang
  * @date 2018/11/07
  */
@@ -19,7 +20,7 @@ public class Stats {
         /**
          * 初始化，启动，同步处理，结束
          */
-        READY,START,SYNC,STOP
+        READY, START, SYNC, STOP
     }
 
 }

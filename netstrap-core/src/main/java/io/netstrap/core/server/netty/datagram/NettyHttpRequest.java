@@ -92,9 +92,9 @@ public class NettyHttpRequest extends HttpRequest {
         if (Objects.isNull(getRequestContext())) {
             Map<String, String> context = new HashMap<>(3);
 
-            context.put("ip",getRemoteIp());
-            context.put("uri",getRequestUri());
-            context.put("id",getRequestId());
+            context.put("ip", getRemoteIp());
+            context.put("uri", getRequestUri());
+            context.put("id", getRequestId());
 
             setRequestContext(context);
         }
@@ -162,7 +162,7 @@ public class NettyHttpRequest extends HttpRequest {
             //POST请求需要解析请求体
             if (POST.equals(getMethod())) {
 
-                String type = getRequestHeader().getOrDefault(HeaderPublicKey.CONTENT_TYPE,"");
+                String type = getRequestHeader().getOrDefault(HeaderPublicKey.CONTENT_TYPE, "");
                 try {
                     boolean isForm = type.contains("form");
                     if (isForm) {

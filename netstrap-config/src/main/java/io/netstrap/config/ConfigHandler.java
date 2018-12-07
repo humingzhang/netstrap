@@ -26,6 +26,7 @@ import java.util.Objects;
 
 /**
  * 配置管理
+ *
  * @author minghu.zhang
  * @date 2018/11/02
  */
@@ -60,11 +61,11 @@ public class ConfigHandler {
 
         classes = factory.getClassByAnnotation(Configurable.class);
         ConfigReader configReader = new ConfigReader();
-        for (Class<?> clz:classes) {
+        for (Class<?> clz : classes) {
             final Object instance = context.getBean(clz);
-            if(Objects.nonNull(instance)) {
+            if (Objects.nonNull(instance)) {
                 Map<String, String> properties = getConfigProperties(clz, configReader);
-                setBeanProperty(instance,properties);
+                setBeanProperty(instance, properties);
             }
         }
     }
@@ -72,18 +73,18 @@ public class ConfigHandler {
     /**
      * 设置bean对象的属性值
      */
-    private void setBeanProperty(Object instance,Map<String,String> properties) throws InstantiationException, IllegalAccessException {
+    private void setBeanProperty(Object instance, Map<String, String> properties) throws InstantiationException, IllegalAccessException {
         Class<?> clz = instance.getClass();
-        saveField(instance,clz,properties);
+        saveField(instance, clz, properties);
     }
 
     /**
      * 保存字段值
      */
-    private void saveField(Object instance,Class<?> clz,Map<String,String> properties) throws IllegalAccessException, InstantiationException {
+    private void saveField(Object instance, Class<?> clz, Map<String, String> properties) throws IllegalAccessException, InstantiationException {
         Class<?> superclass = clz.getSuperclass();
-        if(!superclass.equals(Object.class)) {
-            saveField(instance,superclass,properties);
+        if (!superclass.equals(Object.class)) {
+            saveField(instance, superclass, properties);
         }
 
         String prefix = clz.getSimpleName().replaceAll("[A-Z]", ".$0").toLowerCase();
@@ -100,14 +101,14 @@ public class ConfigHandler {
         }
 
         for (Field field : clz.getDeclaredFields()) {
-            setFieldValue(field,prefix,properties,instance);
+            setFieldValue(field, prefix, properties, instance);
         }
     }
 
     /**
      * 设置值参数
      */
-    private void setFieldValue(Field field,String prefix,Map<String,String> properties,Object instance) throws IllegalAccessException, InstantiationException {
+    private void setFieldValue(Field field, String prefix, Map<String, String> properties, Object instance) throws IllegalAccessException, InstantiationException {
         field.setAccessible(true);
 
         String key = prefix + "." + field.getName();
@@ -117,12 +118,12 @@ public class ConfigHandler {
         }
 
         String value = properties.get(key);
-        if(Convertible.convertible(field.getType())) {
+        if (Convertible.convertible(field.getType())) {
             if (Objects.nonNull(value)) {
                 field.set(instance, ConvertUtils.convert(value, field.getType()));
             }
         } else {
-            if(!field.isAnnotationPresent(Autowired.class)     ||
+            if (!field.isAnnotationPresent(Autowired.class) ||
                     !field.isAnnotationPresent(Resource.class) ||
                     !field.isAnnotationPresent(Inject.class)) {
                 Object fieldObject = field.getType().newInstance();
@@ -137,17 +138,17 @@ public class ConfigHandler {
      */
     public String parse(String express) {
         int minLength = 3;
-        if(express.length() <= minLength) {
+        if (express.length() <= minLength) {
             throw new RuntimeException("Please pass in a correct value expression. ");
         }
 
-        return express.substring(2,express.length()-1);
+        return express.substring(2, express.length() - 1);
     }
 
     /**
      * 获取配置属性
      */
-    private Map<String,String> getConfigProperties(Class<?> clz,ConfigReader configReader) throws IOException {
+    private Map<String, String> getConfigProperties(Class<?> clz, ConfigReader configReader) throws IOException {
         Configurable configurable = clz.getAnnotation(Configurable.class);
 
         InputStream input = null;
@@ -157,7 +158,7 @@ public class ConfigHandler {
             input = reader.load(configurable.path());
             properties = configReader.readByInputStream(input);
         } finally {
-            if(Objects.nonNull(input)) {
+            if (Objects.nonNull(input)) {
                 input.close();
             }
         }
@@ -167,6 +168,7 @@ public class ConfigHandler {
 
     /**
      * 读取资源内容
+     *
      * @author minghu.zhang
      * @date 2018/11/02
      */
@@ -174,6 +176,7 @@ public class ConfigHandler {
 
         /**
          * 获取资源输入流
+         *
          * @param path 资源加载路径
          * @return 获取资源输入流
          */
@@ -181,6 +184,7 @@ public class ConfigHandler {
 
         /**
          * 获取加载器
+         *
          * @param protocol 协议策略
          * @return 返回资源阅读器
          */
@@ -188,11 +192,11 @@ public class ConfigHandler {
 
             List<Class<?>> classes = ClassFactory.getInstance().getClassByInterface(ResourceReader.class);
             try {
-                for (Class<?> clz:classes) {
-                    if(clz.isAnnotationPresent(ProtocolSupport.class)) {
+                for (Class<?> clz : classes) {
+                    if (clz.isAnnotationPresent(ProtocolSupport.class)) {
 
                         ProtocolSupport support = clz.getAnnotation(ProtocolSupport.class);
-                        if(support.protocol().equals(protocol)) {
+                        if (support.protocol().equals(protocol)) {
                             return (ResourceReader) clz.newInstance();
                         }
 

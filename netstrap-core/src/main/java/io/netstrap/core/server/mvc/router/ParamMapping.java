@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * 参数映射
+ *
  * @author minghu.zhang
  * @date 2018/12/5 15:12
  */
@@ -18,11 +19,11 @@ public class ParamMapping {
     /**
      * 参数别名
      */
-    private String      alisName;
+    private String alisName;
     /**
      * 参数值类型
      */
-    private Class<?>    paramClass;
+    private Class<?> paramClass;
     /**
      * 参数类型
      */
@@ -31,12 +32,12 @@ public class ParamMapping {
     /**
      * 参数类型[基本类型，文件类型，集合类型，数组类型]
      */
-    private ParamType   paramType;
+    private ParamType paramType;
 
     /**
      * 泛型类型[仅支持一个泛型]
      */
-    private Class<?>    genericType;
+    private Class<?> genericType;
 
     @Override
     public String toString() {

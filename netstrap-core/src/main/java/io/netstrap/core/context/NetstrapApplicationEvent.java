@@ -5,6 +5,7 @@ import org.springframework.context.ApplicationEvent;
 
 /**
  * 通用事件模型
+ *
  * @author minghu.zhang
  * @date 2018/11/03
  */
@@ -21,6 +22,6 @@ public class NetstrapApplicationEvent extends ApplicationEvent {
      * 获取当前启动应用环境
      */
     public NetstrapBootApplication getApplication() {
-        return (NetstrapBootApplication)source;
+        return (NetstrapBootApplication) source;
     }
 }

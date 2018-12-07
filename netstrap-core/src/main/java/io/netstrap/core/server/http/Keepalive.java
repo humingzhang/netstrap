@@ -1,7 +1,8 @@
 package io.netstrap.core.server.http;
 
 /**
- * @Description keep_alive参数
+ * keep_alive参数
+ *
  * @author minghu.zhang
  * @date 2018/12/1 12:46
  */

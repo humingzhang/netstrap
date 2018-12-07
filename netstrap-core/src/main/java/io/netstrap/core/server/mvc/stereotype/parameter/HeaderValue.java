@@ -7,9 +7,10 @@ import java.lang.annotation.*;
 
 /**
  * 请求头参数
+ *
  * @author minghu.zhang
  */
-@Target(value={ElementType.PARAMETER})
+@Target(value = {ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @NameAlias(type = ContextType.REQUEST_HEADER)

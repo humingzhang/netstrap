@@ -6,9 +6,10 @@ import java.lang.annotation.*;
 
 /**
  * 标识资源加载器所支持的协议类型
+ *
  * @author minghu.zhang
  */
-@Target(value=ElementType.TYPE)
+@Target(value = ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface ProtocolSupport {

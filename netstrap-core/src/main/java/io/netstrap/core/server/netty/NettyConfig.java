@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 
 /**
  * Netty容器配置
+ *
  * @author minghu.zhang
  * @date 2018/11/07
  */
@@ -21,11 +22,11 @@ public class NettyConfig extends ServerConfig {
     /**
      * boss线程数
      */
-    private int    boss = Runtime.getRuntime().availableProcessors();
+    private int boss = Runtime.getRuntime().availableProcessors();
     /**
      * work线程数
      */
-    private int    work = Runtime.getRuntime().availableProcessors()*2;
+    private int work = Runtime.getRuntime().availableProcessors() * 2;
 
 }
 

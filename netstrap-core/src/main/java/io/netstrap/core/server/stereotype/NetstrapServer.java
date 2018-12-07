@@ -6,9 +6,10 @@ import java.lang.annotation.*;
 
 /**
  * 标识为网络服务
+ *
  * @author minghu.zhang
  */
-@Target(value=ElementType.TYPE)
+@Target(value = ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Component
 @Documented

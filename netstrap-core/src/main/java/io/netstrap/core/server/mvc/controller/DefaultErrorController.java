@@ -9,8 +9,9 @@ import io.netstrap.core.server.mvc.stereotype.parameter.AttributeValue;
 import io.netstrap.core.server.mvc.stereotype.parameter.ContextValue;
 
 /**
+ * 异常控制器
+ *
  * @author minghu.zhang
- * @Description 异常控制器
  * @date 2018/11/28 19:06
  */
 @RestController

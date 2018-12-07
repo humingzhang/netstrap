@@ -2,6 +2,7 @@ package io.netstrap.config.policy;
 
 /**
  * 协议策略
+ *
  * @author minghu.zhang
  */
 public enum ProtocolPolicy {

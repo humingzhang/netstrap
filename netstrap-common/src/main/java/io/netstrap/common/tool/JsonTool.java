@@ -6,7 +6,8 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import java.util.Map;
 
 /**
- * @Description Json转换工具类
+ * Json转换工具类
+ *
  * @author minghu.zhang
  * @date 2018/11/28 17:45
  */

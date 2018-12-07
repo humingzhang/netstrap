@@ -7,9 +7,10 @@ import java.lang.annotation.*;
 
 /**
  * 标识PATCH请求
+ *
  * @author minghu.zhang
  */
-@Target(value={ElementType.TYPE,ElementType.METHOD})
+@Target(value = {ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @RequestMapping(method = HttpMethod.PATCH)

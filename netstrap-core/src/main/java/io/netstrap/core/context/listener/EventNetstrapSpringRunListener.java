@@ -13,6 +13,7 @@ import org.springframework.util.ErrorHandler;
 
 /**
  * 默认Spring容器运行监听器
+ *
  * @author minghu.zhang
  * @date 2018/11/03
  */
@@ -65,8 +66,7 @@ public class EventNetstrapSpringRunListener implements NetstrapSpringRunListener
         FailedApplicationEvent event = new FailedApplicationEvent(this.application, context, exception);
         if (context != null && context.isActive()) {
             context.publishEvent(event);
-        }
-        else {
+        } else {
             if (context instanceof AbstractApplicationContext) {
                 for (ApplicationListener<?> listener : ((AbstractApplicationContext) context)
                         .getApplicationListeners()) {

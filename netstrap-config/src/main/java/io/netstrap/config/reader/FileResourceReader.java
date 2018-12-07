@@ -9,6 +9,7 @@ import java.io.InputStream;
 
 /**
  * 本地磁盘文件加载
+ *
  * @author minghu.zhang
  * @date 2018/11/02
  */
@@ -20,7 +21,7 @@ public class FileResourceReader implements ConfigHandler.ResourceReader {
         try {
             return new FileInputStream(path);
         } catch (Exception e) {
-            throw new RuntimeException("the file \""+path+"\" isn't exits.");
+            throw new RuntimeException("the file \"" + path + "\" isn't exits.");
         }
     }
 

@@ -53,7 +53,7 @@ public class DefaultHttpHandler extends ChannelInboundHandlerAdapter {
      */
     private void handleHttpRequest(ChannelHandlerContext context, FullHttpRequest req) {
         //创建请求对象
-        HttpRequest request = new NettyHttpRequest(context,req)
+        HttpRequest request = new NettyHttpRequest(context, req)
                 .parseContext()
                 .parseMethod()
                 .parseHeader()
@@ -61,13 +61,13 @@ public class DefaultHttpHandler extends ChannelInboundHandlerAdapter {
                 .parseBody();
         //创建响应对象
         HttpResponse response = new NettyHttpResponse(context.channel())
-                                .keepAlive(req.protocolVersion(),request.getRequestHeader());
+                .keepAlive(req.protocolVersion(), request.getRequestHeader());
 
-        context.channel().eventLoop().execute(()->{
+        context.channel().eventLoop().execute(() -> {
             try {
-                dispatcher.doDispatcher(request,response);
+                dispatcher.doDispatcher(request, response);
             } catch (Exception e) {
-                exceptionCaught(context,e.getCause());
+                exceptionCaught(context, e.getCause());
             }
         });
     }

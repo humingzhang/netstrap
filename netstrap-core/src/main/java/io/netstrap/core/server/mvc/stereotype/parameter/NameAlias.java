@@ -6,9 +6,10 @@ import java.lang.annotation.*;
 
 /**
  * 参数别名
+ *
  * @author minghu.zhang
  */
-@Target(value={ElementType.ANNOTATION_TYPE,ElementType.PARAMETER})
+@Target(value = {ElementType.ANNOTATION_TYPE, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface NameAlias {

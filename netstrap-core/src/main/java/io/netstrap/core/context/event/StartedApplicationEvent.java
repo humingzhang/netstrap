@@ -7,6 +7,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 /**
  * 启动完成事件
+ *
  * @author minghu.zhang
  * @date 2018/11/03
  */

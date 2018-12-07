@@ -2,6 +2,7 @@ package io.netstrap.core.server.exception;
 
 /**
  * 参数解析异常
+ *
  * @author minghu.zhang
  * @date 2018/12/5 17:13
  */

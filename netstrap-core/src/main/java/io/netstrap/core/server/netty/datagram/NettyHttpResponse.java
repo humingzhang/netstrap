@@ -16,6 +16,7 @@ import java.util.Objects;
 
 /**
  * Netty HTTP响应体
+ *
  * @author minghu.zhang
  * @date 2018/11/08
  */
@@ -40,7 +41,7 @@ public class NettyHttpResponse extends HttpResponse {
 
     @Override
     public void write() {
-        if(isWritable()) {
+        if (isWritable()) {
             createResponse();
             addHeaders();
             writeFlush();
@@ -69,7 +70,7 @@ public class NettyHttpResponse extends HttpResponse {
         for (String key : getHeader().keySet()) {
             response.headers().add(key, getHeader().get(key));
         }
-        addHeader(HeaderPublicKey.CONTENT_LENGTH,getBody().getBytes());
+        addHeader(HeaderPublicKey.CONTENT_LENGTH, getBody().getBytes());
     }
 
     /**
@@ -93,14 +94,14 @@ public class NettyHttpResponse extends HttpResponse {
 
         String connection = header.getOrDefault(HeaderPublicKey.CONNECTION, Keepalive.CLOSE_ALIVE).toLowerCase();
         //设置keep-alive
-        if((httpVersion.equals(HttpVersion.HTTP_1_1) && !connection.equals(Keepalive.CLOSE_ALIVE))) {
+        if ((httpVersion.equals(HttpVersion.HTTP_1_1) && !connection.equals(Keepalive.CLOSE_ALIVE))) {
             setKeepAlive(true);
-        } else if(httpVersion.equals(HttpVersion.HTTP_1_0) && connection.equals(Keepalive.KEEP_ALIVE)) {
+        } else if (httpVersion.equals(HttpVersion.HTTP_1_0) && connection.equals(Keepalive.KEEP_ALIVE)) {
             setKeepAlive(true);
         }
 
-        if(isKeepAlive()) {
-            addHeader(HeaderPublicKey.CONNECTION,Keepalive.KEEP_ALIVE);
+        if (isKeepAlive()) {
+            addHeader(HeaderPublicKey.CONNECTION, Keepalive.KEEP_ALIVE);
         }
 
         return this;

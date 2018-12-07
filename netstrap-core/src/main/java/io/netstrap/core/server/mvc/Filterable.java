@@ -11,10 +11,10 @@ import java.lang.annotation.Target;
 /**
  * Filter类注解，提供过滤器调用顺序
  */
-@Target(value={ElementType.TYPE})
+@Target(value = {ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Component
 @Documented
 public @interface Filterable {
-	int order() default 0;
+    int order() default 0;
 }

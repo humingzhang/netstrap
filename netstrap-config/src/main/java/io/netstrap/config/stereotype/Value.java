@@ -4,9 +4,10 @@ import java.lang.annotation.*;
 
 /**
  * 定义获取参数值的表达式
+ *
  * @author minghu.zhang
  */
-@Target(value=ElementType.FIELD)
+@Target(value = ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface Value {

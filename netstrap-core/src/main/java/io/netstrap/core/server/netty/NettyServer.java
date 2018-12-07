@@ -24,6 +24,7 @@ import org.springframework.util.StringUtils;
 
 /**
  * Netty服务接口
+ *
  * @author minghu.zhang
  * @date 2018/11/05
  */
@@ -38,7 +39,7 @@ public class NettyServer implements Server {
     /**
      * The result of an asynchronous {@link Channel} I/O operation.
      */
-    private ChannelFuture     sync;
+    private ChannelFuture sync;
     /**
      * netty配置
      */
@@ -73,24 +74,24 @@ public class NettyServer implements Server {
         applyChildHandler(bootstrap, protocol);
 
         // 绑定端口
-        int port  = nettyServerConfig.getPort();
+        int port = nettyServerConfig.getPort();
         String ip = nettyServerConfig.getIp();
 
-        if(StringUtils.isEmpty(ip) || NetstrapConstant.ANY_ADDRESS.equals(ip)) {
+        if (StringUtils.isEmpty(ip) || NetstrapConstant.ANY_ADDRESS.equals(ip)) {
             sync = bootstrap.bind(port).sync();
         } else {
-            sync = bootstrap.bind(ip,port).sync();
+            sync = bootstrap.bind(ip, port).sync();
         }
 
         status.setCode(Stats.Code.START);
-        log.info("The server bind IP:"+ip+" , PORT:" + port);
+        log.info("The server bind IP:" + ip + " , PORT:" + port);
     }
 
     /**
      * 设置网络IO处理，默认实现HTTP
      */
     private void applyChildHandler(ServerBootstrap bootstrap, ProtocolType protocol) {
-        if(protocol.equals(ProtocolType.HTTP)) {
+        if (protocol.equals(ProtocolType.HTTP)) {
             bootstrap.childHandler(httpChannelInitializer);
         } else if (protocol.equals(ProtocolType.SOCKET)) {
             //TODO

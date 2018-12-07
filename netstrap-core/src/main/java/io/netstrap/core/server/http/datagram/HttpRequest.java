@@ -98,18 +98,18 @@ public abstract class HttpRequest {
     /**
      * 设置参数
      */
-    public void setAttribute(String key,Object value) {
-        if(Objects.isNull(requestAttribute)) {
+    public void setAttribute(String key, Object value) {
+        if (Objects.isNull(requestAttribute)) {
             requestAttribute = new HashMap<>(8);
         }
-        requestAttribute.put(key,value);
+        requestAttribute.put(key, value);
     }
 
     /**
      * 获取参数
      */
-    public <N>N getAttribute(String key) {
-        if(Objects.isNull(requestAttribute)) {
+    public <N> N getAttribute(String key) {
+        if (Objects.isNull(requestAttribute)) {
             requestAttribute = new HashMap<>(8);
         }
         return (N) requestAttribute.get(key);
