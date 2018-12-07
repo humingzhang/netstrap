@@ -1,6 +1,7 @@
 package io.netstrap.core.server.http.datagram;
 
 import io.netstrap.core.server.http.Keepalive;
+import io.netstrap.core.server.http.header.HeaderPublicKey;
 import io.netstrap.core.server.http.wrapper.HttpBody;
 import io.netty.handler.codec.http.HttpVersion;
 import lombok.Data;
@@ -56,7 +57,6 @@ public abstract class HttpResponse {
      * @return this
      */
     public HttpResponse setBody(HttpBody body) {
-        addHeader("Content-Length",body.getBytes().length);
         this.body = body;
         return this;
     }
