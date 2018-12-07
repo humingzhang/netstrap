@@ -1,4 +1,4 @@
-package io.netstrap.core.context;
+package io.netstrap.core.server.context;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.ConfigurableApplicationContext;

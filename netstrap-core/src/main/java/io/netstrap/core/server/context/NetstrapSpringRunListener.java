@@ -1,4 +1,4 @@
-package io.netstrap.core.context;
+package io.netstrap.core.server.context;
 
 import org.springframework.context.ConfigurableApplicationContext;
 

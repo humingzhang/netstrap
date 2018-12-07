@@ -1,4 +1,4 @@
-package io.netstrap.core.server;
+package io.netstrap.core.server.server;
 
 import io.netstrap.core.server.enums.ProtocolType;
 import io.netstrap.core.server.stats.Stats;

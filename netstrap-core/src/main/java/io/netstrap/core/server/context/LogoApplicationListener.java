@@ -1,13 +1,12 @@
-package io.netstrap.core.context;
+package io.netstrap.core.server.context;
 
-import io.netstrap.core.context.event.StartedApplicationEvent;
+import io.netstrap.core.server.context.event.StartedApplicationEvent;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 

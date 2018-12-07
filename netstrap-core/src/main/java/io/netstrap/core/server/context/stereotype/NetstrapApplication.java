@@ -1,4 +1,4 @@
-package io.netstrap.core.context.stereotype;
+package io.netstrap.core.server.context.stereotype;
 
 import java.lang.annotation.*;
 

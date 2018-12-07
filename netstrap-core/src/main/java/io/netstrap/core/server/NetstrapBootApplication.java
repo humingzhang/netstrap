@@ -1,16 +1,16 @@
-package io.netstrap.core;
+package io.netstrap.core.server;
 
 import io.netstrap.common.NetstrapConstant;
 import io.netstrap.common.factory.ClassFactory;
-import io.netstrap.core.context.NetstrapSpringRunListener;
-import io.netstrap.core.context.NetstrapSpringRunListeners;
-import io.netstrap.core.context.stereotype.EnableNetstrapServer;
-import io.netstrap.core.context.stereotype.NetstrapApplication;
-import io.netstrap.core.server.Server;
+import io.netstrap.core.server.context.NetstrapSpringRunListener;
+import io.netstrap.core.server.context.NetstrapSpringRunListeners;
+import io.netstrap.core.server.context.stereotype.EnableNetstrapServer;
+import io.netstrap.core.server.context.stereotype.NetstrapApplication;
 import io.netstrap.core.server.enums.ProtocolType;
 import io.netstrap.core.server.enums.ServerType;
 import io.netstrap.core.server.mina.MinaServer;
 import io.netstrap.core.server.netty.NettyServer;
+import io.netstrap.core.server.server.Server;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.ApplicationContext;

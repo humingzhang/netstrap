@@ -1,6 +1,6 @@
-package io.netstrap.core.context;
+package io.netstrap.core.server.context;
 
-import io.netstrap.core.NetstrapBootApplication;
+import io.netstrap.core.server.NetstrapBootApplication;
 import org.springframework.context.ApplicationEvent;
 
 /**

@@ -1,4 +1,4 @@
-package io.netstrap.core.context.stereotype;
+package io.netstrap.core.server.context.stereotype;
 
 import io.netstrap.core.server.enums.ProtocolType;
 import io.netstrap.core.server.enums.ServerType;

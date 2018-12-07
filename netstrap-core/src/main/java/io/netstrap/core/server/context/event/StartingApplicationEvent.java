@@ -1,6 +1,6 @@
-package io.netstrap.core.context.event;
+package io.netstrap.core.server.context.event;
 
-import io.netstrap.core.context.NetstrapApplicationEvent;
+import io.netstrap.core.server.context.NetstrapApplicationEvent;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 
