@@ -44,8 +44,6 @@ public abstract class HttpResponse {
 
     /**
      * 添加响应头
-     *
-     * @return this
      */
     public void addHeader(String key, Object value) {
         this.header.put(key, value.toString());
