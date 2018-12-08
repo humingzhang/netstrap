@@ -237,7 +237,7 @@ public class DefaultHttpDispatcher extends Dispatcher {
      * 处理数组
      */
     private Object handleArray(HttpForm requestForm,String alias,Class<?> paramClass) {
-        Object value = null;
+        Object value;
 
         if (paramClass.equals(MixedFileUpload.class)) {
             value = requestForm.getUploads(alias).toArray(new MixedFileUpload[]{});
