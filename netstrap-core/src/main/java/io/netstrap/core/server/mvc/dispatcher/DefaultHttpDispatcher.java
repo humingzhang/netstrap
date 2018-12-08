@@ -196,40 +196,61 @@ public class DefaultHttpDispatcher extends Dispatcher {
                     value = requestForm.getUpload(alias);
                     break;
                 case LIST_PARAM:
-                    Class<?> genericType = mapping.getGenericType();
-                    if (genericType.equals(MixedFileUpload.class)) {
-                        value = requestForm.getUploads(alias);
-                    } else if (Convertible.convertible(genericType)) {
-                        List<String> params = requestForm.getParams(alias);
-                        if (genericType.equals(String.class)) {
-                            value = params;
-                        } else {
-                            List<Object> values = new ArrayList<>();
-                            for (String param : params) {
-                                values.add(convertValueType(param, genericType));
-                            }
-                            value = paramClass.cast(values);
-                        }
-                    }
+                    value = handleList(mapping.getGenericType(),requestForm,alias,paramClass);
                     break;
                 case ARRAY_PARAM:
-                    if (paramClass.equals(MixedFileUpload.class)) {
-                        value = requestForm.getUploads(alias).toArray(new MixedFileUpload[]{});
-                    } else {
-                        List<String> params = requestForm.getParams(alias);
-                        Object array = Array.newInstance(paramClass, params.size());
-
-                        for (int i = 0; i < params.size(); i++) {
-                            String param = params.get(i);
-                            Array.set(array, i, convertValueType(param, paramClass));
-                        }
-
-                        value = array;
-                    }
+                    value = handleArray(requestForm,alias,paramClass);
                     break;
                 default:
                     break;
             }
+        }
+
+        return value;
+    }
+
+    /**
+     * 处理List
+     */
+    private Object handleList(Class<?> genericType,HttpForm requestForm,String alias,Class<?> paramClass) {
+        Object value = null;
+
+        if (genericType.equals(MixedFileUpload.class)) {
+            value = requestForm.getUploads(alias);
+        } else if (Convertible.convertible(genericType)) {
+            List<String> params = requestForm.getParams(alias);
+            if (genericType.equals(String.class)) {
+                value = params;
+            } else {
+                List<Object> values = new ArrayList<>();
+                for (String param : params) {
+                    values.add(convertValueType(param, genericType));
+                }
+                value = paramClass.cast(values);
+            }
+        }
+
+        return value;
+    }
+
+    /**
+     * 处理数组
+     */
+    private Object handleArray(HttpForm requestForm,String alias,Class<?> paramClass) {
+        Object value = null;
+
+        if (paramClass.equals(MixedFileUpload.class)) {
+            value = requestForm.getUploads(alias).toArray(new MixedFileUpload[]{});
+        } else {
+            List<String> params = requestForm.getParams(alias);
+            Object array = Array.newInstance(paramClass, params.size());
+
+            for (int i = 0; i < params.size(); i++) {
+                String param = params.get(i);
+                Array.set(array, i, convertValueType(param, paramClass));
+            }
+
+            value = array;
         }
 
         return value;
