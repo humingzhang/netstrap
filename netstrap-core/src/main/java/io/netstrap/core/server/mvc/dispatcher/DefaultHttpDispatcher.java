@@ -196,10 +196,10 @@ public class DefaultHttpDispatcher extends Dispatcher {
                     value = requestForm.getUpload(alias);
                     break;
                 case LIST_PARAM:
-                    value = handleList(mapping.getGenericType(),requestForm,alias,paramClass);
+                    value = handleFormList(mapping.getGenericType(),requestForm,alias,paramClass);
                     break;
                 case ARRAY_PARAM:
-                    value = handleArray(requestForm,alias,paramClass);
+                    value = handleFormArray(requestForm,alias,paramClass);
                     break;
                 default:
                     break;
@@ -212,7 +212,7 @@ public class DefaultHttpDispatcher extends Dispatcher {
     /**
      * 处理List
      */
-    private Object handleList(Class<?> genericType,HttpForm requestForm,String alias,Class<?> paramClass) {
+    private Object handleFormList(Class<?> genericType,HttpForm requestForm,String alias,Class<?> paramClass) {
         Object value = null;
 
         if (genericType.equals(MixedFileUpload.class)) {
@@ -236,7 +236,7 @@ public class DefaultHttpDispatcher extends Dispatcher {
     /**
      * 处理数组
      */
-    private Object handleArray(HttpForm requestForm,String alias,Class<?> paramClass) {
+    private Object handleFormArray(HttpForm requestForm,String alias,Class<?> paramClass) {
         Object value;
 
         if (paramClass.equals(MixedFileUpload.class)) {
