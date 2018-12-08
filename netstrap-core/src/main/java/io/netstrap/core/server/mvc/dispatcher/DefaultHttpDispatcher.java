@@ -151,15 +151,19 @@ public class DefaultHttpDispatcher extends Dispatcher {
 
         switch (mapping.getContextType()) {
             case REQUEST_PARAM:
+                //TODO 处理POJO
                 value = convertValueType(request.getRequestParam().get(alias), paramClass);
                 break;
             case REQUEST_HEADER:
+                //TODO 处理POJO
                 value = convertValueType(request.getRequestHeader().get(alias), paramClass);
                 break;
             case REQUEST_CONTEXT:
+                //TODO 处理POJO
                 value = convertValueType(request.getRequestContext().get(alias), paramClass);
                 break;
             case REQUEST_ATTRIBUTE:
+                //TODO 处理POJO
                 value = convertValueType(request.getAttribute(alias), paramClass);
                 break;
             case REQUEST_FORM:
