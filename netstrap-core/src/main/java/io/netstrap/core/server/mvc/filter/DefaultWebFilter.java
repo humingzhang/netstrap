@@ -48,7 +48,7 @@ public class DefaultWebFilter implements WebFilter {
      * 初始化过滤器
      */
     @PostConstruct
-    public void init() throws IllegalAccessException, InstantiationException {
+    public void init() {
         factory = ClassFactory.getInstance();
         initFilterChain();
     }
@@ -56,7 +56,7 @@ public class DefaultWebFilter implements WebFilter {
     /**
      * 初始化过滤器链
      */
-    private void initFilterChain() throws IllegalAccessException, InstantiationException {
+    private void initFilterChain() {
         List<Pair<Integer, Class<?>>> ordered = getOrderedList();
 
         for (Pair<Integer, Class<?>> pair : ordered) {
