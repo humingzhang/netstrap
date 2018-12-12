@@ -1,13 +1,12 @@
 package io.netstrap.core.server.http.datagram;
 
-import io.netstrap.core.server.http.Keepalive;
-import io.netstrap.core.server.http.header.HeaderPublicKey;
 import io.netstrap.core.server.http.wrapper.HttpBody;
-import io.netty.handler.codec.http.HttpVersion;
 import lombok.Data;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static io.netstrap.core.server.http.header.HeaderPublicKey.CONTENT_LENGTH;
 
 /**
  * Http响应数据报文

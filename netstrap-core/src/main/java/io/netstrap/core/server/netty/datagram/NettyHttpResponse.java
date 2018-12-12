@@ -14,6 +14,8 @@ import lombok.Builder;
 import java.util.Map;
 import java.util.Objects;
 
+import static io.netstrap.core.server.http.header.HeaderPublicKey.CONTENT_LENGTH;
+
 /**
  * Netty HTTP响应体
  *
@@ -70,13 +72,14 @@ public class NettyHttpResponse extends HttpResponse {
         for (String key : getHeader().keySet()) {
             response.headers().add(key, getHeader().get(key));
         }
-        addHeader(HeaderPublicKey.CONTENT_LENGTH, getBody().getBytes());
     }
 
     /**
      * 写数据
      */
     private void writeFlush() {
+        //添加数据长度响应头
+        response.headers().add(CONTENT_LENGTH,getBody().getBytes().length);
         ChannelFuture future = channel.writeAndFlush(response);
 
         if (!isKeepAlive()) {

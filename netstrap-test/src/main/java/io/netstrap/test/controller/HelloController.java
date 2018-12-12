@@ -5,6 +5,7 @@ import io.netstrap.core.server.http.datagram.HttpResponse;
 import io.netstrap.core.server.mvc.stereotype.RestController;
 import io.netstrap.core.server.mvc.stereotype.mapping.GetMapping;
 import io.netstrap.core.server.mvc.stereotype.mapping.PostMapping;
+import io.netstrap.core.server.mvc.stereotype.parameter.ContextValue;
 import io.netstrap.core.server.mvc.stereotype.parameter.FormValue;
 import io.netstrap.core.server.mvc.stereotype.parameter.RequestBody;
 import io.netstrap.test.config.WechatConfig;
@@ -35,21 +36,17 @@ public class HelloController {
     /**
      * 打印字符串
      */
-    @PostMapping("/hello")
-    public String hello(@RequestBody Map map) {
-        map.forEach((key, value) -> {
-            System.out.println(key + "," + value);
-        });
-        return "hello netstrap";
+    @GetMapping("/hello")
+    public String hello(@ContextValue String id) {
+        return "hello netstrap -> " + id;
     }
 
     /**
      * 打印字符串
      */
-    @PostMapping("/hi")
-    public String hi(HttpRequest request, HttpResponse response) {
-        response.setStatus(401);
-        return "hello netstrap";
+    @GetMapping("/hi")
+    public String hi(@ContextValue String id) {
+        return "hello netstrap -> " + id;
     }
 
     /**
