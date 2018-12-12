@@ -5,14 +5,15 @@ import io.netstrap.core.server.http.datagram.HttpResponse;
 import io.netstrap.core.server.mvc.stereotype.RestController;
 import io.netstrap.core.server.mvc.stereotype.mapping.GetMapping;
 import io.netstrap.core.server.mvc.stereotype.mapping.PostMapping;
-import io.netstrap.core.server.mvc.stereotype.parameter.ContextValue;
 import io.netstrap.core.server.mvc.stereotype.parameter.FormValue;
+import io.netstrap.core.server.mvc.stereotype.parameter.RequestBody;
 import io.netstrap.test.config.WechatConfig;
 import io.netty.handler.codec.http.multipart.MixedFileUpload;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 控制器示例
@@ -34,17 +35,21 @@ public class HelloController {
     /**
      * 打印字符串
      */
-    @GetMapping("/hello")
-    public String hello(@ContextValue String id) {
-        return "hello netstrap ->" + id;
+    @PostMapping("/hello")
+    public String hello(@RequestBody Map map) {
+        map.forEach((key, value) -> {
+            System.out.println(key + "," + value);
+        });
+        return "hello netstrap";
     }
 
     /**
      * 打印字符串
      */
-    @GetMapping("/hi")
-    public String hi(@ContextValue String id) {
-        return "hello netstrap -> " + id;
+    @PostMapping("/hi")
+    public String hi(HttpRequest request, HttpResponse response) {
+        response.setStatus(401);
+        return "hello netstrap";
     }
 
     /**

@@ -2,8 +2,6 @@ package io.netstrap.core.server.netty.datagram;
 
 import io.netstrap.core.server.http.Keepalive;
 import io.netstrap.core.server.http.datagram.HttpResponse;
-import static io.netstrap.core.server.http.header.HeaderPublicKey.*;
-
 import io.netstrap.core.server.http.header.HeaderPublicKey;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -11,6 +9,7 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.handler.codec.http.*;
+import lombok.Builder;
 
 import java.util.Map;
 import java.util.Objects;
@@ -71,14 +70,13 @@ public class NettyHttpResponse extends HttpResponse {
         for (String key : getHeader().keySet()) {
             response.headers().add(key, getHeader().get(key));
         }
+        addHeader(HeaderPublicKey.CONTENT_LENGTH, getBody().getBytes());
     }
 
     /**
      * 写数据
      */
     private void writeFlush() {
-        long length = getBody().getBytes().length;
-        response.headers().add(CONTENT_LENGTH,length);
         ChannelFuture future = channel.writeAndFlush(response);
 
         if (!isKeepAlive()) {
