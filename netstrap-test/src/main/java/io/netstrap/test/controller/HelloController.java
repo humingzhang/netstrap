@@ -40,10 +40,8 @@ public class HelloController {
     @GetMapping("/hello")
     public void hello(@ContextValue String id,HttpResponse response) {
         String echo =  "hello netstrap -> " + id;
-        while (true) {
-            response.setBody(HttpBody.wrap((echo+" -> "+System.currentTimeMillis()).getBytes()));
-            response.write();
-        }
+        response.setBody(HttpBody.wrap((echo+" -> "+System.currentTimeMillis()).getBytes()));
+        response.write();
     }
 
     /**

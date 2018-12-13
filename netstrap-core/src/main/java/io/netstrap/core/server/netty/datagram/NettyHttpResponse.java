@@ -49,8 +49,6 @@ public class NettyHttpResponse extends HttpResponse {
             createResponse();
             addHeaders();
             writeFlush();
-        } else {
-            throw new RuntimeException("Response data can not be repeated output. ");
         }
     }
 
