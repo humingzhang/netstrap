@@ -8,8 +8,10 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
-import io.netty.handler.codec.http.*;
-import lombok.Builder;
+import io.netty.handler.codec.http.DefaultFullHttpResponse;
+import io.netty.handler.codec.http.FullHttpResponse;
+import io.netty.handler.codec.http.HttpResponseStatus;
+import io.netty.handler.codec.http.HttpVersion;
 
 import java.util.Map;
 import java.util.Objects;
@@ -84,9 +86,9 @@ public class NettyHttpResponse extends HttpResponse {
 
         if (!isKeepAlive()) {
             future.addListener(ChannelFutureListener.CLOSE);
+            //非keep-alive则不能多次写
+            setWritable(false);
         }
-
-        setWritable(false);
     }
 
 
