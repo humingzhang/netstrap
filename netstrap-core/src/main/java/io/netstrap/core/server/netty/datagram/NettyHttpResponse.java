@@ -86,11 +86,10 @@ public class NettyHttpResponse extends HttpResponse {
 
         if (!isKeepAlive()) {
             future.addListener(ChannelFutureListener.CLOSE);
-            //非keep-alive则不能多次写
-            setWritable(false);
         }
+        //只能写一次。
+        setWritable(false);
     }
-
 
     /**
      * 设置keep-alive

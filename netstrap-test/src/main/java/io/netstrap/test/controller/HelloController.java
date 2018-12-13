@@ -2,6 +2,7 @@ package io.netstrap.test.controller;
 
 import io.netstrap.core.server.http.datagram.HttpRequest;
 import io.netstrap.core.server.http.datagram.HttpResponse;
+import io.netstrap.core.server.http.wrapper.HttpBody;
 import io.netstrap.core.server.mvc.stereotype.RestController;
 import io.netstrap.core.server.mvc.stereotype.mapping.GetMapping;
 import io.netstrap.core.server.mvc.stereotype.mapping.PostMapping;
@@ -37,8 +38,12 @@ public class HelloController {
      * 打印字符串
      */
     @GetMapping("/hello")
-    public String hello(@ContextValue String id) {
-        return "hello netstrap -> " + id;
+    public void hello(@ContextValue String id,HttpResponse response) {
+        String echo =  "hello netstrap -> " + id;
+        while (true) {
+            response.setBody(HttpBody.wrap((echo+" -> "+System.currentTimeMillis()).getBytes()));
+            response.write();
+        }
     }
 
     /**

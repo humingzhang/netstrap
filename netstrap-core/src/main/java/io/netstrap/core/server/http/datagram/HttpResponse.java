@@ -66,7 +66,23 @@ public abstract class HttpResponse {
     /**
      * 查询通道是否可写
      */
-    public boolean isWritable() {
+    protected boolean isWritable() {
         return writable;
+    }
+
+    /**
+     * 设置keep-alive
+     * @param keepAlive 是否属于keep-alive
+     */
+    protected void setKeepAlive(boolean keepAlive) {
+        this.keepAlive = keepAlive;
+    }
+
+    /**
+     * 设置是否可写
+     * @param writable 是否可写
+     */
+    protected void setWritable(boolean writable) {
+        this.writable = writable;
     }
 }

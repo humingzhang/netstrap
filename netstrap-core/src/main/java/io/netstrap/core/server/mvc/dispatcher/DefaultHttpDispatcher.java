@@ -88,7 +88,7 @@ public class DefaultHttpDispatcher extends Dispatcher {
                 response.setBody(HttpBody.wrap(body));
             }
         } catch (Exception e) {
-            request.setAttribute("message", e.getMessage());
+            request.addAttribute("message", e.getMessage());
             if (e instanceof ParameterParseException) {
                 doInvoke(factory.getBadRequestRouter(), request, response);
             } else {

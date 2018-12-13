@@ -98,7 +98,7 @@ public abstract class HttpRequest {
     /**
      * 设置参数
      */
-    public void setAttribute(String key, Object value) {
+    public void addAttribute(String key, Object value) {
         if (Objects.isNull(requestAttribute)) {
             requestAttribute = new HashMap<>(8);
         }
@@ -157,4 +157,38 @@ public abstract class HttpRequest {
      */
     public abstract HttpRequest release();
 
+    protected HttpRequest setMethod(HttpMethod method) {
+        this.method = method;
+        return this;
+    }
+
+    protected HttpRequest setRequestAttribute(Map<String, Object> requestAttribute) {
+        this.requestAttribute = requestAttribute;
+        return this;
+    }
+
+    protected HttpRequest setRequestContext(Map<String, String> requestContext) {
+        this.requestContext = requestContext;
+        return this;
+    }
+
+    protected HttpRequest setRequestHeader(Map<String, String> requestHeader) {
+        this.requestHeader = requestHeader;
+        return this;
+    }
+
+    protected HttpRequest setRequestParam(Map<String, String> requestParam) {
+        this.requestParam = requestParam;
+        return this;
+    }
+
+    protected HttpRequest setRequestBody(HttpBody requestBody) {
+        this.requestBody = requestBody;
+        return this;
+    }
+
+    protected HttpRequest setRequestForm(HttpForm requestForm) {
+        this.requestForm = requestForm;
+        return this;
+    }
 }
