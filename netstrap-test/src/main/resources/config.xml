@@ -7,8 +7,10 @@
 		 http://www.springframework.org/schema/context
          http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<!-- 打开Spring的Annotation支持 -->
+	<!--
 	<import resource="classpath:spring/*.xml"/>
+	-->
+	<!-- 打开Spring的Annotation支持 -->
 	<context:component-scan base-package="io.netstrap.test"/>
 
 </beans>
