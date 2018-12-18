@@ -6,6 +6,8 @@ import io.netstrap.core.server.config.ServerConfig;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Netty容器配置
  *
@@ -18,7 +20,6 @@ import lombok.EqualsAndHashCode;
 @Prefix("netty")
 @EqualsAndHashCode(callSuper = false)
 public class NettyConfig extends ServerConfig {
-
     /**
      * boss线程数
      */
@@ -27,7 +28,22 @@ public class NettyConfig extends ServerConfig {
      * work线程数
      */
     private int work = Runtime.getRuntime().availableProcessors() * 2;
-
+    /**
+     * 读超时
+     */
+    private int read = 3;
+    /**
+     * 写超时
+     */
+    private int write = 4;
+    /**
+     * 所有超时
+     */
+    private int all = 5;
+    /**
+     * web,socket,握手连接
+     */
+    private String endpoint = "/web/socket";
 }
 
 

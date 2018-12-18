@@ -1,6 +1,6 @@
 package io.netstrap.core.server.netty.initializer;
 
-import io.netstrap.core.server.config.SSLConfig;
+import io.netstrap.core.server.config.SslConfig;
 import io.netstrap.core.server.netty.NettyConfig;
 import io.netstrap.core.server.netty.codec.NetstrapRequestDecode;
 import io.netstrap.core.server.netty.codec.NetstrapResponseEncoder;
@@ -45,14 +45,14 @@ public class HttpChannelInitializer extends ChannelInitializer<SocketChannel> {
 	@Override
 	public void initChannel(SocketChannel ch) throws Exception {
 		ChannelPipeline pipeline = ch.pipeline();
-        SSLConfig ssl = nettyConfig.getSsl();
+        SslConfig ssl = nettyConfig.getSsl();
 
         if(ssl.isEnable()) {
             initSSL(pipeline,ssl);
         }
 
 		pipeline.addLast(new NetstrapRequestDecode());
-		pipeline.addLast(new HttpObjectAggregator(10*1024*1024));
+		pipeline.addLast(new HttpObjectAggregator(65535));
 		pipeline.addLast(handler);
 		pipeline.addLast(new NetstrapResponseEncoder());
 	}
@@ -60,7 +60,7 @@ public class HttpChannelInitializer extends ChannelInitializer<SocketChannel> {
     /**
      * 初始化SSL
      */
-	private void initSSL(ChannelPipeline pipeline, SSLConfig ssl) throws Exception {
+	private void initSSL(ChannelPipeline pipeline, SslConfig ssl) throws Exception {
         KeyStore ks = KeyStore.getInstance("JKS");
 
         InputStream ksInputStream = HttpChannelInitializer.class.getResourceAsStream(ssl.getJksPath());

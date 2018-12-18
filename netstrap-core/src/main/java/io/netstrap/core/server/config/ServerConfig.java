@@ -27,5 +27,5 @@ public class ServerConfig {
     /**
      * SSL配置
      */
-    private SSLConfig ssl;
+    private SslConfig ssl;
 }

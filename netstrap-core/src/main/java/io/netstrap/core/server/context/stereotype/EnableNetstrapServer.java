@@ -16,13 +16,11 @@ public @interface EnableNetstrapServer {
 
     /**
      * 待扫描的包名列表
-     * @return
      */
     ServerType    serverType() default ServerType.Netty;
 
     /**
      * 协议类型
-     * @return
      */
     ProtocolType  protocol() default ProtocolType.HTTP;
 }

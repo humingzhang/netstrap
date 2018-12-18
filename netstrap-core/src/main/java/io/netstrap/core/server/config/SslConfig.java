@@ -11,7 +11,7 @@ import lombok.Data;
  */
 @Data
 @Prefix("server.ssl")
-public class SSLConfig {
+public class SslConfig {
     /**
      * 是否开启SSL
      */

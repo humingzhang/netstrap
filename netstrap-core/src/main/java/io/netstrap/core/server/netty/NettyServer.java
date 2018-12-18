@@ -2,6 +2,7 @@ package io.netstrap.core.server.netty;
 
 import io.netstrap.common.NetstrapConstant;
 import io.netstrap.core.server.enums.ProtocolType;
+import io.netstrap.core.server.netty.initializer.WebSocketChannelInitializer;
 import io.netstrap.core.server.server.Server;
 import io.netstrap.core.server.netty.initializer.HttpChannelInitializer;
 import io.netstrap.core.server.stats.Stats;
@@ -41,14 +42,20 @@ public class NettyServer implements Server {
      */
     private Stats status = new Stats();
     /**
-     * HTTP报文加工管道
+     * HTTP管道
      */
     private final HttpChannelInitializer httpChannelInitializer;
+    /**
+     * web/socket 管道
+     */
+    private final WebSocketChannelInitializer webSocketChannelInitializer;
+
 
     @Autowired
-    public NettyServer(NettyConfig nettyServerConfig, HttpChannelInitializer httpChannelInitializer) {
+    public NettyServer(NettyConfig nettyServerConfig, HttpChannelInitializer httpChannelInitializer, WebSocketChannelInitializer webSocketChannelInitializer) {
         this.nettyServerConfig = nettyServerConfig;
         this.httpChannelInitializer = httpChannelInitializer;
+        this.webSocketChannelInitializer = webSocketChannelInitializer;
     }
 
     @Override
@@ -86,9 +93,11 @@ public class NettyServer implements Server {
         if (protocol.equals(ProtocolType.HTTP)) {
             bootstrap.childHandler(httpChannelInitializer);
         } else if (protocol.equals(ProtocolType.SOCKET)) {
-            //TODO
+            {
+                log.info("...not implement...");
+            }
         } else if (protocol.equals(ProtocolType.WEB_SOCKET)) {
-            //TODO
+            bootstrap.childHandler(webSocketChannelInitializer);
         }
     }
 

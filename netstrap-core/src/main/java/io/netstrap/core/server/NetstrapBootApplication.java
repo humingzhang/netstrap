@@ -220,6 +220,7 @@ public class NetstrapBootApplication {
         for (ApplicationContextInitializer initializer : getInitialises()) {
             Class<?> requiredType = GenericTypeResolver.resolveTypeArgument(
                     initializer.getClass(), ApplicationContextInitializer.class);
+            assert requiredType != null;
             Assert.isInstanceOf(requiredType, context, "Unable to call initializer.");
             initializer.initialize(context);
         }

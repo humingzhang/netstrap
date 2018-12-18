@@ -28,22 +28,16 @@ public interface Server {
 
     /**
      * 获取状态
-     *
-     * @return
      */
     Stats.Code stats();
 
     /**
      * 是否已启动
-     *
-     * @return
      */
     boolean isStarted();
 
     /**
      * 是否已停止
-     *
-     * @return
      */
     boolean isStopped();
 }
