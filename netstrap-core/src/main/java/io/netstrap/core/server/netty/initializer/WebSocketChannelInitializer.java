@@ -22,7 +22,7 @@ import java.security.KeyStore;
 import java.util.concurrent.TimeUnit;
 
 /**
- * HTTP报文加工管道
+ * WebSocket报文加工管道
  *
  * @author minghu.zhang
  * @date 2018/11/07
