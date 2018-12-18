@@ -4,7 +4,6 @@ import io.netstrap.common.tool.Convertible;
 import io.netstrap.common.tool.JsonTool;
 import io.netstrap.core.server.exception.ParameterParseException;
 import io.netstrap.core.server.http.HttpMethod;
-import io.netstrap.core.server.http.ParamType;
 import io.netstrap.core.server.http.datagram.HttpRequest;
 import io.netstrap.core.server.http.datagram.HttpResponse;
 import io.netstrap.core.server.http.wrapper.HttpBody;
@@ -15,11 +14,13 @@ import io.netstrap.core.server.mvc.router.InvokeAction;
 import io.netstrap.core.server.mvc.router.ParamMapping;
 import io.netstrap.core.server.mvc.router.RouterFactory;
 import io.netty.handler.codec.http.multipart.MixedFileUpload;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -145,26 +146,42 @@ public class DefaultHttpDispatcher extends Dispatcher {
     /**
      * 解析参数值
      */
-    private Object parseValue(ParamMapping mapping, HttpRequest request, Class<?> paramClass) {
+    private Object parseValue(ParamMapping mapping, HttpRequest request, Class<?> paramClass) throws IllegalAccessException, InstantiationException, InvocationTargetException {
         String alias = mapping.getAlisName();
         Object value = null;
 
         switch (mapping.getContextType()) {
             case REQUEST_PARAM:
-                //TODO 处理POJO
-                value = convertValueType(request.getRequestParam().get(alias), paramClass);
+                if(Convertible.convertible(paramClass)) {
+                    value = convertValueType(request.getRequestParam().get(alias), paramClass);
+                } else {
+                    value = paramClass.newInstance();
+                    BeanUtils.copyProperties(value,request.getRequestParam());
+                }
                 break;
             case REQUEST_HEADER:
-                //TODO 处理POJO
-                value = convertValueType(request.getRequestHeader().get(alias), paramClass);
+                if(Convertible.convertible(paramClass)) {
+                    value = convertValueType(request.getRequestHeader().get(alias), paramClass);
+                } else {
+                    value = paramClass.newInstance();
+                    BeanUtils.copyProperties(value,request.getRequestHeader());
+                }
                 break;
             case REQUEST_CONTEXT:
-                //TODO 处理POJO
-                value = convertValueType(request.getRequestContext().get(alias), paramClass);
+                if(Convertible.convertible(paramClass)) {
+                    value = convertValueType(request.getRequestContext().get(alias), paramClass);
+                } else {
+                    value = paramClass.newInstance();
+                    BeanUtils.copyProperties(value,request.getRequestContext());
+                }
                 break;
             case REQUEST_ATTRIBUTE:
-                //TODO 处理POJO
-                value = convertValueType(request.getAttribute(alias), paramClass);
+                if(Convertible.convertible(paramClass)) {
+                    value = convertValueType(request.getRequestAttribute().get(alias), paramClass);
+                } else {
+                    value = paramClass.newInstance();
+                    BeanUtils.copyProperties(value,request.getRequestAttribute());
+                }
                 break;
             case REQUEST_FORM:
                 value = formParse(mapping, request);

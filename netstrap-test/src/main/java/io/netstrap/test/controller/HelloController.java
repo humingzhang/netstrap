@@ -1,5 +1,6 @@
 package io.netstrap.test.controller;
 
+import com.alibaba.fastjson.JSON;
 import io.netstrap.core.server.http.datagram.HttpRequest;
 import io.netstrap.core.server.http.datagram.HttpResponse;
 import io.netstrap.core.server.http.wrapper.HttpBody;
@@ -10,6 +11,7 @@ import io.netstrap.core.server.mvc.stereotype.parameter.ContextValue;
 import io.netstrap.core.server.mvc.stereotype.parameter.FormValue;
 import io.netstrap.core.server.mvc.stereotype.parameter.RequestBody;
 import io.netstrap.test.config.WechatConfig;
+import io.netstrap.test.pojo.User;
 import io.netty.handler.codec.http.multipart.MixedFileUpload;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +40,8 @@ public class HelloController {
      * 打印字符串
      */
     @GetMapping("/hello")
-    public void hello(@ContextValue String id,HttpResponse response) {
-        String echo =  "hello netstrap -> " + id;
-        response.setBody(HttpBody.wrap((echo+" -> "+System.currentTimeMillis()).getBytes()));
-        response.write();
+    public String hello(@ContextValue String id, User user) {
+        return "hello netstrap -> " + id + " -> " + JSON.toJSONString(user);
     }
 
     /**
