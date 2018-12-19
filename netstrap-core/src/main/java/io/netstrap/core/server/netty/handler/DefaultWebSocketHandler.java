@@ -55,12 +55,12 @@ public class DefaultWebSocketHandler extends SimpleChannelInboundHandler<Object>
     }
 
     @Override
-    public void channelActive(ChannelHandlerContext context) throws Exception {
+    public void channelActive(ChannelHandlerContext context) {
         //连接
     }
 
     @Override
-    public void channelInactive(ChannelHandlerContext context) throws Exception {
+    public void channelInactive(ChannelHandlerContext context) {
         //断开
     }
 
@@ -81,7 +81,7 @@ public class DefaultWebSocketHandler extends SimpleChannelInboundHandler<Object>
      * @param context 管道上下文
      * @param frame   WebSocket消息
      */
-    private void handlerWebSocketFrame(ChannelHandlerContext context, WebSocketFrame frame) throws IOException {
+    private void handlerWebSocketFrame(ChannelHandlerContext context, WebSocketFrame frame) {
 
         // 关闭请求
         if (frame instanceof CloseWebSocketFrame) {
