@@ -18,4 +18,8 @@ public interface NetstrapConstant {
      */
     String ANY_ADDRESS = "0.0.0.0";
 
+    /**
+     * 标识 WebSocket模式
+     */
+    String WEB_SOCKET_MODE = "web_socket_mode";
 }

@@ -13,4 +13,9 @@ public interface HeaderPublicValue {
      */
     String KEEP_ALIVE = "keep-alive";
 
+    /**
+     * close-keep-alive
+     */
+    String CLOSE_KEEP_ALIVE = "close";
+
 }

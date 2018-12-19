@@ -61,10 +61,4 @@ public class WebSocketGroup {
         return ALL.size();
     }
 
-    /**
-     * 关闭连接
-     */
-    public static void close() {
-        ALL.close();
-    }
 }

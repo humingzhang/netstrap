@@ -22,6 +22,7 @@ public class QuartzTime {
     @Scheduled(cron = "0/1 * * * * ?")
     public void loopSayHello() {
         String message = "{\"timestamp\":"+System.currentTimeMillis()+",\"linking\":"+WebSocketGroup.count()+"}";
+        System.out.println(message);
         WebSocketGroup.push(message);
     }
 }

@@ -79,7 +79,7 @@ public class NettyHttpResponse extends AbstractHttpResponse {
      */
     private void writeFlush() {
         //添加数据长度响应头
-        response.headers().add(CONTENT_LENGTH,getBody().getBytes().length);
+        response.headers().add(CONTENT_LENGTH, getBody().getBytes().length);
         ChannelFuture future = channel.writeAndFlush(response);
 
         if (!isKeepAlive()) {
@@ -95,6 +95,7 @@ public class NettyHttpResponse extends AbstractHttpResponse {
     public AbstractHttpResponse keepAlive(HttpVersion httpVersion, Map<String, String> header) {
 
         String connection = header.getOrDefault(HeaderPublicKey.CONNECTION, Keepalive.CLOSE_ALIVE).toLowerCase();
+
         //设置keep-alive
         if ((httpVersion.equals(HttpVersion.HTTP_1_1) && !connection.equals(Keepalive.CLOSE_ALIVE))) {
             setKeepAlive(true);
