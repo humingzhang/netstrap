@@ -64,7 +64,7 @@ public class DefaultWebSocketHandler extends SimpleChannelInboundHandler<Object>
     @Override
     public void channelInactive(ChannelHandlerContext context) {
         //断开
-        WebSocketGroup.login(context.channel());
+        WebSocketGroup.logout(context.channel());
     }
 
     @Override
