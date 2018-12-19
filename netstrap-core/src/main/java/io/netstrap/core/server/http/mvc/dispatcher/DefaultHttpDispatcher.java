@@ -10,7 +10,7 @@ import io.netstrap.core.server.http.wrapper.HttpBody;
 import io.netstrap.core.server.http.wrapper.HttpForm;
 import io.netstrap.core.server.http.mvc.AbstractDispatcher;
 import io.netstrap.core.server.http.mvc.filter.DefaultWebFilter;
-import io.netstrap.core.server.http.mvc.router.InvokeAction;
+import io.netstrap.core.server.http.mvc.router.HttpAction;
 import io.netstrap.core.server.http.mvc.router.ParamMapping;
 import io.netstrap.core.server.http.mvc.router.RouterFactory;
 import io.netty.handler.codec.http.multipart.MixedFileUpload;
@@ -52,7 +52,7 @@ public class DefaultHttpDispatcher extends AbstractDispatcher {
     @Override
     protected void dispatcher(AbstractHttpRequest request, AbstractHttpResponse response) {
         String uri = request.getRequestContext().get("uri");
-        InvokeAction router = factory.get(uri);
+        HttpAction router = factory.get(uri);
         if (router.getUri().equals(uri)) {
             //检查method
             HttpMethod requestMethod = request.getMethod();
@@ -74,7 +74,7 @@ public class DefaultHttpDispatcher extends AbstractDispatcher {
     /**
      * 执行调用
      */
-    private void doInvoke(InvokeAction router, AbstractHttpRequest request, AbstractHttpResponse response) {
+    private void doInvoke(HttpAction router, AbstractHttpRequest request, AbstractHttpResponse response) {
         //执行调用
         final Object result;
         try {
@@ -153,16 +153,16 @@ public class DefaultHttpDispatcher extends AbstractDispatcher {
 
         switch (mapping.getContextType()) {
             case REQUEST_PARAM:
-                value = simpleParamParse(paramClass,alias,request.getRequestParam());
+                value = simpleParamParse(paramClass, alias, request.getRequestParam());
                 break;
             case REQUEST_HEADER:
-                value = simpleParamParse(paramClass,alias,request.getRequestHeader());
+                value = simpleParamParse(paramClass, alias, request.getRequestHeader());
                 break;
             case REQUEST_CONTEXT:
-                value = simpleParamParse(paramClass,alias,request.getRequestContext());
+                value = simpleParamParse(paramClass, alias, request.getRequestContext());
                 break;
             case REQUEST_ATTRIBUTE:
-                value = simpleParamParse(paramClass,alias,request.getRequestAttribute());
+                value = simpleParamParse(paramClass, alias, request.getRequestAttribute());
                 break;
             case REQUEST_FORM:
                 value = formParse(mapping, request);

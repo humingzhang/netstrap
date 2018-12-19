@@ -31,7 +31,6 @@ public class HttpBody {
 
     /**
      * 获取字符串
-     * @return
      */
     public String getString() {
         return new String(getBytes(), StandardCharsets.UTF_8);

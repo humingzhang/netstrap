@@ -33,7 +33,7 @@ public class RouterFactory {
     /**
      * 调用模型
      */
-    private final static Map<String, InvokeAction> ROUTERS = new HashMap<>(8);
+    private final static Map<String, HttpAction> ROUTERS = new HashMap<>(8);
 
     /**
      * 类工厂
@@ -109,7 +109,7 @@ public class RouterFactory {
      * 构建路由对象
      */
     private void buildMethod(Object invoker, Method method, String groupUri, String slash) {
-        InvokeAction router = new InvokeAction();
+        HttpAction router = new HttpAction();
         router.setInvoker(invoker);
         method.setAccessible(true);
 
@@ -226,16 +226,16 @@ public class RouterFactory {
     /**
      * 添加路由模型
      */
-    private void put(String uri, InvokeAction router) {
+    private void put(String uri, HttpAction router) {
         ROUTERS.put(uri, router);
     }
 
     /**
      * 获取路由
      */
-    public InvokeAction get(String uri) {
+    public HttpAction get(String uri) {
 
-        InvokeAction router;
+        HttpAction router;
         if (!ROUTERS.containsKey(uri)) {
             router = getNotFoundRouter();
         } else {
@@ -248,42 +248,42 @@ public class RouterFactory {
     /**
      * 405
      */
-    public InvokeAction getMethodNotAllowedRouter() {
+    public HttpAction getMethodNotAllowedRouter() {
         return get(DefaultErrorController.METHOD_NOT_ALLOWED);
     }
 
     /**
      * 500
      */
-    public InvokeAction getInternalServiceErrorRouter() {
+    public HttpAction getInternalServiceErrorRouter() {
         return get(DefaultErrorController.INTERNAL_SERVICE_ERROR);
     }
 
     /**
      * 400
      */
-    public InvokeAction getBadRequestRouter() {
+    public HttpAction getBadRequestRouter() {
         return get(DefaultErrorController.BAD_REQUEST);
     }
 
     /**
      * 404
      */
-    public InvokeAction getNotFoundRouter() {
+    public HttpAction getNotFoundRouter() {
         return get(DefaultErrorController.NOT_FOUND);
     }
 
     /**
      * 403
      */
-    public InvokeAction getForbiddenRouter() {
+    public HttpAction getForbiddenRouter() {
         return get(DefaultErrorController.FORBIDDEN);
     }
 
     /**
      * 401
      */
-    public InvokeAction getUnauthorizedRouter() {
+    public HttpAction getUnauthorizedRouter() {
         return get(DefaultErrorController.UNAUTHORIZED);
     }
 }

@@ -13,7 +13,7 @@ import java.lang.reflect.Method;
  * @date 2018/12/05
  */
 @Data
-public class InvokeAction {
+public class HttpAction {
     /**
      * 参数映射
      */

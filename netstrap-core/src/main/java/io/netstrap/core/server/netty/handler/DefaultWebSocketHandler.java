@@ -4,6 +4,7 @@ import io.netstrap.core.server.config.SslConfig;
 import io.netstrap.core.server.netty.NettyConfig;
 import io.netstrap.core.server.websocket.AbstractStringDecoder;
 import io.netstrap.core.server.websocket.decoder.DefaultStringDecoder;
+import io.netstrap.core.server.websocket.dispatcher.WebSocketDispatcher;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -41,39 +42,44 @@ public class DefaultWebSocketHandler extends SimpleChannelInboundHandler<Object>
      * netty配置
      */
     private final NettyConfig nettyConfig;
+    /**
+     * socket处理
+     */
+    private final WebSocketDispatcher dispatcher;
 
     @Autowired
-    public DefaultWebSocketHandler(DefaultHttpHandler httpHandler, NettyConfig nettyConfig) {
+    public DefaultWebSocketHandler(DefaultHttpHandler httpHandler, NettyConfig nettyConfig, WebSocketDispatcher dispatcher) {
         this.httpHandler = httpHandler;
         this.nettyConfig = nettyConfig;
+        this.dispatcher = dispatcher;
     }
 
     @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+    public void channelActive(ChannelHandlerContext context) throws Exception {
         //连接
     }
 
     @Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+    public void channelInactive(ChannelHandlerContext context) throws Exception {
         //断开
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
+    protected void channelRead0(ChannelHandlerContext context, Object msg) throws Exception {
         // http：//xxxx
         if (msg instanceof FullHttpRequest) {
-            handleHttpRequest(ctx, (FullHttpRequest) msg);
+            handleHttpRequest(context, (FullHttpRequest) msg);
         } else if (msg instanceof WebSocketFrame) {
             // ws://xxxx
-            handlerWebSocketFrame(ctx, (WebSocketFrame) msg);
+            handlerWebSocketFrame(context, (WebSocketFrame) msg);
         }
     }
 
     /**
      * WebSocket消息处理
      *
-     * @param ctx   管道上下文
-     * @param frame WebSocket消息
+     * @param context 管道上下文
+     * @param frame   WebSocket消息
      */
     private void handlerWebSocketFrame(ChannelHandlerContext context, WebSocketFrame frame) throws IOException {
 
@@ -90,17 +96,18 @@ public class DefaultWebSocketHandler extends SimpleChannelInboundHandler<Object>
         }
 
         if (frame instanceof TextWebSocketFrame) {
-            // 文本消息
-            String text = ((TextWebSocketFrame) frame).text();
-            AbstractStringDecoder decoder =
-                    new DefaultStringDecoder(text).decode();
-            context.channel().eventLoop().execute(() -> {
-                try {
-                    /*dispatcher.doDispatcher(request, response);*/
-                } catch (Exception e) {
-                    exceptionCaught(context, e.getCause());
-                }
-            });
+            try {
+                // 文本消息
+                String text = ((TextWebSocketFrame) frame).text();
+                AbstractStringDecoder decoder = new DefaultStringDecoder(text).decode();
+                context.channel().eventLoop().execute(() -> {
+                    dispatcher.dispatcher(context.channel(), decoder);
+                });
+            } catch (Exception e) {
+                exceptionCaught(context, e.getCause());
+            } finally {
+                frame.release();
+            }
         }
     }
 
