@@ -185,12 +185,14 @@ public class DefaultHttpDispatcher extends AbstractDispatcher {
      */
     private Object simpleParamParse(Class<?> paramClass, String alias, Map<String, ?> source)
             throws IllegalAccessException, InstantiationException, InvocationTargetException {
-        Object value;
-        if (Convertible.convertible(paramClass)) {
-            value = convertValueType(source.get(alias), paramClass);
-        } else {
-            value = paramClass.newInstance();
-            BeanUtils.copyProperties(value, source);
+        Object value = null;
+        if(Objects.nonNull(source)) {
+            if (Convertible.convertible(paramClass)) {
+                value = convertValueType(source.get(alias), paramClass);
+            } else {
+                value = paramClass.newInstance();
+                BeanUtils.copyProperties(value, source);
+            }
         }
         return value;
     }
