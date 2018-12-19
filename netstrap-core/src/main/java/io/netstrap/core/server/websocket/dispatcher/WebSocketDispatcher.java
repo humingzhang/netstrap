@@ -1,5 +1,6 @@
 package io.netstrap.core.server.websocket.dispatcher;
 
+import io.netstrap.common.tool.Convertible;
 import io.netstrap.common.tool.JsonTool;
 import io.netstrap.core.server.websocket.AbstractStringDecoder;
 import io.netstrap.core.server.websocket.WebSocketRouterFactory;
@@ -38,9 +39,14 @@ public class WebSocketDispatcher {
             WebSocketAction action = factory.get(decoder.uri());
             if (Objects.nonNull(action)) {
                 Object[] params = getParams(action, channel, decoder.body());
-                Object result = action.getAction().invoke(action.getInvoker(), params);
-                if (Objects.nonNull(result)) {
-                    TextWebSocketFrame tws = new TextWebSocketFrame(JsonTool.obj2json(result));
+                Object message = action.getAction().invoke(action.getInvoker(), params);
+                if (Objects.nonNull(message)) {
+                    TextWebSocketFrame tws;
+                    if(Convertible.convertible(message.getClass())) {
+                        tws = new TextWebSocketFrame(message.toString());
+                    } else {
+                        tws = new TextWebSocketFrame(JsonTool.obj2json(message));
+                    }
                     channel.writeAndFlush(tws);
                 }
             }

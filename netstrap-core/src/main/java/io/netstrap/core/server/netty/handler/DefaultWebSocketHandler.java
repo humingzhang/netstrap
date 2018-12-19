@@ -3,11 +3,15 @@ package io.netstrap.core.server.netty.handler;
 import io.netstrap.core.server.config.SslConfig;
 import io.netstrap.core.server.netty.NettyConfig;
 import io.netstrap.core.server.websocket.AbstractStringDecoder;
+import io.netstrap.core.server.websocket.WebSocketGroup;
 import io.netstrap.core.server.websocket.decoder.DefaultStringDecoder;
 import io.netstrap.core.server.websocket.dispatcher.WebSocketDispatcher;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.EventLoop;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.group.ChannelGroup;
+import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.websocketx.*;
@@ -16,8 +20,6 @@ import io.netty.handler.timeout.IdleStateEvent;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
 
 /**
  * WebSocket解析
@@ -29,7 +31,6 @@ import java.io.IOException;
 @Sharable
 @Log4j2
 public class DefaultWebSocketHandler extends SimpleChannelInboundHandler<Object> {
-
     /**
      * 握手处理
      */
@@ -57,11 +58,13 @@ public class DefaultWebSocketHandler extends SimpleChannelInboundHandler<Object>
     @Override
     public void channelActive(ChannelHandlerContext context) {
         //连接
+        WebSocketGroup.login(context.channel());
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext context) {
         //断开
+        WebSocketGroup.login(context.channel());
     }
 
     @Override
