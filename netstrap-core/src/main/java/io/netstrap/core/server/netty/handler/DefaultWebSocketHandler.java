@@ -97,15 +97,10 @@ public class DefaultWebSocketHandler extends SimpleChannelInboundHandler<Object>
             context.channel().eventLoop().execute(() -> {
                 try {
                     /*dispatcher.doDispatcher(request, response);*/
-
                 } catch (Exception e) {
                     exceptionCaught(context, e.getCause());
                 }
             });
-        } else if (frame instanceof BinaryWebSocketFrame) {
-            // 二进制消息(暂不处理)
-            frame.release();
-            context.close();
         }
     }
 
