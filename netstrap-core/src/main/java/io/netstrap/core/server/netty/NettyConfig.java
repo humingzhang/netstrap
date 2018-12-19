@@ -31,15 +31,15 @@ public class NettyConfig extends ServerConfig {
     /**
      * 读超时
      */
-    private int read = 10;
+    private int read = 1;
     /**
      * 写超时
      */
-    private int write = 20;
+    private int write = 2;
     /**
      * 所有超时
      */
-    private int all = 30;
+    private int all = 3;
     /**
      * web,socket,握手连接
      */
