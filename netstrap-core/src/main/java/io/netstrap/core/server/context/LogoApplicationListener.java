@@ -36,9 +36,9 @@ public class LogoApplicationListener implements ApplicationListener {
     private void printLogo() {
         InputStream logoStream = LogoApplicationListener.class.getResourceAsStream("/logo.png");
         try {
-            StringBuffer logo = new StringBuffer();
-            logo.append("The server started successfully.\n\n");
+            StringBuilder logo = new StringBuilder();
 
+            logo.append("> . > . > . > . > . > . > . > . > . > . > \r\n");
             BufferedImage bi = ImageIO.read(logoStream);
             /**
              * 获取图像的宽度和高度
@@ -64,6 +64,8 @@ public class LogoApplicationListener implements ApplicationListener {
             }
 
             log.info(logo.toString());
+
+            log.info("The server started successfully.\n\n");
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

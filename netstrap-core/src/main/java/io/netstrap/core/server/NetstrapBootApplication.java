@@ -197,6 +197,7 @@ public class NetstrapBootApplication {
         }
 
         server.start(protocol);
+        log.info("The network service["+ serverType +" -> "+ protocol +"] is starting.");
     }
 
     /**
