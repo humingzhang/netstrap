@@ -1,8 +1,8 @@
 package io.netstrap.core.server.netty.handler;
 
-import io.netstrap.core.server.http.datagram.HttpRequest;
-import io.netstrap.core.server.http.datagram.HttpResponse;
-import io.netstrap.core.server.http.mvc.Dispatcher;
+import io.netstrap.core.server.http.datagram.AbstractHttpRequest;
+import io.netstrap.core.server.http.datagram.AbstractHttpResponse;
+import io.netstrap.core.server.http.mvc.AbstractDispatcher;
 import io.netstrap.core.server.netty.datagram.NettyHttpRequest;
 import io.netstrap.core.server.netty.datagram.NettyHttpResponse;
 import io.netty.channel.ChannelHandler.Sharable;
@@ -27,13 +27,13 @@ public class DefaultHttpHandler extends ChannelInboundHandlerAdapter {
     /**
      * 请求分发
      */
-    private Dispatcher dispatcher;
+    private AbstractDispatcher dispatcher;
 
     /**
      * 构造函数
      */
     @Autowired
-    public DefaultHttpHandler(Dispatcher dispatcher) {
+    public DefaultHttpHandler(AbstractDispatcher dispatcher) {
         this.dispatcher = dispatcher;
     }
 
@@ -48,14 +48,14 @@ public class DefaultHttpHandler extends ChannelInboundHandlerAdapter {
      */
     void handleHttpRequest(ChannelHandlerContext context, FullHttpRequest req) {
         //创建请求对象
-        HttpRequest request = new NettyHttpRequest(context, req)
+        AbstractHttpRequest request = new NettyHttpRequest(context, req)
                 .parseContext()
                 .parseMethod()
                 .parseHeader()
                 .parseParam()
                 .parseBody();
         //创建响应对象
-        HttpResponse response = new NettyHttpResponse(context.channel())
+        AbstractHttpResponse response = new NettyHttpResponse(context.channel())
                 .keepAlive(req.protocolVersion(), request.getRequestHeader());
 
         context.channel().eventLoop().execute(() -> {

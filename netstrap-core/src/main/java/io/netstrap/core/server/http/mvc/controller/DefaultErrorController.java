@@ -1,7 +1,7 @@
 package io.netstrap.core.server.http.mvc.controller;
 
 import io.netstrap.core.server.http.HttpStatus;
-import io.netstrap.core.server.http.datagram.HttpResponse;
+import io.netstrap.core.server.http.datagram.AbstractHttpResponse;
 import io.netstrap.core.server.http.wrapper.HttpBody;
 import io.netstrap.core.server.http.mvc.stereotype.RestController;
 import io.netstrap.core.server.http.mvc.stereotype.mapping.GetMapping;
@@ -54,37 +54,37 @@ public class DefaultErrorController {
     public static final String INTERNAL_SERVICE_ERROR = "/ERROR/INTERNAL_SERVICE_ERROR";
 
     @GetMapping(BAD_REQUEST)
-    public void badRequest(@RequestContext String uri, @RequestAttribute String message, HttpResponse response) {
+    public void badRequest(@RequestContext String uri, @RequestAttribute String message, AbstractHttpResponse response) {
         response.setStatus(HttpStatus.BAD_REQUEST);
         response.setBody(HttpBody.wrap((uri + ".Bad Request." + (message == null ? "" : message)).getBytes()));
     }
 
     @GetMapping(FORBIDDEN)
-    public void forbidden(@RequestContext String uri, @RequestAttribute String message, HttpResponse response) {
+    public void forbidden(@RequestContext String uri, @RequestAttribute String message, AbstractHttpResponse response) {
         response.setStatus(HttpStatus.FORBIDDEN);
         response.setBody(HttpBody.wrap((uri + ".Forbidden." + (message == null ? "" : message)).getBytes()));
     }
 
     @GetMapping(INTERNAL_SERVICE_ERROR)
-    public void internalServiceError(@RequestContext String uri, @RequestAttribute String message, HttpResponse response) {
+    public void internalServiceError(@RequestContext String uri, @RequestAttribute String message, AbstractHttpResponse response) {
         response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         response.setBody(HttpBody.wrap((uri + ".Internal Service Error." + (message == null ? "" : message)).getBytes()));
     }
 
     @GetMapping(METHOD_NOT_ALLOWED)
-    public void methodNotAllowed(@RequestContext String uri, @RequestAttribute String message, HttpResponse response) {
+    public void methodNotAllowed(@RequestContext String uri, @RequestAttribute String message, AbstractHttpResponse response) {
         response.setStatus(HttpStatus.METHOD_NOT_ALLOWED);
         response.setBody(HttpBody.wrap((uri + ".Method Not Allowed." + (message == null ? "" : message)).getBytes()));
     }
 
     @GetMapping(NOT_FOUND)
-    public void notFound(@RequestContext String uri, @RequestAttribute String message, HttpResponse response) {
+    public void notFound(@RequestContext String uri, @RequestAttribute String message, AbstractHttpResponse response) {
         response.setStatus(HttpStatus.NOT_FOUND);
         response.setBody(HttpBody.wrap((uri + ".Not Found." + (message == null ? "" : message)).getBytes()));
     }
 
     @GetMapping(UNAUTHORIZED)
-    public void unauthorized(@RequestContext String uri, @RequestAttribute String message, HttpResponse response) {
+    public void unauthorized(@RequestContext String uri, @RequestAttribute String message, AbstractHttpResponse response) {
         response.setStatus(HttpStatus.UNAUTHORIZED);
         response.setBody(HttpBody.wrap((uri + ".Unauthorized." + (message == null ? "" : message)).getBytes()));
     }

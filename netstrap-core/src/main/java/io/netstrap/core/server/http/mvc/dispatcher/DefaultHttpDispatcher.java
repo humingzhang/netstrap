@@ -4,11 +4,11 @@ import io.netstrap.common.tool.Convertible;
 import io.netstrap.common.tool.JsonTool;
 import io.netstrap.core.server.exception.ParameterParseException;
 import io.netstrap.core.server.http.HttpMethod;
-import io.netstrap.core.server.http.datagram.HttpRequest;
-import io.netstrap.core.server.http.datagram.HttpResponse;
+import io.netstrap.core.server.http.datagram.AbstractHttpRequest;
+import io.netstrap.core.server.http.datagram.AbstractHttpResponse;
 import io.netstrap.core.server.http.wrapper.HttpBody;
 import io.netstrap.core.server.http.wrapper.HttpForm;
-import io.netstrap.core.server.http.mvc.Dispatcher;
+import io.netstrap.core.server.http.mvc.AbstractDispatcher;
 import io.netstrap.core.server.http.mvc.filter.DefaultWebFilter;
 import io.netstrap.core.server.http.mvc.router.InvokeAction;
 import io.netstrap.core.server.http.mvc.router.ParamMapping;
@@ -23,6 +23,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -32,7 +33,7 @@ import java.util.Objects;
  * @date 2018/11/08
  */
 @Component
-public class DefaultHttpDispatcher extends Dispatcher {
+public class DefaultHttpDispatcher extends AbstractDispatcher {
 
     /**
      * 路由工厂
@@ -49,7 +50,7 @@ public class DefaultHttpDispatcher extends Dispatcher {
     }
 
     @Override
-    protected void dispatcher(HttpRequest request, HttpResponse response) {
+    protected void dispatcher(AbstractHttpRequest request, AbstractHttpResponse response) {
         String uri = request.getRequestContext().get("uri");
         InvokeAction router = factory.get(uri);
         if (router.getUri().equals(uri)) {
@@ -73,7 +74,7 @@ public class DefaultHttpDispatcher extends Dispatcher {
     /**
      * 执行调用
      */
-    private void doInvoke(InvokeAction router, HttpRequest request, HttpResponse response) {
+    private void doInvoke(InvokeAction router, AbstractHttpRequest request, AbstractHttpResponse response) {
         //执行调用
         final Object result;
         try {
@@ -101,19 +102,19 @@ public class DefaultHttpDispatcher extends Dispatcher {
     /**
      * 解析调用参数
      */
-    private Object[] parseParameter(ParamMapping[] mappings, HttpRequest request, HttpResponse response) {
+    private Object[] parseParameter(ParamMapping[] mappings, AbstractHttpRequest request, AbstractHttpResponse response) {
         Object[] parameters = new Object[mappings.length];
 
         try {
             for (int i = 0; i < mappings.length; i++) {
                 ParamMapping mapping = mappings[i];
                 Class<?> paramClass = mapping.getParamClass();
-                if (paramClass.equals(HttpRequest.class)) {
+                if (paramClass.equals(AbstractHttpRequest.class)) {
                     parameters[i] = request;
                     continue;
                 }
 
-                if (paramClass.equals(HttpResponse.class)) {
+                if (paramClass.equals(AbstractHttpResponse.class)) {
                     parameters[i] = response;
                     continue;
                 }
@@ -146,42 +147,22 @@ public class DefaultHttpDispatcher extends Dispatcher {
     /**
      * 解析参数值
      */
-    private Object parseValue(ParamMapping mapping, HttpRequest request, Class<?> paramClass) throws IllegalAccessException, InstantiationException, InvocationTargetException {
+    private Object parseValue(ParamMapping mapping, AbstractHttpRequest request, Class<?> paramClass) throws IllegalAccessException, InstantiationException, InvocationTargetException {
         String alias = mapping.getAlisName();
         Object value = null;
 
         switch (mapping.getContextType()) {
             case REQUEST_PARAM:
-                if(Convertible.convertible(paramClass)) {
-                    value = convertValueType(request.getRequestParam().get(alias), paramClass);
-                } else {
-                    value = paramClass.newInstance();
-                    BeanUtils.copyProperties(value,request.getRequestParam());
-                }
+                value = simpleParamParse(paramClass,alias,request.getRequestParam());
                 break;
             case REQUEST_HEADER:
-                if(Convertible.convertible(paramClass)) {
-                    value = convertValueType(request.getRequestHeader().get(alias), paramClass);
-                } else {
-                    value = paramClass.newInstance();
-                    BeanUtils.copyProperties(value,request.getRequestHeader());
-                }
+                value = simpleParamParse(paramClass,alias,request.getRequestHeader());
                 break;
             case REQUEST_CONTEXT:
-                if(Convertible.convertible(paramClass)) {
-                    value = convertValueType(request.getRequestContext().get(alias), paramClass);
-                } else {
-                    value = paramClass.newInstance();
-                    BeanUtils.copyProperties(value,request.getRequestContext());
-                }
+                value = simpleParamParse(paramClass,alias,request.getRequestContext());
                 break;
             case REQUEST_ATTRIBUTE:
-                if(Convertible.convertible(paramClass)) {
-                    value = convertValueType(request.getRequestAttribute().get(alias), paramClass);
-                } else {
-                    value = paramClass.newInstance();
-                    BeanUtils.copyProperties(value,request.getRequestAttribute());
-                }
+                value = simpleParamParse(paramClass,alias,request.getRequestAttribute());
                 break;
             case REQUEST_FORM:
                 value = formParse(mapping, request);
@@ -200,9 +181,24 @@ public class DefaultHttpDispatcher extends Dispatcher {
     }
 
     /**
+     * 构造简单参数
+     */
+    private Object simpleParamParse(Class<?> paramClass, String alias, Map<String, ?> source)
+            throws IllegalAccessException, InstantiationException, InvocationTargetException {
+        Object value;
+        if (Convertible.convertible(paramClass)) {
+            value = convertValueType(source.get(alias), paramClass);
+        } else {
+            value = paramClass.newInstance();
+            BeanUtils.copyProperties(value, source);
+        }
+        return value;
+    }
+
+    /**
      * 表单参数解析
      */
-    private Object formParse(ParamMapping mapping, HttpRequest request) {
+    private Object formParse(ParamMapping mapping, AbstractHttpRequest request) {
         Object value = null;
 
         if (request.getMethod().equals(HttpMethod.POST)) {
@@ -217,10 +213,10 @@ public class DefaultHttpDispatcher extends Dispatcher {
                     value = requestForm.getUpload(alias);
                     break;
                 case LIST_PARAM:
-                    value = handleFormList(mapping.getGenericType(),requestForm,alias,paramClass);
+                    value = handleFormList(mapping.getGenericType(), requestForm, alias, paramClass);
                     break;
                 case ARRAY_PARAM:
-                    value = handleFormArray(requestForm,alias,paramClass);
+                    value = handleFormArray(requestForm, alias, paramClass);
                     break;
                 default:
                     break;
@@ -233,7 +229,7 @@ public class DefaultHttpDispatcher extends Dispatcher {
     /**
      * 处理List
      */
-    private Object handleFormList(Class<?> genericType,HttpForm requestForm,String alias,Class<?> paramClass) {
+    private Object handleFormList(Class<?> genericType, HttpForm requestForm, String alias, Class<?> paramClass) {
         Object value = null;
 
         if (genericType.equals(MixedFileUpload.class)) {
@@ -257,7 +253,7 @@ public class DefaultHttpDispatcher extends Dispatcher {
     /**
      * 处理数组
      */
-    private Object handleFormArray(HttpForm requestForm,String alias,Class<?> paramClass) {
+    private Object handleFormArray(HttpForm requestForm, String alias, Class<?> paramClass) {
         Object value;
 
         if (paramClass.equals(MixedFileUpload.class)) {

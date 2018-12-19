@@ -2,6 +2,8 @@ package io.netstrap.core.server.netty.handler;
 
 import io.netstrap.core.server.config.SslConfig;
 import io.netstrap.core.server.netty.NettyConfig;
+import io.netstrap.core.server.websocket.AbstractStringDecoder;
+import io.netstrap.core.server.websocket.decoder.DefaultStringDecoder;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -13,6 +15,8 @@ import io.netty.handler.timeout.IdleStateEvent;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
 
 /**
  * WebSocket解析
@@ -71,38 +75,47 @@ public class DefaultWebSocketHandler extends SimpleChannelInboundHandler<Object>
      * @param ctx   管道上下文
      * @param frame WebSocket消息
      */
-    private void handlerWebSocketFrame(ChannelHandlerContext ctx, WebSocketFrame frame) {
+    private void handlerWebSocketFrame(ChannelHandlerContext context, WebSocketFrame frame) throws IOException {
 
         // 关闭请求
         if (frame instanceof CloseWebSocketFrame) {
-            handshake.close(ctx.channel(), (CloseWebSocketFrame) frame.retain());
+            handshake.close(context.channel(), (CloseWebSocketFrame) frame.retain());
             return;
         }
 
         // ping请求
         if (frame instanceof PingWebSocketFrame) {
-            ctx.channel().write(new PongWebSocketFrame(frame.content().retain()));
+            context.channel().write(new PongWebSocketFrame(frame.content().retain()));
             return;
         }
 
         if (frame instanceof TextWebSocketFrame) {
             // 文本消息
             String text = ((TextWebSocketFrame) frame).text();
-            log.info(text);
+            AbstractStringDecoder decoder =
+                    new DefaultStringDecoder(text).decode();
+            context.channel().eventLoop().execute(() -> {
+                try {
+                    /*dispatcher.doDispatcher(request, response);*/
+
+                } catch (Exception e) {
+                    exceptionCaught(context, e.getCause());
+                }
+            });
         } else if (frame instanceof BinaryWebSocketFrame) {
-            // 二进制消息
-            frame.content();
+            // 二进制消息(暂不处理)
             frame.release();
+            context.close();
         }
     }
 
     /**
      * 处理Http请求或握手请求
      */
-    private void handleHttpRequest(ChannelHandlerContext ctx, FullHttpRequest request) {
+    private void handleHttpRequest(ChannelHandlerContext context, FullHttpRequest request) {
 
         if (!request.decoderResult().isSuccess()) {
-            ctx.close();
+            context.close();
             return;
         }
 
@@ -115,13 +128,13 @@ public class DefaultWebSocketHandler extends SimpleChannelInboundHandler<Object>
             handshake = wsFactory.newHandshaker(request);
             if (handshake == null) {
                 // 不支持
-                WebSocketServerHandshakerFactory.sendUnsupportedVersionResponse(ctx.channel());
+                WebSocketServerHandshakerFactory.sendUnsupportedVersionResponse(context.channel());
             } else {
-                handshake.handshake(ctx.channel(), request);
+                handshake.handshake(context.channel(), request);
             }
         } else {
             // 处理普通http请求
-            httpHandler.handleHttpRequest(ctx, request);
+            httpHandler.handleHttpRequest(context, request);
         }
     }
 
@@ -129,12 +142,13 @@ public class DefaultWebSocketHandler extends SimpleChannelInboundHandler<Object>
      * 异常处理
      */
     @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        super.exceptionCaught(ctx, cause);
+    public void exceptionCaught(ChannelHandlerContext context, Throwable cause) {
+        cause.printStackTrace();
+        context.close();
     }
 
     @Override
-    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+    public void userEventTriggered(ChannelHandlerContext context, Object evt) throws Exception {
         if (evt instanceof IdleStateEvent) {
 
             IdleStateEvent event = (IdleStateEvent) evt;
@@ -144,11 +158,11 @@ public class DefaultWebSocketHandler extends SimpleChannelInboundHandler<Object>
                 // 写数据超时
             } else if (event.state() == IdleState.ALL_IDLE) {
                 // 通道长时间没有读写，服务端主动断开链接
-                ctx.close();
+                context.close();
             }
 
         } else {
-            super.userEventTriggered(ctx, evt);
+            super.userEventTriggered(context, evt);
         }
     }
 

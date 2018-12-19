@@ -1,7 +1,7 @@
 package io.netstrap.core.server.netty.datagram;
 
 import io.netstrap.core.server.http.Keepalive;
-import io.netstrap.core.server.http.datagram.HttpResponse;
+import io.netstrap.core.server.http.datagram.AbstractHttpResponse;
 import io.netstrap.core.server.http.header.HeaderPublicKey;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -24,7 +24,7 @@ import static io.netstrap.core.server.http.header.HeaderPublicKey.CONTENT_LENGTH
  * @author minghu.zhang
  * @date 2018/11/08
  */
-public class NettyHttpResponse extends HttpResponse {
+public class NettyHttpResponse extends AbstractHttpResponse {
 
     /**
      * channel数据管道
@@ -92,7 +92,7 @@ public class NettyHttpResponse extends HttpResponse {
     /**
      * 设置keep-alive
      */
-    public HttpResponse keepAlive(HttpVersion httpVersion, Map<String, String> header) {
+    public AbstractHttpResponse keepAlive(HttpVersion httpVersion, Map<String, String> header) {
 
         String connection = header.getOrDefault(HeaderPublicKey.CONNECTION, Keepalive.CLOSE_ALIVE).toLowerCase();
         //设置keep-alive

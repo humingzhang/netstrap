@@ -6,8 +6,6 @@ import lombok.Data;
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.netstrap.core.server.http.header.HeaderPublicKey.CONTENT_LENGTH;
-
 /**
  * Http响应数据报文
  *
@@ -15,7 +13,7 @@ import static io.netstrap.core.server.http.header.HeaderPublicKey.CONTENT_LENGTH
  * @date 2018/11/07
  */
 @Data
-public abstract class HttpResponse {
+public abstract class AbstractHttpResponse {
 
     /**
      * 请求状态码
@@ -53,7 +51,7 @@ public abstract class HttpResponse {
      *
      * @return this
      */
-    public HttpResponse setBody(HttpBody body) {
+    public AbstractHttpResponse setBody(HttpBody body) {
         this.body = body;
         return this;
     }
