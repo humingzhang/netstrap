@@ -6,19 +6,19 @@ import org.springframework.core.annotation.AliasFor;
 import java.lang.annotation.*;
 
 /**
- * 请求上下文参数
+ * 请求URI参数
  *
  * @author minghu.zhang
  */
 @Target(value = {ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@NameAlias(type = ContextType.REQUEST_CONTEXT)
-public @interface ContextValue {
+@RequestValue(type = ContextType.REQUEST_PARAM)
+public @interface RequestParam {
 
     /**
      * 参数名
      */
-    @AliasFor(annotation = NameAlias.class)
+    @AliasFor(annotation = RequestValue.class)
     String value() default "";
 }

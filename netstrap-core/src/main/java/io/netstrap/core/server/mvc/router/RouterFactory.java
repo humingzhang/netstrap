@@ -8,9 +8,8 @@ import io.netstrap.core.server.http.ParamType;
 import io.netstrap.core.server.mvc.controller.DefaultErrorController;
 import io.netstrap.core.server.mvc.stereotype.*;
 import io.netstrap.core.server.mvc.stereotype.mapping.RequestMapping;
-import io.netstrap.core.server.mvc.stereotype.parameter.NameAlias;
+import io.netstrap.core.server.mvc.stereotype.parameter.RequestValue;
 import io.netty.handler.codec.http.multipart.MixedFileUpload;
-import org.apache.commons.beanutils.ConvertUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.DefaultParameterNameDiscoverer;
@@ -207,7 +206,7 @@ public class RouterFactory {
      */
     private void buildParamMapping(Parameter parameter, ParamMapping mapping) {
         //指定参数别名
-        NameAlias alias = AnnotatedElementUtils.findMergedAnnotation(parameter, NameAlias.class);
+        RequestValue alias = AnnotatedElementUtils.findMergedAnnotation(parameter, RequestValue.class);
         String aliasName = "";
         ContextType contextType;
         if (Objects.nonNull(alias)) {

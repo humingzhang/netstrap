@@ -1,24 +1,26 @@
 package io.netstrap.core.server.mvc.stereotype.parameter;
 
 import io.netstrap.core.server.http.ContextType;
-import org.springframework.core.annotation.AliasFor;
 
 import java.lang.annotation.*;
 
 /**
- * 请求属性参数
+ * 参数值获取
  *
  * @author minghu.zhang
  */
-@Target(value = {ElementType.PARAMETER})
+@Target(value = {ElementType.ANNOTATION_TYPE, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@NameAlias(type = ContextType.REQUEST_ATTRIBUTE)
-public @interface AttributeValue {
+public @interface RequestValue {
 
     /**
      * 参数名
      */
-    @AliasFor(annotation = NameAlias.class)
     String value() default "";
+
+    /**
+     * METHOD
+     */
+    ContextType type();
 }

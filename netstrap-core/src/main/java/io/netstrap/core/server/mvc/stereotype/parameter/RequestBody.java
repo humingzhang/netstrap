@@ -13,12 +13,12 @@ import java.lang.annotation.*;
 @Target(value = {ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@NameAlias(type = ContextType.REQUEST_BODY)
+@RequestValue(type = ContextType.REQUEST_BODY)
 public @interface RequestBody {
 
     /**
      * 参数名
      */
-    @AliasFor(annotation = NameAlias.class)
+    @AliasFor(annotation = RequestValue.class)
     String value() default "";
 }
