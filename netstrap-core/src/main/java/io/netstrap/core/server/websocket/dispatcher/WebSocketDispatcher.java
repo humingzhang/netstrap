@@ -32,18 +32,20 @@ public class WebSocketDispatcher {
     /**
      * 请求分发
      */
-    public void dispatcher(Channel channel, AbstractStringDecoder decoder)
-            throws InvocationTargetException, IllegalAccessException {
+    public void dispatcher(Channel channel, AbstractStringDecoder decoder) {
         //执行过滤分发
-        WebSocketAction action = factory.get(decoder.uri());
-        if (Objects.nonNull(action)) {
-            Object[] params = getParams(action, channel, decoder.body());
-            Object result = action.getAction().invoke(action.getInvoker(), params);
-            if (Objects.nonNull(result)) {
-                TextWebSocketFrame tws =
-                        new TextWebSocketFrame(JsonTool.obj2json(result));
-                channel.writeAndFlush(tws);
+        try {
+            WebSocketAction action = factory.get(decoder.uri());
+            if (Objects.nonNull(action)) {
+                Object[] params = getParams(action, channel, decoder.body());
+                Object result = action.getAction().invoke(action.getInvoker(), params);
+                if (Objects.nonNull(result)) {
+                    TextWebSocketFrame tws = new TextWebSocketFrame(JsonTool.obj2json(result));
+                    channel.writeAndFlush(tws);
+                }
             }
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
         }
 
     }

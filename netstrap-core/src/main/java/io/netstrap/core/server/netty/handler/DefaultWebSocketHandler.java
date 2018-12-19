@@ -100,13 +100,11 @@ public class DefaultWebSocketHandler extends SimpleChannelInboundHandler<Object>
                 // 文本消息
                 String text = ((TextWebSocketFrame) frame).text();
                 AbstractStringDecoder decoder = new DefaultStringDecoder(text).decode();
-                context.channel().eventLoop().execute(() -> {
-                    dispatcher.dispatcher(context.channel(), decoder);
-                });
+                context.channel().eventLoop().execute(
+                        () -> dispatcher.dispatcher(context.channel(), decoder)
+                );
             } catch (Exception e) {
                 exceptionCaught(context, e.getCause());
-            } finally {
-                frame.release();
             }
         }
     }
