@@ -66,12 +66,12 @@ public class DefaultWebSocketHandler extends SimpleChannelInboundHandler<Object>
 
     @Override
     protected void channelRead0(ChannelHandlerContext context, Object msg) throws Exception {
-        // http：//xxxx
         if (msg instanceof FullHttpRequest) {
+            // http//xxxx
             handleHttpRequest(context, (FullHttpRequest) msg);
         } else if (msg instanceof WebSocketFrame) {
             // ws://xxxx
-            handlerWebSocketFrame(context, (WebSocketFrame) msg);
+            handleWebSocketFrame(context, (WebSocketFrame) msg);
         }
     }
 
@@ -81,7 +81,7 @@ public class DefaultWebSocketHandler extends SimpleChannelInboundHandler<Object>
      * @param context 管道上下文
      * @param frame   WebSocket消息
      */
-    private void handlerWebSocketFrame(ChannelHandlerContext context, WebSocketFrame frame) {
+    private void handleWebSocketFrame(ChannelHandlerContext context, WebSocketFrame frame) {
 
         // 关闭请求
         if (frame instanceof CloseWebSocketFrame) {
@@ -101,7 +101,7 @@ public class DefaultWebSocketHandler extends SimpleChannelInboundHandler<Object>
                 String text = ((TextWebSocketFrame) frame).text();
                 AbstractStringDecoder decoder = new DefaultStringDecoder(text).decode();
                 context.channel().eventLoop().execute(
-                        () -> dispatcher.dispatcher(context.channel(), decoder)
+                    () -> dispatcher.dispatcher(context.channel(), decoder)
                 );
             } catch (Exception e) {
                 exceptionCaught(context, e.getCause());
