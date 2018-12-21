@@ -40,9 +40,6 @@ public class LogoApplicationListener implements ApplicationListener {
 
             logo.append("Printing logo, wait a moment... \r\n");
             BufferedImage bi = ImageIO.read(logoStream);
-            /**
-             * 获取图像的宽度和高度
-             */
             int width = bi.getWidth();
             int height = bi.getHeight();
 
