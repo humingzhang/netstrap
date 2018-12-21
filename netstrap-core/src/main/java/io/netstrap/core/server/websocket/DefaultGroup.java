@@ -11,11 +11,11 @@ import io.netty.util.concurrent.GlobalEventExecutor;
 import java.util.Objects;
 
 /**
- * WebSocket连接线程组
+ * 默认连接线程组
  * @author minghu.zhang
  * @date 2018/12/19 16:59
  */
-public class WebSocketGroup {
+public class DefaultGroup {
 
     /**
      * 保存该服务器所有连接

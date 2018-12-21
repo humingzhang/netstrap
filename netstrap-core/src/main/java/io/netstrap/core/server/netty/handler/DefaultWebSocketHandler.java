@@ -3,7 +3,7 @@ package io.netstrap.core.server.netty.handler;
 import io.netstrap.core.server.config.SslConfig;
 import io.netstrap.core.server.netty.NettyConfig;
 import io.netstrap.core.server.websocket.AbstractStringDecoder;
-import io.netstrap.core.server.websocket.WebSocketGroup;
+import io.netstrap.core.server.websocket.DefaultGroup;
 import io.netstrap.core.server.websocket.decoder.DefaultStringDecoder;
 import io.netstrap.core.server.websocket.dispatcher.WebSocketDispatcher;
 import io.netty.channel.ChannelHandler.Sharable;
@@ -55,13 +55,13 @@ public class DefaultWebSocketHandler extends SimpleChannelInboundHandler<Object>
     @Override
     public void channelActive(ChannelHandlerContext context) {
         //连接
-        WebSocketGroup.login(context.channel());
+        DefaultGroup.login(context.channel());
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext context) {
         //断开
-        WebSocketGroup.logout(context.channel());
+        DefaultGroup.logout(context.channel());
     }
 
     @Override

@@ -1,11 +1,9 @@
 package io.netstrap.test.quartz;
 
-import io.netstrap.core.server.websocket.WebSocketGroup;
+import io.netstrap.core.server.websocket.DefaultGroup;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
-import java.nio.channels.Channel;
 
 /**
  * 定时器测试
@@ -21,8 +19,8 @@ public class QuartzTime {
      */
     @Scheduled(cron = "0/1 * * * * ?")
     public void loopSayHello() {
-        String message = "{\"timestamp\":"+System.currentTimeMillis()+",\"linking\":"+WebSocketGroup.count()+"}";
+        String message = "{\"timestamp\":"+System.currentTimeMillis()+",\"linking\":"+ DefaultGroup.count()+"}";
         System.out.println(message);
-        WebSocketGroup.push(message);
+        DefaultGroup.push(message);
     }
 }
