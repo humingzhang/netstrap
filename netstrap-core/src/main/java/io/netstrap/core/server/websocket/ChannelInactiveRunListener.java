@@ -37,10 +37,8 @@ public class ChannelInactiveRunListener {
     @PostConstruct
     private void initListener() {
         ClassFactory factory = ClassFactory.getInstance();
-        factory.getClassByInterface(ChannelInactiveListener.class).forEach(clz -> {
-            ChannelInactiveListener listener = (ChannelInactiveListener) context.getBean(clz);
-            listeners.add(listener);
-        });
+        factory.getClassByInterface(ChannelInactiveListener.class)
+                .forEach(clz -> listeners.add((ChannelInactiveListener) context.getBean(clz)));
     }
 
     /**
