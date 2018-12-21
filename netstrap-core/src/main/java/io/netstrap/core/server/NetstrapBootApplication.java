@@ -159,6 +159,7 @@ public class NetstrapBootApplication {
             //开始监听请求
             server.join();
         } catch (Throwable ex) {
+            ex.printStackTrace();
             context.close();
             if (server.isStarted()) {
                 server.stop();
