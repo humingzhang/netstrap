@@ -38,7 +38,7 @@ public class LogoApplicationListener implements ApplicationListener {
         try {
             StringBuilder logo = new StringBuilder();
 
-            logo.append("> . > . > . > . > . > . > . > . > . > . > \r\n");
+            logo.append("Printing logo, wait a moment... \r\n");
             BufferedImage bi = ImageIO.read(logoStream);
             /**
              * 获取图像的宽度和高度

@@ -1,6 +1,9 @@
 package io.netstrap.core.server.websocket;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * 字符串解析抽象类
@@ -22,6 +25,10 @@ public abstract class AbstractStringDecoder {
      * 请求体
      */
     private String body;
+    /**
+     * 请求参数
+     */
+    private Map<String,String> param;
 
     /**
      * 构造函数
@@ -47,6 +54,10 @@ public abstract class AbstractStringDecoder {
         return body;
     }
 
+    public Map<String,String> param() {
+        return param;
+    }
+
     protected String text() {
         return text;
     }
@@ -57,5 +68,12 @@ public abstract class AbstractStringDecoder {
 
     protected void setBody(String body) {
         this.body = body;
+    }
+
+    protected void addParam(String key, String value) {
+        if(Objects.isNull(param)) {
+            param = new HashMap<>();
+        }
+        param.put(key,value);
     }
 }

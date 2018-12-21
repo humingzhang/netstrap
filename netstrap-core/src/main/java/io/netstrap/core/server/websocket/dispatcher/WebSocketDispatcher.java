@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -38,7 +39,7 @@ public class WebSocketDispatcher {
         try {
             WebSocketAction action = factory.get(decoder.uri());
             if (Objects.nonNull(action)) {
-                Object[] params = getParams(action, channel, decoder.body());
+                Object[] params = getParams(action, channel, decoder);
                 Object message = action.getAction().invoke(action.getInvoker(), params);
                 if (Objects.nonNull(message)) {
                     TextWebSocketFrame tws;
@@ -59,7 +60,7 @@ public class WebSocketDispatcher {
     /**
      * 获取调用参数
      */
-    private Object[] getParams(WebSocketAction action, Channel channel, String body) {
+    private Object[] getParams(WebSocketAction action, Channel channel, AbstractStringDecoder decoder) {
         Class<?>[] types = action.getParamTypes();
         Object[] params = new Object[types.length];
 
@@ -68,9 +69,11 @@ public class WebSocketDispatcher {
             if (type.equals(Channel.class)) {
                 params[i] = channel;
             } else if (type.equals(String.class)) {
-                params[i] = body;
+                params[i] = decoder.body();
+            } else if(type.isAssignableFrom(Map.class)) {
+                params[i] = decoder.param();
             } else {
-                params[i] = JsonTool.json2obj(body, type);
+                params[i] = JsonTool.json2obj(decoder.body(), type);
             }
         }
         return params;
