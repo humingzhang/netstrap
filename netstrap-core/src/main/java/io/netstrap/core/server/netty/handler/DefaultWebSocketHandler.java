@@ -3,7 +3,7 @@ package io.netstrap.core.server.netty.handler;
 import io.netstrap.core.server.config.SslConfig;
 import io.netstrap.core.server.netty.NettyConfig;
 import io.netstrap.core.server.websocket.AbstractStringDecoder;
-import io.netstrap.core.server.websocket.DefaultGroup;
+import io.netstrap.core.server.websocket.ChannelInactiveRunListener;
 import io.netstrap.core.server.websocket.decoder.DefaultStringDecoder;
 import io.netstrap.core.server.websocket.dispatcher.WebSocketDispatcher;
 import io.netty.channel.ChannelHandler.Sharable;
@@ -44,24 +44,30 @@ public class DefaultWebSocketHandler extends SimpleChannelInboundHandler<Object>
      * socket处理
      */
     private final WebSocketDispatcher dispatcher;
+    /**
+     * inactive 监听器
+     */
+    private final ChannelInactiveRunListener listener;
 
     @Autowired
-    public DefaultWebSocketHandler(DefaultHttpHandler httpHandler, NettyConfig nettyConfig, WebSocketDispatcher dispatcher) {
+    public DefaultWebSocketHandler(DefaultHttpHandler httpHandler, NettyConfig nettyConfig,
+                                   WebSocketDispatcher dispatcher, ChannelInactiveRunListener listener) {
         this.httpHandler = httpHandler;
         this.nettyConfig = nettyConfig;
         this.dispatcher = dispatcher;
+        this.listener = listener;
     }
 
     @Override
     public void channelActive(ChannelHandlerContext context) {
         //连接
-        DefaultGroup.login(context.channel());
+        listener.channelActive(context.channel());
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext context) {
         //断开
-        DefaultGroup.logout(context.channel());
+        listener.channelInactive(context.channel());
     }
 
     @Override

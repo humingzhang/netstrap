@@ -1,6 +1,6 @@
 package io.netstrap.test.quartz;
 
-import io.netstrap.core.server.websocket.DefaultGroup;
+import io.netstrap.core.server.websocket.group.DefaultGroup;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
