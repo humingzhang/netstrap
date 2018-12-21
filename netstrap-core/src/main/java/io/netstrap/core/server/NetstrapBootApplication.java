@@ -119,10 +119,10 @@ public class NetstrapBootApplication {
      * 设置启动扫描路径
      */
     private void initBaseScanPackages() {
-        NetstrapApplication mainClassAnnotation =
+        NetstrapApplication annotation =
                 clz.getAnnotation(NetstrapApplication.class);
         List<String> packages = new ArrayList<>(Arrays.asList(NetstrapConstant.DEFAULT_SCAN));
-        packages.addAll(Arrays.asList(mainClassAnnotation.packages()));
+        packages.addAll(Arrays.asList(annotation.packages()));
         packages.add(clz.getPackage().getName());
         basePackages = packages.toArray(new String[]{});
     }
