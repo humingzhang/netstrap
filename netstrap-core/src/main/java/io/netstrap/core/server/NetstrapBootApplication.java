@@ -19,6 +19,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.core.Constants;
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -31,6 +32,8 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static io.netstrap.common.NetstrapConstant.DEFAULT_SCAN;
 
 /**
  * Netstrap启动类
@@ -116,12 +119,12 @@ public class NetstrapBootApplication {
     }
 
     /**
-     * 设置启动扫描路径
+     * 设置类工厂扫描路径
      */
     private void initBaseScanPackages() {
         NetstrapApplication annotation =
                 clz.getAnnotation(NetstrapApplication.class);
-        List<String> packages = new ArrayList<>(Arrays.asList(NetstrapConstant.DEFAULT_SCAN));
+        List<String> packages = new ArrayList<>(Arrays.asList(DEFAULT_SCAN));
         packages.addAll(Arrays.asList(annotation.packages()));
         packages.add(clz.getPackage().getName());
         basePackages = packages.toArray(new String[]{});
@@ -145,7 +148,7 @@ public class NetstrapBootApplication {
         try {
 
             //创建上下文
-            context = createApplicationContext(configLocations, basePackages);
+            context = createApplicationContext(configLocations);
             //准备Context
             prepareContext(context, new StandardEnvironment());
             //Spring容器初始化完毕（包括引入的Spring组件）之后调用
@@ -198,7 +201,7 @@ public class NetstrapBootApplication {
         }
 
         server.start(protocol);
-        log.info("The network service["+ serverType +" -> "+ protocol +"] is starting.");
+        log.info("The network service[" + serverType + " -> " + protocol + "] is starting.");
     }
 
     /**
@@ -231,9 +234,12 @@ public class NetstrapBootApplication {
     /**
      * 创建Spring容器
      */
-    private ConfigurableApplicationContext createApplicationContext(String[] configLocations, String[] packages) {
-        ApplicationContext parent = new AnnotationConfigApplicationContext(packages);
-        return new ClassPathXmlApplicationContext(configLocations, parent);
+    private ConfigurableApplicationContext createApplicationContext(String[] configLocations) {
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+        context.setParent(new ClassPathXmlApplicationContext(configLocations));
+        context.scan(DEFAULT_SCAN);
+        context.refresh();
+        return context;
     }
 
     /**
