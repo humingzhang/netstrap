@@ -4,9 +4,11 @@ import io.netstrap.common.tool.Convertible;
 import io.netstrap.common.tool.JsonTool;
 import io.netstrap.core.server.websocket.AbstractStringDecoder;
 import io.netstrap.core.server.websocket.WebSocketRouterFactory;
+import io.netstrap.core.server.websocket.decoder.DefaultStringDecoder;
 import io.netstrap.core.server.websocket.router.WebSocketAction;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
+import io.netty.handler.codec.http.websocketx.WebSocketFrame;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -34,7 +36,30 @@ public class WebSocketDispatcher {
     /**
      * 请求分发
      */
-    public void dispatcher(Channel channel, AbstractStringDecoder decoder) {
+    public void dispatcher(Channel channel, WebSocketFrame frame) {
+        if (frame instanceof TextWebSocketFrame) {
+            try {
+                // 文本消息
+                String text = ((TextWebSocketFrame) frame).text();
+                handler(channel, new DefaultStringDecoder(text).decode());
+            } catch (Exception e) {
+                exceptionCaught(channel, e.getCause());
+            }
+        }
+    }
+
+    /**
+     * 处理异常
+     */
+    private void exceptionCaught(Channel channel, Throwable cause) {
+        cause.printStackTrace();
+        channel.close();
+    }
+
+    /**
+     * 请求分发
+     */
+    private void handler(Channel channel, AbstractStringDecoder decoder) {
         //执行过滤分发
         try {
             WebSocketAction action = factory.get(decoder.uri());

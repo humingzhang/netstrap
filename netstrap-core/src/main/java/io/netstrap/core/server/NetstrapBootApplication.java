@@ -1,6 +1,5 @@
 package io.netstrap.core.server;
 
-import io.netstrap.common.NetstrapConstant;
 import io.netstrap.common.factory.ClassFactory;
 import io.netstrap.core.server.context.NetstrapSpringRunListener;
 import io.netstrap.core.server.context.NetstrapSpringRunListeners;
@@ -13,13 +12,11 @@ import io.netstrap.core.server.netty.NettyServer;
 import io.netstrap.core.server.server.Server;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.core.Constants;
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 import org.springframework.core.env.ConfigurableEnvironment;

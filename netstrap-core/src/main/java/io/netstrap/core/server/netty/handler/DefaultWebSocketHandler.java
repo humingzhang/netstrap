@@ -2,10 +2,9 @@ package io.netstrap.core.server.netty.handler;
 
 import io.netstrap.core.server.config.SslConfig;
 import io.netstrap.core.server.netty.NettyConfig;
-import io.netstrap.core.server.websocket.AbstractStringDecoder;
 import io.netstrap.core.server.websocket.ChannelInactiveRunListener;
-import io.netstrap.core.server.websocket.decoder.DefaultStringDecoder;
 import io.netstrap.core.server.websocket.dispatcher.WebSocketDispatcher;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -88,31 +87,20 @@ public class DefaultWebSocketHandler extends SimpleChannelInboundHandler<Object>
      * @param frame   WebSocket消息
      */
     private void handleWebSocketFrame(ChannelHandlerContext context, WebSocketFrame frame) {
-
+        Channel channel = context.channel();
         // 关闭请求
         if (frame instanceof CloseWebSocketFrame) {
-            handshake.close(context.channel(), (CloseWebSocketFrame) frame.retain());
+            handshake.close(channel, (CloseWebSocketFrame) frame.retain());
             return;
         }
 
         // ping请求
         if (frame instanceof PingWebSocketFrame) {
-            context.channel().write(new PongWebSocketFrame(frame.content().retain()));
+            channel.write(new PongWebSocketFrame(frame.content().retain()));
             return;
         }
 
-        if (frame instanceof TextWebSocketFrame) {
-            try {
-                // 文本消息
-                String text = ((TextWebSocketFrame) frame).text();
-                AbstractStringDecoder decoder = new DefaultStringDecoder(text).decode();
-                context.channel().eventLoop().execute(
-                        () -> dispatcher.dispatcher(context.channel(), decoder)
-                );
-            } catch (Exception e) {
-                exceptionCaught(context, e.getCause());
-            }
-        }
+        channel.eventLoop().execute(() -> dispatcher.dispatcher(channel, frame));
     }
 
     /**
@@ -142,15 +130,6 @@ public class DefaultWebSocketHandler extends SimpleChannelInboundHandler<Object>
             // 处理普通http请求
             httpHandler.handleHttpRequest(context, request);
         }
-    }
-
-    /**
-     * 异常处理
-     */
-    @Override
-    public void exceptionCaught(ChannelHandlerContext context, Throwable cause) {
-        cause.printStackTrace();
-        context.close();
     }
 
     @Override
