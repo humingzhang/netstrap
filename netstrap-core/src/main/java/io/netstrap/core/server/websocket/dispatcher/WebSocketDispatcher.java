@@ -12,6 +12,7 @@ import io.netty.handler.codec.http.websocketx.WebSocketFrame;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -38,13 +39,15 @@ public class WebSocketDispatcher {
      */
     public void dispatcher(Channel channel, WebSocketFrame frame) {
         if (frame instanceof TextWebSocketFrame) {
-            try {
-                // 文本消息
-                String text = ((TextWebSocketFrame) frame).text();
-                handler(channel, new DefaultStringDecoder(text).decode());
-            } catch (Exception e) {
-                exceptionCaught(channel, e.getCause());
-            }
+            // 文本消息
+            String text = ((TextWebSocketFrame) frame).text();
+            channel.eventLoop().execute(() -> {
+                try {
+                    handler(channel, new DefaultStringDecoder(text).decode());
+                } catch (IOException e) {
+                    exceptionCaught(channel, e.getCause());
+                }
+            });
         }
     }
 

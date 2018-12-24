@@ -100,7 +100,7 @@ public class DefaultWebSocketHandler extends SimpleChannelInboundHandler<Object>
             return;
         }
 
-        channel.eventLoop().execute(() -> dispatcher.dispatcher(channel, frame));
+        dispatcher.dispatcher(channel, frame);
     }
 
     /**
