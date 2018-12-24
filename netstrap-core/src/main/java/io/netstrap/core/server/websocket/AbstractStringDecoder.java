@@ -41,7 +41,7 @@ public abstract class AbstractStringDecoder {
 
     /**
      * 解析
-     *
+     * @throws  IOException 解析异常
      * @return this
      */
     public abstract AbstractStringDecoder decode() throws IOException;
@@ -72,7 +72,7 @@ public abstract class AbstractStringDecoder {
 
     protected void addParam(String key, String value) {
         if(Objects.isNull(param)) {
-            param = new HashMap<>();
+            param = new HashMap<>(8);
         }
         param.put(key,value);
     }

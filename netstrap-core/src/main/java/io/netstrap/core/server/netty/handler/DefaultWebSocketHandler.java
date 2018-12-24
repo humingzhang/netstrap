@@ -4,7 +4,6 @@ import io.netstrap.core.server.config.SslConfig;
 import io.netstrap.core.server.netty.NettyConfig;
 import io.netstrap.core.server.websocket.ChannelInactiveRunListener;
 import io.netstrap.core.server.websocket.WebSocketDispatcher;
-import io.netstrap.core.server.websocket.dispatcher.DefaultWebSocketDispatcher;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
@@ -71,7 +70,7 @@ public class DefaultWebSocketHandler extends SimpleChannelInboundHandler<Object>
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext context, Object msg) throws Exception {
+    protected void channelRead0(ChannelHandlerContext context, Object msg) {
         if (msg instanceof FullHttpRequest) {
             // http//xxxx
             handleHttpRequest(context, (FullHttpRequest) msg);
