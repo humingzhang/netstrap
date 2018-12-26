@@ -1,12 +1,5 @@
 #### HttpServer使用说明
 
-```
-<dependency>
-    <groupId>io.netstrap</groupId>
-    <artifactId>netstrap-core</artifactId>
-    <version>${version}</version>
-</dependency>
-```
 
 #### 核心示例
 

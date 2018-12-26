@@ -3,6 +3,16 @@
 #### 项目介绍
 Web development framework based on Spring Boot and Netty. Spring module is integrated with XML configuration file, Starter dependency is removed, and a set of web containers for production is fully realized.
 
+#### MAVEN引入netstrap
+
+```
+<dependency>
+    <groupId>io.netstrap</groupId>
+    <artifactId>netstrap-core</artifactId>
+    <version>${version}</version>
+</dependency>
+```
+
 #### 启动示例
 
 ```

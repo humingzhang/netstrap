@@ -1,14 +1,7 @@
 #### WebSocketServer使用说明
 
-```
-<dependency>
-    <groupId>io.netstrap</groupId>
-    <artifactId>netstrap-core</artifactId>
-    <version>${version}</version>
-</dependency>
-```
 
-1.Server启动示例
+#### Server启动示例
 
 ```
 /**
@@ -30,7 +23,7 @@ public class OrderApplication {
 }
 ```
 
-2.控制器示例
+#### 控制器示例
 
 请求协议
 
@@ -59,8 +52,9 @@ public void joinGroup(Channel channel, Map<String, String> param, User user) {
     }
 }
 ```
-注：若需自定义协议，请参看源码<br/><br/>
-3.可选参数类型
+注：若需自定义协议，请参看源码
+
+#### 可选参数类型
 ```
 Channel channel             链接参数
 Map<String, String> param   URI参数
@@ -68,7 +62,7 @@ User user                   请求体
 
 ```
 
-4.监听器
+#### 监听器
 ```
 channel的active和inactive事件框架会通知监听者，如下所示，该监听器必须实现ChannelInactiveListener并被
 @Component修饰，框架会基于Spring查找到监听器进行调用：
@@ -113,7 +107,7 @@ public class NamedChannelInactiveListener implements ChannelInactiveListener {
 
 ```
 
-5.多人点餐场景示例 <br/>
+#### 多人点餐场景示例 <br/>
 
 [多人点餐](http://paylist.instanceof.cn)
 ```
@@ -125,9 +119,8 @@ public class NamedChannelInactiveListener implements ChannelInactiveListener {
 
 可以使用SpringBoot打包插件，也可以使用assembly进行打包。引入打包插件后，mvn package 即可生成可执行jar！
 
-#### 压力测试
+#### 应用启动
 
-环境准备
 ```
 nohup java -jar -server -d64 ./netstrap-test-0.1.jar >> /dev/null &
 ```
