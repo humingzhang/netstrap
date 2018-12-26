@@ -28,7 +28,7 @@ public class OrderApplication {
 请求协议
 
 ```
-/join/group?a=1&b=2 \n <br/>  //请求链接 ，指定访问WebSocketMapping为/join/group的方法
+/join/group?a=1&b=2    //请求链接 ，指定访问WebSocketMapping为/join/group的方法
 {
     "uid":100          //请求体
 }
