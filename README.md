@@ -7,7 +7,7 @@ Web development framework based on Spring Boot and Netty. Spring module is integ
 
 ```
 15:27:46.229 [main] INFO  io.netstrap.core.server.netty.NettyServer - The server bind IP:0.0.0.0 , PORT:9000
-15:27:46.233 [main] INFO  io.netstrap.core.server.NetstrapBootApplication - The network service[Netty -> WEB_SOCKET] is starting.
+15:27:46.233 [main] INFO  io.netstrap.core.server.NetstrapBootApplication - The network service is starting.
 15:27:46.276 [main] INFO  io.netstrap.core.server.context.LogoApplicationListener - Printing logo, wait a moment... ^M
 
              ***  **
@@ -26,5 +26,5 @@ Web development framework based on Spring Boot and Netty. Spring module is integ
 ```
 
 
-[HTTP示例]: (HTTP.md)
-[WEB_SOCKET示例]: (WEB_SOCKET.md)
+[HTTP示例]: (https://github.com/minghu-zhang/netstrap/blob/master/HTTP.md)
+[WEB_SOCKET示例]: (https://github.com/minghu-zhang/netstrap/blob/master/WEB_SOCKET.md)
