@@ -92,15 +92,7 @@ public class NamedChannelInactiveListener implements ChannelInactiveListener {
 
     @Override
     public void channelInactive(Channel channel) {
-        String id = MD5.encrypt16(channel.id().asLongText());
-        String group = userCacheService.getValueForHash(id, RedisKey.UserCache.GROUP);
-        String user = userCacheService.getValueForHash(id, RedisKey.UserCache.USER);
-        if (Objects.nonNull(group) && Objects.nonNull(user)) {
-            String userGroupKey = RedisKey.GroupCache.USER + group;
-            userGroupService.remove(userGroupKey, user);
-            userCacheService.removeKeyById(id);
-            NamedGroup.remove(group, JsonTool.json2obj(user, User.class));
-        }
+        //
     }
 
 }
