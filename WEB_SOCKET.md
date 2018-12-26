@@ -99,14 +99,6 @@ public class NamedChannelInactiveListener implements ChannelInactiveListener {
 
 ```
 
-#### 多人点餐场景示例 <br/>
-
-[多人点餐](http://paylist.instanceof.cn)
-```
-用户名：  test01 - test06
-默认密码：123456
-```
-
 #### 打包部署
 
 可以使用SpringBoot打包插件，也可以使用assembly进行打包。引入打包插件后，mvn package 即可生成可执行jar！
