@@ -113,11 +113,12 @@ public class NamedChannelInactiveListener implements ChannelInactiveListener {
 
 ```
 
-5.多人点餐场景示例
+5.多人点餐场景示例 <br/>
+
+[多人点餐](http://paylist.instanceof.cn)
 ```
-用户名：  test01 - test05
+用户名：  test01 - test06
 默认密码：123456
-访问链接：http://paylist.instanceof.cn 
 ```
 
 #### 打包部署
