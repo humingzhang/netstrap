@@ -46,3 +46,7 @@ Websocket应用：[WEB_SOCKET示例](https://github.com/minghu-zhang/netstrap/bl
 用户名：  test01 - test06
 默认密码：123456
 ```
+
+![默认页面](https://images.gitee.com/uploads/images/2018/1226/155405_c447ed81_679674.png "QQ截图20181226154552.png")
+![用户加入](https://images.gitee.com/uploads/images/2018/1226/155423_b2e782e7_679674.png "QQ截图20181226154628.png")
+![参与聊天](https://images.gitee.com/uploads/images/2018/1226/155501_fc715360_679674.png "QQ截图20181226154743.png")
