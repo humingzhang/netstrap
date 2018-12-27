@@ -1,6 +1,6 @@
 package io.netstrap.core.server.http.datagram;
 
-import io.netstrap.core.server.http.HttpMethod;
+import io.netstrap.core.server.http.router.HttpMethod;
 import io.netstrap.core.server.http.wrapper.HttpBody;
 import io.netstrap.core.server.http.wrapper.HttpForm;
 import lombok.Data;

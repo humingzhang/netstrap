@@ -1,7 +1,6 @@
 package io.netstrap.core.server.http.router;
 
 
-import io.netstrap.core.server.http.HttpMethod;
 import lombok.Data;
 
 import java.lang.reflect.Method;
@@ -17,7 +16,7 @@ public class HttpAction {
     /**
      * 参数映射
      */
-    private ParamMapping[] mappings;
+    private HttpParamMapping[] mappings;
     /**
      * 当前映射的URI
      */

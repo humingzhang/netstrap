@@ -61,7 +61,7 @@ public class DefaultWebSocketDispatcher implements WebSocketDispatcher {
         try {
             WebSocketAction action = factory.get(decoder.uri());
             if (Objects.nonNull(action)) {
-                Object[] params = getParams(action, channel, decoder);
+                Object[] params = getParams(action, context, channel, decoder);
                 Object message = action.getAction().invoke(action.getInvoker(), params);
                 if (Objects.nonNull(message)) {
                     TextWebSocketFrame tws;
@@ -82,7 +82,7 @@ public class DefaultWebSocketDispatcher implements WebSocketDispatcher {
     /**
      * 获取调用参数
      */
-    private Object[] getParams(WebSocketAction action, Channel channel, AbstractStringDecoder decoder) {
+    private Object[] getParams(WebSocketAction action, WebSocketContext context, Channel channel, AbstractStringDecoder decoder) {
         Class<?>[] types = action.getParamTypes();
         Object[] params = new Object[types.length];
 

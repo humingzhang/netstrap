@@ -1,6 +1,6 @@
 package io.netstrap.core.server.http.stereotype.parameter;
 
-import io.netstrap.core.server.http.ContextType;
+import io.netstrap.core.server.http.router.HttpContextType;
 
 import java.lang.annotation.*;
 
@@ -22,5 +22,5 @@ public @interface RequestValue {
     /**
      * METHOD
      */
-    ContextType type();
+    HttpContextType type();
 }

@@ -1,6 +1,6 @@
 package io.netstrap.core.server.http.stereotype.mapping;
 
-import io.netstrap.core.server.http.HttpMethod;
+import io.netstrap.core.server.http.router.HttpMethod;
 
 import java.lang.annotation.*;
 

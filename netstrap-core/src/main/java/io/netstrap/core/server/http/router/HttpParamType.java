@@ -1,4 +1,4 @@
-package io.netstrap.core.server.http;
+package io.netstrap.core.server.http.router;
 
 
 /**
@@ -7,7 +7,7 @@ package io.netstrap.core.server.http;
  * @author minghu.zhang
  * @date 2018/11/07
  */
-public enum ParamType {
+public enum HttpParamType {
 
     /**
      * URI参数

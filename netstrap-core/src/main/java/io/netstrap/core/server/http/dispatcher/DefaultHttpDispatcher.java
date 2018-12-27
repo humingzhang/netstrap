@@ -4,13 +4,13 @@ import io.netstrap.common.tool.Convertible;
 import io.netstrap.common.tool.JsonTool;
 import io.netstrap.core.server.exception.ParameterParseException;
 import io.netstrap.core.server.http.AbstractDispatcher;
-import io.netstrap.core.server.http.HttpMethod;
+import io.netstrap.core.server.http.router.HttpMethod;
 import io.netstrap.core.server.http.datagram.AbstractHttpRequest;
 import io.netstrap.core.server.http.datagram.AbstractHttpResponse;
 import io.netstrap.core.server.http.filter.DefaultWebFilter;
 import io.netstrap.core.server.http.router.HttpAction;
-import io.netstrap.core.server.http.router.ParamMapping;
-import io.netstrap.core.server.http.router.RouterFactory;
+import io.netstrap.core.server.http.router.HttpParamMapping;
+import io.netstrap.core.server.http.router.HttpRouterFactory;
 import io.netstrap.core.server.http.wrapper.HttpBody;
 import io.netstrap.core.server.http.wrapper.HttpForm;
 import io.netty.handler.codec.http.multipart.MixedFileUpload;
@@ -38,13 +38,13 @@ public class DefaultHttpDispatcher extends AbstractDispatcher {
     /**
      * 路由工厂
      */
-    private final RouterFactory factory;
+    private final HttpRouterFactory factory;
 
     /**
      * 构造函数注入
      */
     @Autowired
-    public DefaultHttpDispatcher(DefaultWebFilter webFilter, RouterFactory factory) {
+    public DefaultHttpDispatcher(DefaultWebFilter webFilter, HttpRouterFactory factory) {
         super(webFilter);
         this.factory = factory;
     }
@@ -102,12 +102,12 @@ public class DefaultHttpDispatcher extends AbstractDispatcher {
     /**
      * 解析调用参数
      */
-    private Object[] parseParameter(ParamMapping[] mappings, AbstractHttpRequest request, AbstractHttpResponse response) {
+    private Object[] parseParameter(HttpParamMapping[] mappings, AbstractHttpRequest request, AbstractHttpResponse response) {
         Object[] parameters = new Object[mappings.length];
 
         try {
             for (int i = 0; i < mappings.length; i++) {
-                ParamMapping mapping = mappings[i];
+                HttpParamMapping mapping = mappings[i];
                 Class<?> paramClass = mapping.getParamClass();
                 if (paramClass.equals(AbstractHttpRequest.class)) {
                     parameters[i] = request;
@@ -147,7 +147,7 @@ public class DefaultHttpDispatcher extends AbstractDispatcher {
     /**
      * 解析参数值
      */
-    private Object parseValue(ParamMapping mapping, AbstractHttpRequest request, Class<?> paramClass) throws IllegalAccessException, InstantiationException, InvocationTargetException {
+    private Object parseValue(HttpParamMapping mapping, AbstractHttpRequest request, Class<?> paramClass) throws IllegalAccessException, InstantiationException, InvocationTargetException {
         String alias = mapping.getAlisName();
         Object value = null;
 
@@ -200,7 +200,7 @@ public class DefaultHttpDispatcher extends AbstractDispatcher {
     /**
      * 表单参数解析
      */
-    private Object formParse(ParamMapping mapping, AbstractHttpRequest request) {
+    private Object formParse(HttpParamMapping mapping, AbstractHttpRequest request) {
         Object value = null;
 
         if (request.getMethod().equals(HttpMethod.POST)) {

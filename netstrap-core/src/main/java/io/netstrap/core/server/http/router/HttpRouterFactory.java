@@ -2,11 +2,7 @@ package io.netstrap.core.server.http.router;
 
 import io.netstrap.common.factory.ClassFactory;
 import io.netstrap.common.tool.Convertible;
-import io.netstrap.core.server.http.ContextType;
 import io.netstrap.core.server.http.DefaultErrorUri;
-import io.netstrap.core.server.http.HttpMethod;
-import io.netstrap.core.server.http.ParamType;
-import io.netstrap.core.server.http.controller.DefaultErrorController;
 import io.netstrap.core.server.http.stereotype.RestController;
 import io.netstrap.core.server.http.stereotype.mapping.RequestMapping;
 import io.netstrap.core.server.http.stereotype.parameter.RequestValue;
@@ -32,7 +28,7 @@ import java.util.*;
  * @date 2018/11/09
  */
 @Component
-public class RouterFactory {
+public class HttpRouterFactory {
 
     /**
      * 调用模型
@@ -53,7 +49,7 @@ public class RouterFactory {
      * 构造函数
      */
     @Autowired
-    private RouterFactory(ApplicationContext context) {
+    private HttpRouterFactory(ApplicationContext context) {
         this.context = context;
         this.factory = ClassFactory.getInstance();
     }
@@ -62,7 +58,7 @@ public class RouterFactory {
      * 初始化MVC
      */
     @PostConstruct
-    private RouterFactory init() {
+    private HttpRouterFactory init() {
         initDefault();
         initRouter();
         return this;
@@ -128,7 +124,7 @@ public class RouterFactory {
                 router.setMethods(httpMethods);
                 router.setUri(groupUri + mappingUri);
                 put(router.getUri(), router);
-                ParamMapping[] mappings = buildArguments(method);
+                HttpParamMapping[] mappings = buildArguments(method);
                 router.setMappings(mappings);
             }
         }
@@ -138,16 +134,16 @@ public class RouterFactory {
      * 构建参数对象
      * 解析参数来源，封装处理类
      */
-    private ParamMapping[] buildArguments(Method method) {
+    private HttpParamMapping[] buildArguments(Method method) {
 
-        List<ParamMapping> mappings = new ArrayList<>(8);
+        List<HttpParamMapping> mappings = new ArrayList<>(8);
 
         //指定默认参数名，并创建mapping对象
         DefaultParameterNameDiscoverer discover = new DefaultParameterNameDiscoverer();
         String[] parameterNames = discover.getParameterNames(method);
         assert parameterNames != null;
         for (String name : parameterNames) {
-            ParamMapping mapping = new ParamMapping();
+            HttpParamMapping mapping = new HttpParamMapping();
             mapping.setAlisName(name);
             mappings.add(mapping);
         }
@@ -157,32 +153,32 @@ public class RouterFactory {
         //构建泛型映射
         buildGenericMapping(method, mappings);
 
-        return mappings.toArray(new ParamMapping[]{});
+        return mappings.toArray(new HttpParamMapping[]{});
     }
 
     /**
      * 构建参数类型
      */
-    private void buildParamTypeMapping(Method method, List<ParamMapping> mappings) {
+    private void buildParamTypeMapping(Method method, List<HttpParamMapping> mappings) {
         Parameter[] parameters = method.getParameters();
         for (int i = 0; i < parameters.length; i++) {
             Parameter parameter = parameters[i];
-            ParamMapping mapping = mappings.get(i);
+            HttpParamMapping mapping = mappings.get(i);
             buildParamMapping(parameter, mapping);
             Class<?> type = parameter.getType();
             mapping.setParamClass(type);
             if (parameter.getType().isArray()) {
                 Class<?> componentType = parameter.getType().getComponentType();
-                mapping.setParamType(ParamType.ARRAY_PARAM);
+                mapping.setParamType(HttpParamType.ARRAY_PARAM);
                 mapping.setParamClass(componentType);
             } else if (Convertible.convertible(type)) {
-                mapping.setParamType(ParamType.BASE_PARAM);
+                mapping.setParamType(HttpParamType.BASE_PARAM);
             } else if (type.equals(MixedFileUpload.class)) {
-                mapping.setParamType(ParamType.FILE_PARAM);
+                mapping.setParamType(HttpParamType.FILE_PARAM);
             } else if (List.class.isAssignableFrom(type)) {
-                mapping.setParamType(ParamType.LIST_PARAM);
+                mapping.setParamType(HttpParamType.LIST_PARAM);
             } else {
-                mapping.setParamType(ParamType.OTHER_PARAM);
+                mapping.setParamType(HttpParamType.OTHER_PARAM);
             }
         }
     }
@@ -190,7 +186,7 @@ public class RouterFactory {
     /**
      * 构建泛型对象
      */
-    private void buildGenericMapping(Method method, List<ParamMapping> mappings) {
+    private void buildGenericMapping(Method method, List<HttpParamMapping> mappings) {
 
         Type[] parameterTypes = method.getGenericParameterTypes();
         for (int i = 0; i < parameterTypes.length; i++) {
@@ -198,7 +194,7 @@ public class RouterFactory {
             if (parameterType instanceof ParameterizedType) {
                 Type[] actualType = ((ParameterizedType) parameterType).getActualTypeArguments();
                 if (actualType.length > 0) {
-                    ParamMapping mapping = mappings.get(i);
+                    HttpParamMapping mapping = mappings.get(i);
                     mapping.setGenericType((Class<?>) actualType[0]);
                 }
             }
@@ -208,16 +204,16 @@ public class RouterFactory {
     /**
      * 构建参数对象
      */
-    private void buildParamMapping(Parameter parameter, ParamMapping mapping) {
+    private void buildParamMapping(Parameter parameter, HttpParamMapping mapping) {
         //指定参数别名
         RequestValue alias = AnnotatedElementUtils.findMergedAnnotation(parameter, RequestValue.class);
         String aliasName = "";
-        ContextType contextType;
+        HttpContextType contextType;
         if (Objects.nonNull(alias)) {
             aliasName = alias.value();
             contextType = alias.type();
         } else {
-            contextType = ContextType.REQUEST_PARAM;
+            contextType = HttpContextType.REQUEST_PARAM;
         }
 
         if (!StringUtils.isEmpty(aliasName)) {

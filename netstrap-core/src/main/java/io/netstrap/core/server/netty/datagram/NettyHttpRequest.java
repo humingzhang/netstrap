@@ -2,7 +2,7 @@ package io.netstrap.core.server.netty.datagram;
 
 
 import io.netstrap.common.encrypt.MD5;
-import io.netstrap.core.server.http.HttpMethod;
+import io.netstrap.core.server.http.router.HttpMethod;
 import io.netstrap.core.server.http.datagram.AbstractHttpRequest;
 import io.netstrap.core.server.http.header.HeaderPublicKey;
 import io.netstrap.core.server.http.wrapper.HttpBody;
@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static io.netstrap.core.server.http.HttpMethod.POST;
+import static io.netstrap.core.server.http.router.HttpMethod.POST;
 
 /**
  * Netty HTTP 消息对象

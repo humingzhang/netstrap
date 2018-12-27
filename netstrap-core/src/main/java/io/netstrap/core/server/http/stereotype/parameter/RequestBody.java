@@ -1,6 +1,6 @@
 package io.netstrap.core.server.http.stereotype.parameter;
 
-import io.netstrap.core.server.http.ContextType;
+import io.netstrap.core.server.http.router.HttpContextType;
 import org.springframework.core.annotation.AliasFor;
 
 import java.lang.annotation.*;
@@ -13,7 +13,7 @@ import java.lang.annotation.*;
 @Target(value = {ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@RequestValue(type = ContextType.REQUEST_BODY)
+@RequestValue(type = HttpContextType.REQUEST_BODY)
 public @interface RequestBody {
 
     /**
