@@ -3,6 +3,7 @@ package io.netstrap.core.server.websocket.dispatcher;
 import io.netstrap.common.tool.Convertible;
 import io.netstrap.common.tool.JsonTool;
 import io.netstrap.core.server.websocket.AbstractStringDecoder;
+import io.netstrap.core.server.websocket.WebSocketContext;
 import io.netstrap.core.server.websocket.WebSocketDispatcher;
 import io.netstrap.core.server.websocket.WebSocketRouterFactory;
 import io.netstrap.core.server.websocket.decoder.DefaultStringDecoder;
@@ -38,13 +39,13 @@ public class DefaultWebSocketDispatcher implements WebSocketDispatcher {
      * 请求分发
      */
     @Override
-    public void dispatcher(Channel channel, WebSocketFrame frame) {
+    public void dispatcher(Channel channel, WebSocketContext context, WebSocketFrame frame) {
         if (frame instanceof TextWebSocketFrame) {
             // 文本消息
             String text = ((TextWebSocketFrame) frame).text();
             channel.eventLoop().execute(() -> {
                 try {
-                    handler(channel, new DefaultStringDecoder(text).decode());
+                    handler(channel, context, new DefaultStringDecoder(text).decode());
                 } catch (IOException e) {
                     exceptionCaught(channel, e.getCause());
                 }
@@ -55,7 +56,7 @@ public class DefaultWebSocketDispatcher implements WebSocketDispatcher {
     /**
      * 请求分发
      */
-    private void handler(Channel channel, AbstractStringDecoder decoder) {
+    private void handler(Channel channel, WebSocketContext context, AbstractStringDecoder decoder) {
         //执行过滤分发
         try {
             WebSocketAction action = factory.get(decoder.uri());
@@ -64,7 +65,7 @@ public class DefaultWebSocketDispatcher implements WebSocketDispatcher {
                 Object message = action.getAction().invoke(action.getInvoker(), params);
                 if (Objects.nonNull(message)) {
                     TextWebSocketFrame tws;
-                    if(Convertible.convertible(message.getClass())) {
+                    if (Convertible.convertible(message.getClass())) {
                         tws = new TextWebSocketFrame(message.toString());
                     } else {
                         tws = new TextWebSocketFrame(JsonTool.obj2json(message));
@@ -91,7 +92,7 @@ public class DefaultWebSocketDispatcher implements WebSocketDispatcher {
                 params[i] = channel;
             } else if (type.equals(String.class)) {
                 params[i] = decoder.body();
-            } else if(type.isAssignableFrom(Map.class)) {
+            } else if (type.isAssignableFrom(Map.class)) {
                 params[i] = decoder.param();
             } else {
                 params[i] = JsonTool.json2obj(decoder.body(), type);

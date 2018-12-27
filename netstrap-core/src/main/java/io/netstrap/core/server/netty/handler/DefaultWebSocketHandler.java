@@ -3,6 +3,7 @@ package io.netstrap.core.server.netty.handler;
 import io.netstrap.core.server.config.SslConfig;
 import io.netstrap.core.server.netty.NettyConfig;
 import io.netstrap.core.server.websocket.ChannelInactiveRunListener;
+import io.netstrap.core.server.websocket.WebSocketContext;
 import io.netstrap.core.server.websocket.WebSocketDispatcher;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler.Sharable;
@@ -100,7 +101,11 @@ public class DefaultWebSocketHandler extends SimpleChannelInboundHandler<Object>
             return;
         }
 
-        dispatcher.dispatcher(channel, frame);
+        WebSocketContext socketContext = new WebSocketContext()
+                .parseContext(channel);
+
+
+        dispatcher.dispatcher(channel, socketContext, frame);
     }
 
     /**

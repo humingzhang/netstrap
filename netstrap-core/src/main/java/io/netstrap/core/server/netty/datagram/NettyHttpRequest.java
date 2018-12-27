@@ -63,7 +63,7 @@ public class NettyHttpRequest extends AbstractHttpRequest {
     /**
      * 获取请求URI
      */
-    public String getRequestUri() {
+    private String getRequestUri() {
         String uri = request.uri();
         String split = "?";
         if (uri.contains(split)) {
