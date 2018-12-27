@@ -28,7 +28,7 @@ public class HelloController {
      * 打印字符串
      */
     @GetMapping("/hello")
-    public String hello(@ParamValue String username,@HeaderValue("Content-Type") String contentType) {
+    public String hello(@RequestParam String username,@RequestHeader("Content-Type") String contentType) {
         return username+":"+password;
     }
 
