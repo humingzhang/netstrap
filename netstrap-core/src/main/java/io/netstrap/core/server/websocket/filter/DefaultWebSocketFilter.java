@@ -1,10 +1,11 @@
 package io.netstrap.core.server.websocket.filter;
 
 import io.netstrap.common.factory.ClassFactory;
-import io.netstrap.core.server.http.WebFilter;
-import io.netstrap.core.server.http.datagram.AbstractHttpRequest;
-import io.netstrap.core.server.http.datagram.AbstractHttpResponse;
-import io.netstrap.core.server.http.stereotype.Filterable;
+import io.netstrap.core.server.stereotype.Filterable;
+import io.netstrap.core.server.websocket.WebSocketContext;
+import io.netstrap.core.server.websocket.WebSocketFilter;
+import io.netstrap.core.server.websocket.router.WebSocketAction;
+import io.netty.channel.Channel;
 import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -22,12 +24,12 @@ import java.util.List;
  * @date 2018/11/08
  */
 @Component
-public class DefaultWebSocketFilter implements WebFilter {
+public class DefaultWebSocketFilter {
 
     /**
      * 过滤组
      */
-    private List<WebFilter> filters = new ArrayList<>();
+    private List<WebSocketFilter> filters = new ArrayList<>();
 
     /**
      * 类工程
@@ -60,7 +62,7 @@ public class DefaultWebSocketFilter implements WebFilter {
         List<Pair<Integer, Class<?>>> ordered = getOrderedList();
 
         for (Pair<Integer, Class<?>> pair : ordered) {
-            WebFilter filter = (WebFilter) context.getBean(pair.getValue1());
+            WebSocketFilter filter = (WebSocketFilter) context.getBean(pair.getValue1());
             filters.add(filter);
         }
     }
@@ -72,7 +74,7 @@ public class DefaultWebSocketFilter implements WebFilter {
         List<Pair<Integer, Class<?>>> filters = new ArrayList<>();
 
         //获取待排序列表
-        List<Class<?>> classes = factory.getClassByAnnotation(Filterable.class);
+        List<Class<?>> classes = factory.getClassByInterface(WebSocketFilter.class);
         for (Class<?> clz : classes) {
             Filterable filtered = clz.getAnnotation(Filterable.class);
             int order = filtered.order();
@@ -80,51 +82,35 @@ public class DefaultWebSocketFilter implements WebFilter {
         }
 
         //过滤器排序
-        filters.sort((a, b) -> {
-            if (a.getValue0() > b.getValue0()) {
-                return -1;
-            } else if (a.getValue0() < b.getValue0()) {
-                return 1;
+        filters.sort(new Comparator<Pair<Integer, Class<?>>>() {
+            @Override
+            public int compare(Pair<Integer, Class<?>> a, Pair<Integer, Class<?>> b) {
+                if (a.getValue0() > b.getValue0()) {
+                    return -1;
+                } else if (a.getValue0() < b.getValue0()) {
+                    return 1;
+                }
+                return 0;
             }
-            return 0;
         });
 
         return filters;
     }
 
     /**
-     * 执行过滤器
+     * 过滤器
+     * @param channel 链接通道
+     * @param context 上下文
+     * @param body    文本报文
+     * @return 执行结果，是否需要继续执行
+     * @throws Exception 解析异常
      */
-    @Override
-    public boolean doBefore(AbstractHttpRequest request, AbstractHttpResponse response) throws Exception {
-        //调用链执行
-        for (int i = 0; i < filters.size(); i++) {
-            if (!filters.get(i).doBefore(request, response)) {
+    public boolean filter(Channel channel, WebSocketContext context, String body) throws Exception {
+        for (WebSocketFilter filter : filters) {
+            if(!filter.filter(channel,context,body)) {
                 return false;
             }
         }
         return true;
     }
-
-    /**
-     * 执行过滤器
-     */
-    @Override
-    public boolean doAfter(AbstractHttpRequest request, AbstractHttpResponse response) throws Exception {
-        //调用链执行
-        for (int i = filters.size() - 1; i >= 0; i--) {
-            if (!filters.get(i).doAfter(request, response)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * 检测是否可调用
-     */
-    public boolean filterable() {
-        return !filters.isEmpty();
-    }
-
 }

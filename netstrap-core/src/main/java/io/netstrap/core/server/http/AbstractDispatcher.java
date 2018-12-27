@@ -2,6 +2,7 @@ package io.netstrap.core.server.http;
 
 import io.netstrap.core.server.http.datagram.AbstractHttpRequest;
 import io.netstrap.core.server.http.datagram.AbstractHttpResponse;
+import io.netstrap.core.server.http.filter.DefaultWebFilter;
 
 /**
  * 请求分发
@@ -14,12 +15,12 @@ public abstract class AbstractDispatcher {
     /**
      * 请求过滤器
      */
-    private WebFilter filter;
+    private DefaultWebFilter filter;
 
     /**
      * 构造函数注入
      */
-    public AbstractDispatcher(WebFilter filter) {
+    public AbstractDispatcher(DefaultWebFilter filter) {
         this.filter = filter;
     }
 

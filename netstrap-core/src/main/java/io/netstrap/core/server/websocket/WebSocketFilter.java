@@ -1,8 +1,5 @@
 package io.netstrap.core.server.websocket;
 
-import io.netstrap.core.server.http.datagram.AbstractHttpRequest;
-import io.netstrap.core.server.http.datagram.AbstractHttpResponse;
-import io.netstrap.core.server.websocket.router.WebSocketAction;
 import io.netty.channel.Channel;
 
 /**
@@ -14,9 +11,13 @@ import io.netty.channel.Channel;
 public interface WebSocketFilter {
 
     /**
-     * 执行过滤
-     * @throws Exception 异常抛出，交给统一异常处理器
+     * 过滤器
+     * @param channel 链接通道
+     * @param context 上下文
+     * @param body    文本报文
+     * @return 执行结果，是否需要继续执行
+     * @throws Exception 解析异常
      */
-    void filter(Channel channel, WebSocketAction action,WebSocketContext context) throws Exception;
+    boolean filter(Channel channel,WebSocketContext context,String body) throws Exception;
 
 }

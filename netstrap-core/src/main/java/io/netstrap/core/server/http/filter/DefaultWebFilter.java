@@ -4,7 +4,7 @@ import io.netstrap.common.factory.ClassFactory;
 import io.netstrap.core.server.http.WebFilter;
 import io.netstrap.core.server.http.datagram.AbstractHttpRequest;
 import io.netstrap.core.server.http.datagram.AbstractHttpResponse;
-import io.netstrap.core.server.http.stereotype.Filterable;
+import io.netstrap.core.server.stereotype.Filterable;
 import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -22,7 +22,7 @@ import java.util.List;
  * @date 2018/11/08
  */
 @Component
-public class DefaultWebFilter implements WebFilter {
+public class DefaultWebFilter {
 
     /**
      * 过滤组
@@ -72,7 +72,7 @@ public class DefaultWebFilter implements WebFilter {
         List<Pair<Integer, Class<?>>> filters = new ArrayList<>();
 
         //获取待排序列表
-        List<Class<?>> classes = factory.getClassByAnnotation(Filterable.class);
+        List<Class<?>> classes = factory.getClassByInterface(WebFilter.class);
         for (Class<?> clz : classes) {
             Filterable filtered = clz.getAnnotation(Filterable.class);
             int order = filtered.order();
@@ -95,7 +95,6 @@ public class DefaultWebFilter implements WebFilter {
     /**
      * 执行过滤器
      */
-    @Override
     public boolean doBefore(AbstractHttpRequest request, AbstractHttpResponse response) throws Exception {
         //调用链执行
         for (int i = 0; i < filters.size(); i++) {
@@ -109,7 +108,6 @@ public class DefaultWebFilter implements WebFilter {
     /**
      * 执行过滤器
      */
-    @Override
     public boolean doAfter(AbstractHttpRequest request, AbstractHttpResponse response) throws Exception {
         //调用链执行
         for (int i = filters.size() - 1; i >= 0; i--) {
@@ -118,13 +116,6 @@ public class DefaultWebFilter implements WebFilter {
             }
         }
         return true;
-    }
-
-    /**
-     * 检测是否可调用
-     */
-    public boolean filterable() {
-        return !filters.isEmpty();
     }
 
 }

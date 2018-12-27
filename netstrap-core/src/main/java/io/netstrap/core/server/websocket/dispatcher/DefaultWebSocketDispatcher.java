@@ -5,6 +5,7 @@ import io.netstrap.common.tool.JsonTool;
 import io.netstrap.core.server.websocket.AbstractStringDecoder;
 import io.netstrap.core.server.websocket.WebSocketContext;
 import io.netstrap.core.server.websocket.WebSocketDispatcher;
+import io.netstrap.core.server.websocket.filter.DefaultWebSocketFilter;
 import io.netstrap.core.server.websocket.router.WebSocketContextType;
 import io.netstrap.core.server.websocket.router.WebSocketParamMapping;
 import io.netstrap.core.server.websocket.router.WebSocketRouterFactory;
@@ -33,10 +34,12 @@ import java.util.Objects;
 public class DefaultWebSocketDispatcher implements WebSocketDispatcher {
 
     private final WebSocketRouterFactory factory;
+    private final DefaultWebSocketFilter webSocketFilter;
 
     @Autowired
-    public DefaultWebSocketDispatcher(WebSocketRouterFactory factory) {
+    public DefaultWebSocketDispatcher(WebSocketRouterFactory factory, DefaultWebSocketFilter webSocketFilter) {
         this.factory = factory;
+        this.webSocketFilter = webSocketFilter;
     }
 
     /**
@@ -49,10 +52,12 @@ public class DefaultWebSocketDispatcher implements WebSocketDispatcher {
             String text = ((TextWebSocketFrame) frame).text();
             channel.eventLoop().execute(() -> {
                 try {
-                    AbstractStringDecoder decode = new DefaultStringDecoder(text)
+                    AbstractStringDecoder decoder = new DefaultStringDecoder(text)
                             .decode();
-                    handler(channel, context, decode);
-                } catch (IOException e) {
+                    if (webSocketFilter.filter(channel, context, decoder.body())) {
+                        handler(channel, context, decoder);
+                    }
+                } catch (Exception e) {
                     exceptionCaught(channel, e.getCause());
                 }
             });
@@ -79,7 +84,7 @@ public class DefaultWebSocketDispatcher implements WebSocketDispatcher {
                     channel.writeAndFlush(tws);
                 }
             }
-        } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

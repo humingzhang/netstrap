@@ -1,4 +1,4 @@
-package io.netstrap.core.server.http.stereotype;
+package io.netstrap.core.server.stereotype;
 
 import org.springframework.stereotype.Component;
 
