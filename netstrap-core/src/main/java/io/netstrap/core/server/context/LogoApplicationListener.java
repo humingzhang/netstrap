@@ -1,9 +1,7 @@
 package io.netstrap.core.server.context;
 
 import io.netstrap.core.server.context.event.StartedApplicationEvent;
-import io.netstrap.core.server.netty.NettyConfig;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 

@@ -2,10 +2,12 @@ package io.netstrap.core.server.http.router;
 
 import io.netstrap.common.factory.ClassFactory;
 import io.netstrap.common.tool.Convertible;
-import io.netstrap.core.server.http.HttpMethod;
 import io.netstrap.core.server.http.ContextType;
+import io.netstrap.core.server.http.DefaultErrorUri;
+import io.netstrap.core.server.http.HttpMethod;
 import io.netstrap.core.server.http.ParamType;
 import io.netstrap.core.server.http.controller.DefaultErrorController;
+import io.netstrap.core.server.http.stereotype.RestController;
 import io.netstrap.core.server.http.stereotype.mapping.RequestMapping;
 import io.netstrap.core.server.http.stereotype.parameter.RequestValue;
 import io.netty.handler.codec.http.multipart.MixedFileUpload;
@@ -17,7 +19,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
-import java.lang.reflect.*;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.*;
 
 /**
@@ -67,7 +72,7 @@ public class RouterFactory {
      * 初始化默认路由
      */
     private void initDefault() {
-        buildRouter(DefaultErrorController.class);
+        buildRouter(DefaultErrorUri.class);
     }
 
     /**
@@ -76,7 +81,7 @@ public class RouterFactory {
     private void initRouter() {
         List<Class<?>> controllers = factory.getClassByAnnotation(RestController.class);
         for (Class clz : controllers) {
-            if (!clz.equals(DefaultErrorController.class)) {
+            if (!clz.equals(DefaultErrorUri.class)) {
                 buildRouter(clz);
             }
         }
@@ -248,41 +253,41 @@ public class RouterFactory {
      * 405
      */
     public HttpAction getMethodNotAllowedRouter() {
-        return get(DefaultErrorController.METHOD_NOT_ALLOWED);
+        return get(DefaultErrorUri.METHOD_NOT_ALLOWED);
     }
 
     /**
      * 500
      */
     public HttpAction getInternalServiceErrorRouter() {
-        return get(DefaultErrorController.INTERNAL_SERVICE_ERROR);
+        return get(DefaultErrorUri.INTERNAL_SERVICE_ERROR);
     }
 
     /**
      * 400
      */
     public HttpAction getBadRequestRouter() {
-        return get(DefaultErrorController.BAD_REQUEST);
+        return get(DefaultErrorUri.BAD_REQUEST);
     }
 
     /**
      * 404
      */
     public HttpAction getNotFoundRouter() {
-        return get(DefaultErrorController.NOT_FOUND);
+        return get(DefaultErrorUri.NOT_FOUND);
     }
 
     /**
      * 403
      */
     public HttpAction getForbiddenRouter() {
-        return get(DefaultErrorController.FORBIDDEN);
+        return get(DefaultErrorUri.FORBIDDEN);
     }
 
     /**
      * 401
      */
     public HttpAction getUnauthorizedRouter() {
-        return get(DefaultErrorController.UNAUTHORIZED);
+        return get(DefaultErrorUri.UNAUTHORIZED);
     }
 }

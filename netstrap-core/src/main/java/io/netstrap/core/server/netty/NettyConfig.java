@@ -6,8 +6,6 @@ import io.netstrap.core.server.config.ServerConfig;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.concurrent.TimeUnit;
-
 /**
  * Netty容器配置
  *

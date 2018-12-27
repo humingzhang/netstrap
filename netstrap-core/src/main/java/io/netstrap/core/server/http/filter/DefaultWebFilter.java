@@ -1,10 +1,10 @@
 package io.netstrap.core.server.http.filter;
 
 import io.netstrap.common.factory.ClassFactory;
+import io.netstrap.core.server.http.WebFilter;
 import io.netstrap.core.server.http.datagram.AbstractHttpRequest;
 import io.netstrap.core.server.http.datagram.AbstractHttpResponse;
 import io.netstrap.core.server.http.stereotype.Filterable;
-import io.netstrap.core.server.http.WebFilter;
 import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

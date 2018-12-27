@@ -2,9 +2,9 @@ package io.netstrap.core.server.netty.datagram;
 
 
 import io.netstrap.common.encrypt.MD5;
-import io.netstrap.core.server.http.header.HeaderPublicKey;
-import io.netstrap.core.server.http.datagram.AbstractHttpRequest;
 import io.netstrap.core.server.http.HttpMethod;
+import io.netstrap.core.server.http.datagram.AbstractHttpRequest;
+import io.netstrap.core.server.http.header.HeaderPublicKey;
 import io.netstrap.core.server.http.wrapper.HttpBody;
 import io.netstrap.core.server.http.wrapper.HttpForm;
 import io.netty.buffer.ByteBuf;
@@ -82,7 +82,7 @@ public class NettyHttpRequest extends AbstractHttpRequest {
     /**
      * 获取请求ID
      */
-    public String getRequestId() {
+    private String getRequestId() {
         return MD5.encrypt16(context.channel().id().asLongText());
     }
 

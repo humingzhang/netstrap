@@ -2,9 +2,9 @@ package io.netstrap.core.server.netty;
 
 import io.netstrap.common.NetstrapConstant;
 import io.netstrap.core.server.enums.ProtocolType;
+import io.netstrap.core.server.netty.initializer.HttpChannelInitializer;
 import io.netstrap.core.server.netty.initializer.WebSocketChannelInitializer;
 import io.netstrap.core.server.server.Server;
-import io.netstrap.core.server.netty.initializer.HttpChannelInitializer;
 import io.netstrap.core.server.stats.Stats;
 import io.netstrap.core.server.stereotype.NetstrapServer;
 import io.netty.bootstrap.ServerBootstrap;

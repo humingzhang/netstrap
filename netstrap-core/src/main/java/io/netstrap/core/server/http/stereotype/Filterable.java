@@ -2,11 +2,7 @@ package io.netstrap.core.server.http.stereotype;
 
 import org.springframework.stereotype.Component;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * Filter类注解，提供过滤器调用顺序
