@@ -17,7 +17,7 @@ public class WebSocketAction {
     /**
      * 参数映射
      */
-    private HttpParamMapping[] mappings;
+    private WebSocketParamMapping[] mappings;
     /**
      * 当前映射的URI
      */
@@ -30,9 +30,4 @@ public class WebSocketAction {
      * 调用方法
      */
     private Method action;
-    /**
-     * 参数映射
-     */
-    private Class<?>[] paramTypes;
-
 }

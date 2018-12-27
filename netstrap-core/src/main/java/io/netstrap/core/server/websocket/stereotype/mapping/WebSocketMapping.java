@@ -1,4 +1,4 @@
-package io.netstrap.core.server.websocket.stereotype;
+package io.netstrap.core.server.websocket.stereotype.mapping;
 
 import java.lang.annotation.*;
 

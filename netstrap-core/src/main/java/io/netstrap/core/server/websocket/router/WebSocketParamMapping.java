@@ -26,7 +26,7 @@ public class WebSocketParamMapping {
     /**
      * 参数类型
      */
-    private HttpContextType contextType;
+    private WebSocketContextType contextType;
 
     @Override
     public String toString() {

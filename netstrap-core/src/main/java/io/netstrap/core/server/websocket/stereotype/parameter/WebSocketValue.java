@@ -1,18 +1,19 @@
-package io.netstrap.core.server.http.stereotype.parameter;
+package io.netstrap.core.server.websocket.stereotype.parameter;
 
 import io.netstrap.core.server.http.router.HttpContextType;
+import io.netstrap.core.server.websocket.router.WebSocketContextType;
 
 import java.lang.annotation.*;
 
 /**
- * 参数值获取
+ * WebSocket参数值获取
  *
  * @author minghu.zhang
  */
 @Target(value = {ElementType.ANNOTATION_TYPE, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface RequestValue {
+public @interface WebSocketValue {
 
     /**
      * 参数名
@@ -22,5 +23,5 @@ public @interface RequestValue {
     /**
      * 参数值域
      */
-    HttpContextType type();
+    WebSocketContextType type();
 }

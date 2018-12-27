@@ -5,7 +5,7 @@ import io.netstrap.common.tool.JsonTool;
 import io.netstrap.core.server.websocket.AbstractStringDecoder;
 import io.netstrap.core.server.websocket.WebSocketContext;
 import io.netstrap.core.server.websocket.WebSocketDispatcher;
-import io.netstrap.core.server.websocket.WebSocketRouterFactory;
+import io.netstrap.core.server.websocket.router.WebSocketRouterFactory;
 import io.netstrap.core.server.websocket.decoder.DefaultStringDecoder;
 import io.netstrap.core.server.websocket.router.WebSocketAction;
 import io.netty.channel.Channel;

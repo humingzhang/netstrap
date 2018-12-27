@@ -1,7 +1,7 @@
 package io.netstrap.test.controller;
 
-import io.netstrap.core.server.websocket.stereotype.WebSocketController;
-import io.netstrap.core.server.websocket.stereotype.WebSocketMapping;
+import io.netstrap.core.server.websocket.stereotype.mapping.WebSocketController;
+import io.netstrap.core.server.websocket.stereotype.mapping.WebSocketMapping;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.extern.log4j.Log4j2;

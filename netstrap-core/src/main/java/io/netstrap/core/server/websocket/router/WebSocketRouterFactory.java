@@ -1,11 +1,14 @@
-package io.netstrap.core.server.websocket;
+package io.netstrap.core.server.websocket.router;
 
 import io.netstrap.common.factory.ClassFactory;
-import io.netstrap.core.server.websocket.router.WebSocketAction;
-import io.netstrap.core.server.websocket.stereotype.WebSocketController;
-import io.netstrap.core.server.websocket.stereotype.WebSocketMapping;
+import io.netstrap.core.server.http.router.HttpContextType;
+import io.netstrap.core.server.http.stereotype.parameter.RequestValue;
+import io.netstrap.core.server.websocket.stereotype.mapping.WebSocketController;
+import io.netstrap.core.server.websocket.stereotype.mapping.WebSocketMapping;
+import io.netstrap.core.server.websocket.stereotype.parameter.WebSocketValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -105,8 +108,7 @@ public class WebSocketRouterFactory {
                 router.setAction(method);
                 router.setUri(groupUri + mappingUri);
                 put(router.getUri(), router);
-                Class<?>[] types = buildTypes(method);
-                router.setParamTypes(types);
+                router.setMappings(buildArguments(method));
             }
         }
     }
@@ -126,6 +128,68 @@ public class WebSocketRouterFactory {
      */
     public WebSocketAction get(String uri) {
         return ROUTERS.get(uri);
+    }
+
+    /**
+     * 获取参数映射数组
+     * @param method java 方法
+     * @return 参数映射数组
+     */
+    private WebSocketParamMapping[] buildArguments(Method method) {
+        List<WebSocketParamMapping> mappings = new ArrayList<>(8);
+
+        //指定默认参数名，并创建mapping对象
+        DefaultParameterNameDiscoverer discover = new DefaultParameterNameDiscoverer();
+        String[] parameterNames = discover.getParameterNames(method);
+        assert parameterNames != null;
+        for (String name : parameterNames) {
+            WebSocketParamMapping mapping = new WebSocketParamMapping();
+            mapping.setAlisName(name);
+            mappings.add(mapping);
+        }
+
+        //参数映射
+        buildParamTypeMapping(method, mappings);
+
+        return mappings.toArray(new WebSocketParamMapping[]{});
+
+    }
+
+    /**
+     * 构建参数类型
+     */
+    private void buildParamTypeMapping(Method method, List<WebSocketParamMapping> mappings) {
+        Parameter[] parameters = method.getParameters();
+        for (int i = 0; i < parameters.length; i++) {
+            Parameter parameter = parameters[i];
+            WebSocketParamMapping mapping = mappings.get(i);
+            buildParamMapping(parameter, mapping);
+            Class<?> type = parameter.getType();
+            mapping.setParamClass(type);
+        }
+    }
+
+    /**
+     * 构建参数对象
+     */
+    private void buildParamMapping(Parameter parameter, WebSocketParamMapping mapping) {
+        //指定参数别名
+        WebSocketValue alias = AnnotatedElementUtils.findMergedAnnotation(parameter, WebSocketValue.class);
+        String aliasName = "";
+
+        WebSocketContextType contextType;
+        if (Objects.nonNull(alias)) {
+            aliasName = alias.value();
+            contextType = alias.type();
+        } else {
+            contextType = WebSocketContextType.REQUEST_PARAM;
+        }
+
+        if (!StringUtils.isEmpty(aliasName)) {
+            mapping.setAlisName(aliasName);
+        }
+
+        mapping.setContextType(contextType);
     }
 
     /**

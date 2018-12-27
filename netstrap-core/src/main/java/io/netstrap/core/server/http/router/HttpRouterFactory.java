@@ -269,7 +269,7 @@ public class HttpRouterFactory {
     /**
      * 404
      */
-    public HttpAction getNotFoundRouter() {
+    private HttpAction getNotFoundRouter() {
         return get(DefaultErrorUri.NOT_FOUND);
     }
 
