@@ -11,6 +11,7 @@
 3、支持类MVC开发模式      <br/> 
 4、同时支持WebSocket和HTTP<br/>
 5、项目基于Netty4构建     <br/>
+6、支持WebSocket过滤器    <br/>
 
 #### Maven引入netstrap
 
