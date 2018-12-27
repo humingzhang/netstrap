@@ -6,7 +6,7 @@ package io.netstrap.core.server.http;
  * @author minghu.zhang
  * @date 2018/12/27 19:38
  */
-public interface DefaultErrorUri {
+public interface ErrorPath {
 
     /**
      * 400

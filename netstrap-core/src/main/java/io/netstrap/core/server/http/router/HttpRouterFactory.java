@@ -2,7 +2,8 @@ package io.netstrap.core.server.http.router;
 
 import io.netstrap.common.factory.ClassFactory;
 import io.netstrap.common.tool.Convertible;
-import io.netstrap.core.server.http.DefaultErrorUri;
+import io.netstrap.core.server.http.ErrorPath;
+import io.netstrap.core.server.http.controller.DefaultErrorController;
 import io.netstrap.core.server.http.stereotype.RestController;
 import io.netstrap.core.server.http.stereotype.mapping.RequestMapping;
 import io.netstrap.core.server.http.stereotype.parameter.RequestValue;
@@ -68,7 +69,7 @@ public class HttpRouterFactory {
      * 初始化默认路由
      */
     private void initDefault() {
-        buildRouter(DefaultErrorUri.class);
+        buildRouter(DefaultErrorController.class);
     }
 
     /**
@@ -77,7 +78,7 @@ public class HttpRouterFactory {
     private void initRouter() {
         List<Class<?>> controllers = factory.getClassByAnnotation(RestController.class);
         for (Class clz : controllers) {
-            if (!clz.equals(DefaultErrorUri.class)) {
+            if (!clz.equals(DefaultErrorController.class)) {
                 buildRouter(clz);
             }
         }
@@ -249,41 +250,41 @@ public class HttpRouterFactory {
      * 405
      */
     public HttpAction getMethodNotAllowedRouter() {
-        return get(DefaultErrorUri.METHOD_NOT_ALLOWED);
+        return get(ErrorPath.METHOD_NOT_ALLOWED);
     }
 
     /**
      * 500
      */
     public HttpAction getInternalServiceErrorRouter() {
-        return get(DefaultErrorUri.INTERNAL_SERVICE_ERROR);
+        return get(ErrorPath.INTERNAL_SERVICE_ERROR);
     }
 
     /**
      * 400
      */
     public HttpAction getBadRequestRouter() {
-        return get(DefaultErrorUri.BAD_REQUEST);
+        return get(ErrorPath.BAD_REQUEST);
     }
 
     /**
      * 404
      */
     private HttpAction getNotFoundRouter() {
-        return get(DefaultErrorUri.NOT_FOUND);
+        return get(ErrorPath.NOT_FOUND);
     }
 
     /**
      * 403
      */
     public HttpAction getForbiddenRouter() {
-        return get(DefaultErrorUri.FORBIDDEN);
+        return get(ErrorPath.FORBIDDEN);
     }
 
     /**
      * 401
      */
     public HttpAction getUnauthorizedRouter() {
-        return get(DefaultErrorUri.UNAUTHORIZED);
+        return get(ErrorPath.UNAUTHORIZED);
     }
 }
