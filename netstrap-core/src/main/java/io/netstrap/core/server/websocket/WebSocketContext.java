@@ -4,6 +4,9 @@ import io.netstrap.common.encrypt.MD5;
 import io.netty.channel.Channel;
 import lombok.Data;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * WebSocketContext
  *
@@ -21,6 +24,10 @@ public class WebSocketContext {
      * 客户端IP
      */
     private String ip;
+    /**
+     * 属性对象
+     */
+    private Map<String,?> attribute = new HashMap<>();
 
     /**
      * 解析Context

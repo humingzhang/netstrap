@@ -5,12 +5,16 @@ import io.netstrap.common.tool.JsonTool;
 import io.netstrap.core.server.websocket.AbstractStringDecoder;
 import io.netstrap.core.server.websocket.WebSocketContext;
 import io.netstrap.core.server.websocket.WebSocketDispatcher;
+import io.netstrap.core.server.websocket.router.WebSocketContextType;
+import io.netstrap.core.server.websocket.router.WebSocketParamMapping;
 import io.netstrap.core.server.websocket.router.WebSocketRouterFactory;
 import io.netstrap.core.server.websocket.decoder.DefaultStringDecoder;
 import io.netstrap.core.server.websocket.router.WebSocketAction;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.ConvertUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -45,7 +49,9 @@ public class DefaultWebSocketDispatcher implements WebSocketDispatcher {
             String text = ((TextWebSocketFrame) frame).text();
             channel.eventLoop().execute(() -> {
                 try {
-                    handler(channel, context, new DefaultStringDecoder(text).decode());
+                    AbstractStringDecoder decode = new DefaultStringDecoder(text)
+                            .decode();
+                    handler(channel, context, decode);
                 } catch (IOException e) {
                     exceptionCaught(channel, e.getCause());
                 }
@@ -73,7 +79,7 @@ public class DefaultWebSocketDispatcher implements WebSocketDispatcher {
                     channel.writeAndFlush(tws);
                 }
             }
-        } catch (IllegalAccessException | InvocationTargetException e) {
+        } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
             e.printStackTrace();
         }
 
@@ -82,23 +88,75 @@ public class DefaultWebSocketDispatcher implements WebSocketDispatcher {
     /**
      * 获取调用参数
      */
-    private Object[] getParams(WebSocketAction action, WebSocketContext context, Channel channel, AbstractStringDecoder decoder) {
-        Class<?>[] types = action.getParamTypes();
-        Object[] params = new Object[types.length];
+    private Object[] getParams(WebSocketAction action, WebSocketContext context, Channel channel, AbstractStringDecoder decoder) throws IllegalAccessException, InstantiationException, InvocationTargetException {
+        WebSocketParamMapping[] mappings = action.getMappings();
+        Object[] params = new Object[mappings.length];
 
-        for (int i = 0; i < params.length; i++) {
-            Class<?> type = types[i];
-            if (type.equals(Channel.class)) {
+        for (int i = 0; i < mappings.length; i++) {
+            WebSocketParamMapping mapping = mappings[i];
+            if (mapping.getParamClass().equals(Channel.class)) {
                 params[i] = channel;
-            } else if (type.equals(String.class)) {
-                params[i] = decoder.body();
-            } else if (type.isAssignableFrom(Map.class)) {
-                params[i] = decoder.param();
+            } else if (mapping.getParamClass().equals(WebSocketContext.class)) {
+                params[i] = context;
             } else {
-                params[i] = JsonTool.json2obj(decoder.body(), type);
+                WebSocketContextType contextType = mapping.getContextType();
+                Map<String, String> param = decoder.param();
+                Map<String, ?> attribute = context.getAttribute();
+
+                Object value;
+                Class<?> paramClass = mapping.getParamClass();
+                switch (contextType) {
+                    case REQUEST_PARAM:
+                        value = getContextValue(mapping, paramClass, param);
+                        break;
+                    case REQUEST_BODY:
+                        value = JsonTool.json2obj(decoder.body(), mapping.getParamClass());
+                        break;
+                    case REQUEST_ATTRIBUTE:
+                        value = getContextValue(mapping, paramClass, attribute);
+                        break;
+                    default: {
+                        value = null;
+                        break;
+                    }
+                }
+                params[i] = value;
             }
         }
+
         return params;
+    }
+
+    /**
+     * 获取参数值
+     */
+    private Object getContextValue(WebSocketParamMapping mapping, Class<?> paramClass, Map<String, ?> paramContext) throws IllegalAccessException, InstantiationException, InvocationTargetException {
+        Object value;
+
+        if (Convertible.convertible(mapping.getParamClass())) {
+            //基本数据类型
+            value = convertValueType(paramContext.get(mapping.getAlisName()), mapping.getParamClass());
+        } else {
+            value = paramClass.newInstance();
+            BeanUtils.copyProperties(paramContext, value);
+        }
+
+        return value;
+    }
+
+    /**
+     * 类型转换
+     */
+    private Object convertValueType(Object baseValue, Class<?> type) {
+        Object value = null;
+        if (Objects.nonNull(baseValue)) {
+            if (type.equals(String.class)) {
+                value = baseValue;
+            } else {
+                value = ConvertUtils.convert(baseValue, type);
+            }
+        }
+        return value;
     }
 
     /**

@@ -1,7 +1,6 @@
 package io.netstrap.core.server.websocket.router;
 
 
-import io.netstrap.core.server.http.router.HttpParamMapping;
 import lombok.Data;
 
 import java.lang.reflect.Method;
