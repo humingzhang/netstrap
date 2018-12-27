@@ -1,7 +1,6 @@
 package io.netstrap.core.server.websocket;
 
 import io.netstrap.common.factory.ClassFactory;
-import io.netstrap.core.server.http.mvc.controller.DefaultErrorController;
 import io.netstrap.core.server.websocket.router.WebSocketAction;
 import io.netstrap.core.server.websocket.stereotype.WebSocketController;
 import io.netstrap.core.server.websocket.stereotype.WebSocketMapping;
@@ -64,9 +63,7 @@ public class WebSocketRouterFactory {
     private void initRouter() {
         List<Class<?>> controllers = factory.getClassByAnnotation(WebSocketController.class);
         for (Class clz : controllers) {
-            if (!clz.equals(DefaultErrorController.class)) {
-                buildRouter(clz);
-            }
+            buildRouter(clz);
         }
     }
 

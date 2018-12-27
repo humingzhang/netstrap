@@ -1,12 +1,12 @@
-package io.netstrap.core.server.http.mvc.controller;
+package io.netstrap.core.server.http.controller;
 
 import io.netstrap.core.server.http.HttpStatus;
 import io.netstrap.core.server.http.datagram.AbstractHttpResponse;
 import io.netstrap.core.server.http.wrapper.HttpBody;
-import io.netstrap.core.server.http.mvc.stereotype.RestController;
-import io.netstrap.core.server.http.mvc.stereotype.mapping.GetMapping;
-import io.netstrap.core.server.http.mvc.stereotype.parameter.RequestAttribute;
-import io.netstrap.core.server.http.mvc.stereotype.parameter.RequestContext;
+import io.netstrap.core.server.http.stereotype.RestController;
+import io.netstrap.core.server.http.stereotype.mapping.GetMapping;
+import io.netstrap.core.server.http.stereotype.parameter.RequestAttribute;
+import io.netstrap.core.server.http.stereotype.parameter.RequestContext;
 
 /**
  * 异常控制器

@@ -1,14 +1,13 @@
-package io.netstrap.core.server.http.mvc.router;
+package io.netstrap.core.server.http.router;
 
 import io.netstrap.common.factory.ClassFactory;
 import io.netstrap.common.tool.Convertible;
 import io.netstrap.core.server.http.HttpMethod;
 import io.netstrap.core.server.http.ContextType;
 import io.netstrap.core.server.http.ParamType;
-import io.netstrap.core.server.http.mvc.controller.DefaultErrorController;
-import io.netstrap.core.server.http.mvc.stereotype.*;
-import io.netstrap.core.server.http.mvc.stereotype.mapping.RequestMapping;
-import io.netstrap.core.server.http.mvc.stereotype.parameter.RequestValue;
+import io.netstrap.core.server.http.controller.DefaultErrorController;
+import io.netstrap.core.server.http.stereotype.mapping.RequestMapping;
+import io.netstrap.core.server.http.stereotype.parameter.RequestValue;
 import io.netty.handler.codec.http.multipart.MixedFileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

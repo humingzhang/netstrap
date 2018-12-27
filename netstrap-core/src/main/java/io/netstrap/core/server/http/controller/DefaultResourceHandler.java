@@ -1,6 +1,6 @@
-package io.netstrap.core.server.http.mvc.controller;
+package io.netstrap.core.server.http.controller;
 
-import io.netstrap.core.server.http.mvc.stereotype.RestController;
+import io.netstrap.core.server.http.stereotype.RestController;
 
 /**
  * 默认静态资源处理

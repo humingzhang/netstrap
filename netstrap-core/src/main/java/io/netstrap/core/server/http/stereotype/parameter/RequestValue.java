@@ -1,4 +1,4 @@
-package io.netstrap.core.server.http.mvc.stereotype.parameter;
+package io.netstrap.core.server.http.stereotype.parameter;
 
 import io.netstrap.core.server.http.ContextType;
 

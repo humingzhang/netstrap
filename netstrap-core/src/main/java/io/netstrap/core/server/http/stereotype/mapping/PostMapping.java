@@ -1,4 +1,4 @@
-package io.netstrap.core.server.http.mvc.stereotype.mapping;
+package io.netstrap.core.server.http.stereotype.mapping;
 
 import io.netstrap.core.server.http.HttpMethod;
 import org.springframework.core.annotation.AliasFor;
@@ -6,15 +6,15 @@ import org.springframework.core.annotation.AliasFor;
 import java.lang.annotation.*;
 
 /**
- * 标识GET请求
+ * 标识POST请求
  *
  * @author minghu.zhang
  */
 @Target(value = {ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@RequestMapping(method = HttpMethod.GET)
-public @interface GetMapping {
+@RequestMapping(method = HttpMethod.POST)
+public @interface PostMapping {
     /**
      * uri
      */

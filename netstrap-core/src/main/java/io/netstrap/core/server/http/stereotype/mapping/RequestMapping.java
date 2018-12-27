@@ -1,4 +1,4 @@
-package io.netstrap.core.server.http.mvc.stereotype.mapping;
+package io.netstrap.core.server.http.stereotype.mapping;
 
 import io.netstrap.core.server.http.HttpMethod;
 

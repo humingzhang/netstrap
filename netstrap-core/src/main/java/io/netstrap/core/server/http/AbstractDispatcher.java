@@ -1,4 +1,4 @@
-package io.netstrap.core.server.http.mvc;
+package io.netstrap.core.server.http;
 
 import io.netstrap.core.server.http.datagram.AbstractHttpRequest;
 import io.netstrap.core.server.http.datagram.AbstractHttpResponse;

@@ -1,4 +1,4 @@
-package io.netstrap.core.server.http.mvc.stereotype.parameter;
+package io.netstrap.core.server.http.stereotype.parameter;
 
 import io.netstrap.core.server.http.ContextType;
 import org.springframework.core.annotation.AliasFor;
@@ -6,15 +6,15 @@ import org.springframework.core.annotation.AliasFor;
 import java.lang.annotation.*;
 
 /**
- * 请求上下文参数
+ * 请求头参数
  *
  * @author minghu.zhang
  */
 @Target(value = {ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@RequestValue(type = ContextType.REQUEST_CONTEXT)
-public @interface RequestContext {
+@RequestValue(type = ContextType.REQUEST_HEADER)
+public @interface RequestHeader {
 
     /**
      * 参数名

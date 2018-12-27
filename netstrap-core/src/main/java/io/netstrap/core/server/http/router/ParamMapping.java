@@ -1,4 +1,4 @@
-package io.netstrap.core.server.http.mvc.router;
+package io.netstrap.core.server.http.router;
 
 import io.netstrap.core.server.http.ContextType;
 import io.netstrap.core.server.http.ParamType;

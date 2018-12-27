@@ -2,7 +2,7 @@ package io.netstrap.core.server.netty.handler;
 
 import io.netstrap.core.server.http.datagram.AbstractHttpRequest;
 import io.netstrap.core.server.http.datagram.AbstractHttpResponse;
-import io.netstrap.core.server.http.mvc.AbstractDispatcher;
+import io.netstrap.core.server.http.AbstractDispatcher;
 import io.netstrap.core.server.netty.datagram.NettyHttpRequest;
 import io.netstrap.core.server.netty.datagram.NettyHttpResponse;
 import io.netty.channel.ChannelHandler.Sharable;

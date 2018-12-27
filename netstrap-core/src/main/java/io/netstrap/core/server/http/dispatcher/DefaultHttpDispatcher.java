@@ -1,4 +1,4 @@
-package io.netstrap.core.server.http.mvc.dispatcher;
+package io.netstrap.core.server.http.dispatcher;
 
 import io.netstrap.common.tool.Convertible;
 import io.netstrap.common.tool.JsonTool;
@@ -8,11 +8,11 @@ import io.netstrap.core.server.http.datagram.AbstractHttpRequest;
 import io.netstrap.core.server.http.datagram.AbstractHttpResponse;
 import io.netstrap.core.server.http.wrapper.HttpBody;
 import io.netstrap.core.server.http.wrapper.HttpForm;
-import io.netstrap.core.server.http.mvc.AbstractDispatcher;
-import io.netstrap.core.server.http.mvc.filter.DefaultWebFilter;
-import io.netstrap.core.server.http.mvc.router.HttpAction;
-import io.netstrap.core.server.http.mvc.router.ParamMapping;
-import io.netstrap.core.server.http.mvc.router.RouterFactory;
+import io.netstrap.core.server.http.AbstractDispatcher;
+import io.netstrap.core.server.http.filter.DefaultWebFilter;
+import io.netstrap.core.server.http.router.HttpAction;
+import io.netstrap.core.server.http.router.ParamMapping;
+import io.netstrap.core.server.http.router.RouterFactory;
 import io.netty.handler.codec.http.multipart.MixedFileUpload;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
