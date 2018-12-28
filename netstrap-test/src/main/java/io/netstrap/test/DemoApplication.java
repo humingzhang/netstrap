@@ -4,7 +4,6 @@ import io.netstrap.core.server.NetstrapBootApplication;
 import io.netstrap.core.server.context.stereotype.EnableNetstrapServer;
 import io.netstrap.core.server.context.stereotype.NetstrapApplication;
 import io.netstrap.core.server.enums.ProtocolType;
-import io.netstrap.core.server.stereotype.NetstrapServer;
 import lombok.extern.log4j.Log4j2;
 
 /**

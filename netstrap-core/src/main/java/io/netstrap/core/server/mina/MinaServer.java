@@ -3,7 +3,7 @@ package io.netstrap.core.server.mina;
 import io.netstrap.core.server.enums.ProtocolType;
 import io.netstrap.core.server.server.Server;
 import io.netstrap.core.server.stats.Stats;
-import io.netstrap.core.server.stereotype.NetstrapServer;
+import io.netstrap.core.server.context.stereotype.NetstrapServer;
 import lombok.extern.log4j.Log4j2;
 
 /**

@@ -1,10 +1,9 @@
 package io.netstrap.core.server.websocket.filter;
 
 import io.netstrap.common.factory.ClassFactory;
-import io.netstrap.core.server.stereotype.Filterable;
+import io.netstrap.core.server.context.stereotype.Filterable;
 import io.netstrap.core.server.websocket.WebSocketContext;
 import io.netstrap.core.server.websocket.WebSocketFilter;
-import io.netstrap.core.server.websocket.router.WebSocketAction;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
 import org.javatuples.Pair;
