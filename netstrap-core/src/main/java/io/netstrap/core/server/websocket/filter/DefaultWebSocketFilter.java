@@ -6,6 +6,7 @@ import io.netstrap.core.server.websocket.WebSocketContext;
 import io.netstrap.core.server.websocket.WebSocketFilter;
 import io.netstrap.core.server.websocket.router.WebSocketAction;
 import io.netty.channel.Channel;
+import io.netty.handler.codec.http.websocketx.WebSocketFrame;
 import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -99,15 +100,16 @@ public class DefaultWebSocketFilter {
 
     /**
      * 过滤器
+     *
      * @param channel 链接通道
      * @param context 上下文
-     * @param body    文本报文
+     * @param frame   请求报文
      * @return 执行结果，是否需要继续执行
      * @throws Exception 解析异常
      */
-    public boolean filter(Channel channel, WebSocketContext context, String body) throws Exception {
+    public boolean filter(Channel channel, WebSocketContext context, WebSocketFrame frame) throws Exception {
         for (WebSocketFilter filter : filters) {
-            if(!filter.filter(channel,context,body)) {
+            if (!filter.filter(channel, context, frame)) {
                 return false;
             }
         }

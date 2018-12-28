@@ -44,7 +44,7 @@ public class OrderApplication {
  * @param user    请求报文
  */
 @WebSocketMapping("/join/group")
-public void joinGroup(Channel channel, Map<String, String> param, User user) {
+public void joinGroup(Channel channel, WebSocketContext context, @WebSocketBody User user) {
     String group = param.get("group");
     String token = param.get("token");
     if (Objects.nonNull(group) && Objects.nonNull(user) && Objects.nonNull(token)) {
@@ -54,12 +54,18 @@ public void joinGroup(Channel channel, Map<String, String> param, User user) {
 ```
 注：若需自定义协议，请参看源码
 
-#### 可选参数类型
+#### 可选参数
 ```
-Channel channel             链接参数
-Map<String, String> param   URI参数
-User user                   请求体 
+Channel            channel     连接通道
+WebSocketContext   context     上下文参数
+String             body        请求体字符串（@WebSocketBody）
+```
 
+#### 注入类型
+```
+@WebSocketAttribute  注入上下文里的Attribute
+@WebSocketBody       注入消息体
+@WebSocketParam      注入消息uri参数
 ```
 
 #### 监听器
@@ -97,6 +103,29 @@ public class NamedChannelInactiveListener implements ChannelInactiveListener {
 
 }
 
+```
+
+#### 过滤器
+
+```
+/**
+ * WebSocket过滤器
+ *
+ * @author minghu.zhang
+ * @date 2018/12/28 10:16
+ */
+@Filterable
+public class MyWebSocketFilter implements WebSocketFilter {
+
+    @Override
+    public boolean filter(Channel channel, WebSocketContext context, WebSocketFrame frame) {
+        //系统默认处理了CloseFrame和PingFrame，文本消息基于文本协议，此处只需要处理二进制消息
+        //所有的websocket消息将经过该过滤器处理，Filterable可以指定排序值
+        channel.writeAndFlush(new TextWebSocketFrame("hello world"));
+        //此处返回true则继续执行，返回False则不会继续执行后面的逻辑
+        return false;
+    }
+}
 ```
 
 #### 打包部署

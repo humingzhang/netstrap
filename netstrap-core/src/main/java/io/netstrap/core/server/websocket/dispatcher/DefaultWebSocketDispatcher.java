@@ -46,28 +46,27 @@ public class DefaultWebSocketDispatcher implements WebSocketDispatcher {
      * 请求分发
      */
     @Override
-    public void dispatcher(Channel channel, WebSocketContext context, WebSocketFrame frame) {
-        if (frame instanceof TextWebSocketFrame) {
-            // 文本消息
-            String text = ((TextWebSocketFrame) frame).text();
-            channel.eventLoop().execute(() -> {
-                try {
-                    AbstractStringDecoder decoder = new DefaultStringDecoder(text)
-                            .decode();
-                    if (webSocketFilter.filter(channel, context, decoder.body())) {
-                        handler(channel, context, decoder);
+    public void dispatcher(Channel channel, WebSocketContext context, WebSocketFrame frame) throws Exception {
+        if (webSocketFilter.filter(channel, context, frame)) {
+            if (frame instanceof TextWebSocketFrame) {
+                // 文本消息
+                String text = ((TextWebSocketFrame) frame).text();
+                channel.eventLoop().execute(() -> {
+                    try {
+                        handler(channel, context, text);
+                    } catch (Exception e) {
+                        exceptionCaught(channel, e.getCause());
                     }
-                } catch (Exception e) {
-                    exceptionCaught(channel, e.getCause());
-                }
-            });
+                });
+            }
         }
     }
 
     /**
      * 请求分发
      */
-    private void handler(Channel channel, WebSocketContext context, AbstractStringDecoder decoder) {
+    private void handler(Channel channel, WebSocketContext context, String text) throws IOException {
+        AbstractStringDecoder decoder = new DefaultStringDecoder(text).decode();
         //执行过滤分发
         try {
             WebSocketAction action = factory.get(decoder.uri());
@@ -115,7 +114,11 @@ public class DefaultWebSocketDispatcher implements WebSocketDispatcher {
                         value = getContextValue(mapping, paramClass, param);
                         break;
                     case REQUEST_BODY:
-                        value = JsonTool.json2obj(decoder.body(), mapping.getParamClass());
+                        if(paramClass.equals(String.class)) {
+                            value = decoder.body();
+                        } else {
+                            value = JsonTool.json2obj(decoder.body(), mapping.getParamClass());
+                        }
                         break;
                     case REQUEST_ATTRIBUTE:
                         value = getContextValue(mapping, paramClass, attribute);
