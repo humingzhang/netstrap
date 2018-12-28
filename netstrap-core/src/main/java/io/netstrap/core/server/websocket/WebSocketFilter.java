@@ -18,8 +18,7 @@ public interface WebSocketFilter {
      * @param context 上下文
      * @param frame   请求报文
      * @return 执行结果，是否需要继续执行
-     * @throws Exception 解析异常
      */
-    boolean filter(Channel channel, WebSocketContext context, WebSocketFrame frame) throws Exception;
+    boolean filter(Channel channel, WebSocketContext context, WebSocketFrame frame);
 
 }

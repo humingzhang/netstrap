@@ -106,7 +106,7 @@ public class DefaultWebSocketFilter {
      * @return 执行结果，是否需要继续执行
      * @throws Exception 解析异常
      */
-    public boolean filter(Channel channel, WebSocketContext context, WebSocketFrame frame) throws Exception {
+    public boolean filter(Channel channel, WebSocketContext context, WebSocketFrame frame) {
         for (WebSocketFilter filter : filters) {
             if (!filter.filter(channel, context, frame)) {
                 return false;

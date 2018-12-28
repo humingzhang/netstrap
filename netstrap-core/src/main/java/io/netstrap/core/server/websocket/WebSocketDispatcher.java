@@ -18,6 +18,6 @@ public interface WebSocketDispatcher {
      * @param context 基本的上下文参数
      * @param frame   数据帧
      */
-    void dispatcher(Channel channel, WebSocketContext context, WebSocketFrame frame) throws Exception;
+    void dispatcher(Channel channel, WebSocketContext context, WebSocketFrame frame);
 
 }

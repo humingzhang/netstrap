@@ -47,14 +47,12 @@ public class DefaultWebSocketDispatcher implements WebSocketDispatcher {
      * 请求分发
      */
     @Override
-    public void dispatcher(Channel channel, WebSocketContext context, WebSocketFrame frame) throws Exception {
+    public void dispatcher(Channel channel, WebSocketContext context, WebSocketFrame frame) {
         if (webSocketFilter.filter(channel, context, frame)) {
             if (frame instanceof TextWebSocketFrame) {
                 // 文本消息
                 String text = ((TextWebSocketFrame) frame).text();
-                channel.eventLoop().execute(() -> {
-                    handler(channel, context, text);
-                });
+                handler(channel, context, text);
             }
         }
     }

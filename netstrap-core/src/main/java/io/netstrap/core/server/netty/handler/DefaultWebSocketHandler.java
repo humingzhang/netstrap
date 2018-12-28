@@ -104,8 +104,7 @@ public class DefaultWebSocketHandler extends SimpleChannelInboundHandler<Object>
         WebSocketContext socketContext = new WebSocketContext()
                 .parseContext(channel);
 
-
-        dispatcher.dispatcher(channel, socketContext, frame);
+        channel.eventLoop().execute(() -> dispatcher.dispatcher(channel, socketContext, frame));
     }
 
     /**
