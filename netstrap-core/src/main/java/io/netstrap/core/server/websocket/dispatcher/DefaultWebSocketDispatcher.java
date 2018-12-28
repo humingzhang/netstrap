@@ -79,7 +79,7 @@ public class DefaultWebSocketDispatcher implements WebSocketDispatcher {
                 }
             }
         } catch (Exception e) {
-            exceptionCaught(channel,e);
+            exceptionCaught(channel, e);
         }
 
     }
@@ -102,36 +102,47 @@ public class DefaultWebSocketDispatcher implements WebSocketDispatcher {
                     WebSocketContextType contextType = mapping.getContextType();
                     Map<String, String> param = decoder.param();
                     Map<String, ?> attribute = context.getAttribute();
-
-                    Object value;
-                    Class<?> paramClass = mapping.getParamClass();
-                    switch (contextType) {
-                        case REQUEST_PARAM:
-                            value = getContextValue(mapping, paramClass, param);
-                            break;
-                        case REQUEST_BODY:
-                            if(paramClass.equals(String.class)) {
-                                value = decoder.body();
-                            } else {
-                                value = JsonTool.json2obj(decoder.body(), mapping.getParamClass());
-                            }
-                            break;
-                        case REQUEST_ATTRIBUTE:
-                            value = getContextValue(mapping, paramClass, attribute);
-                            break;
-                        default: {
-                            value = null;
-                            break;
-                        }
-                    }
-                    params[i] = value;
+                    params[i] = getObject(decoder, mapping, contextType, param, attribute);
                 }
             }
-        } catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
+        } catch (Exception e) {
             throw new ParameterParseException("Parameter transformation exception.");
         }
 
         return params;
+    }
+
+    /**
+     * 获取参数值
+     */
+    private Object getObject(AbstractStringDecoder decoder,
+                             WebSocketParamMapping mapping,
+                             WebSocketContextType contextType,
+                             Map<String, String> param,
+                             Map<String, ?> attribute) throws Exception {
+        Object value = null;
+
+        Class<?> paramClass = mapping.getParamClass();
+        switch (contextType) {
+            case REQUEST_PARAM:
+                value = getContextValue(mapping, paramClass, param);
+                break;
+            case REQUEST_BODY:
+                if (paramClass.equals(String.class)) {
+                    value = decoder.body();
+                } else {
+                    value = JsonTool.json2obj(decoder.body(), mapping.getParamClass());
+                }
+                break;
+            case REQUEST_ATTRIBUTE:
+                value = getContextValue(mapping, paramClass, attribute);
+                break;
+            default: {
+                break;
+            }
+        }
+
+        return value;
     }
 
     /**
