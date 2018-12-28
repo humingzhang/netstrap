@@ -2,6 +2,7 @@ package io.netstrap.core.server.websocket.dispatcher;
 
 import io.netstrap.common.tool.Convertible;
 import io.netstrap.common.tool.JsonTool;
+import io.netstrap.core.server.exception.ParameterParseException;
 import io.netstrap.core.server.websocket.AbstractStringDecoder;
 import io.netstrap.core.server.websocket.WebSocketContext;
 import io.netstrap.core.server.websocket.WebSocketDispatcher;
@@ -52,11 +53,7 @@ public class DefaultWebSocketDispatcher implements WebSocketDispatcher {
                 // 文本消息
                 String text = ((TextWebSocketFrame) frame).text();
                 channel.eventLoop().execute(() -> {
-                    try {
-                        handler(channel, context, text);
-                    } catch (Exception e) {
-                        exceptionCaught(channel, e.getCause());
-                    }
+                    handler(channel, context, text);
                 });
             }
         }
@@ -65,10 +62,10 @@ public class DefaultWebSocketDispatcher implements WebSocketDispatcher {
     /**
      * 请求分发
      */
-    private void handler(Channel channel, WebSocketContext context, String text) throws IOException {
-        AbstractStringDecoder decoder = new DefaultStringDecoder(text).decode();
+    private void handler(Channel channel, WebSocketContext context, String text) {
         //执行过滤分发
         try {
+            AbstractStringDecoder decoder = new DefaultStringDecoder(text).decode();
             WebSocketAction action = factory.get(decoder.uri());
             if (Objects.nonNull(action)) {
                 Object[] params = getParams(action, context, channel, decoder);
@@ -84,7 +81,7 @@ public class DefaultWebSocketDispatcher implements WebSocketDispatcher {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            exceptionCaught(channel,e);
         }
 
     }
@@ -92,44 +89,48 @@ public class DefaultWebSocketDispatcher implements WebSocketDispatcher {
     /**
      * 获取调用参数
      */
-    private Object[] getParams(WebSocketAction action, WebSocketContext context, Channel channel, AbstractStringDecoder decoder) throws IllegalAccessException, InstantiationException, InvocationTargetException {
+    private Object[] getParams(WebSocketAction action, WebSocketContext context, Channel channel, AbstractStringDecoder decoder) {
         WebSocketParamMapping[] mappings = action.getMappings();
         Object[] params = new Object[mappings.length];
 
-        for (int i = 0; i < mappings.length; i++) {
-            WebSocketParamMapping mapping = mappings[i];
-            if (mapping.getParamClass().equals(Channel.class)) {
-                params[i] = channel;
-            } else if (mapping.getParamClass().equals(WebSocketContext.class)) {
-                params[i] = context;
-            } else {
-                WebSocketContextType contextType = mapping.getContextType();
-                Map<String, String> param = decoder.param();
-                Map<String, ?> attribute = context.getAttribute();
+        try {
+            for (int i = 0; i < mappings.length; i++) {
+                WebSocketParamMapping mapping = mappings[i];
+                if (mapping.getParamClass().equals(Channel.class)) {
+                    params[i] = channel;
+                } else if (mapping.getParamClass().equals(WebSocketContext.class)) {
+                    params[i] = context;
+                } else {
+                    WebSocketContextType contextType = mapping.getContextType();
+                    Map<String, String> param = decoder.param();
+                    Map<String, ?> attribute = context.getAttribute();
 
-                Object value;
-                Class<?> paramClass = mapping.getParamClass();
-                switch (contextType) {
-                    case REQUEST_PARAM:
-                        value = getContextValue(mapping, paramClass, param);
-                        break;
-                    case REQUEST_BODY:
-                        if(paramClass.equals(String.class)) {
-                            value = decoder.body();
-                        } else {
-                            value = JsonTool.json2obj(decoder.body(), mapping.getParamClass());
+                    Object value;
+                    Class<?> paramClass = mapping.getParamClass();
+                    switch (contextType) {
+                        case REQUEST_PARAM:
+                            value = getContextValue(mapping, paramClass, param);
+                            break;
+                        case REQUEST_BODY:
+                            if(paramClass.equals(String.class)) {
+                                value = decoder.body();
+                            } else {
+                                value = JsonTool.json2obj(decoder.body(), mapping.getParamClass());
+                            }
+                            break;
+                        case REQUEST_ATTRIBUTE:
+                            value = getContextValue(mapping, paramClass, attribute);
+                            break;
+                        default: {
+                            value = null;
+                            break;
                         }
-                        break;
-                    case REQUEST_ATTRIBUTE:
-                        value = getContextValue(mapping, paramClass, attribute);
-                        break;
-                    default: {
-                        value = null;
-                        break;
                     }
+                    params[i] = value;
                 }
-                params[i] = value;
             }
+        } catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            throw new ParameterParseException("Parameter transformation exception.");
         }
 
         return params;
