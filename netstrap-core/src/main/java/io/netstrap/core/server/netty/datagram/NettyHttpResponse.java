@@ -79,7 +79,8 @@ public class NettyHttpResponse extends HttpResponse {
      */
     private void writeFlush() {
         //添加数据长度响应头
-        response.headers().add(CONTENT_LENGTH, getBody().getBytes().length);
+        int length = Objects.isNull(getBody()) ? 0 : getBody().getBytes().length;
+        response.headers().add(CONTENT_LENGTH, length);
         ChannelFuture future = channel.writeAndFlush(response);
 
         if (!isKeepAlive()) {
