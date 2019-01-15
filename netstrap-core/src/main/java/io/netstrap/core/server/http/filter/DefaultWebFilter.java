@@ -2,8 +2,8 @@ package io.netstrap.core.server.http.filter;
 
 import io.netstrap.common.factory.ClassFactory;
 import io.netstrap.core.server.http.WebFilter;
-import io.netstrap.core.server.http.datagram.AbstractHttpRequest;
-import io.netstrap.core.server.http.datagram.AbstractHttpResponse;
+import io.netstrap.core.server.http.datagram.HttpRequest;
+import io.netstrap.core.server.http.datagram.HttpResponse;
 import io.netstrap.core.server.context.stereotype.Filterable;
 import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,7 +95,7 @@ public class DefaultWebFilter {
     /**
      * 执行过滤器
      */
-    public boolean doBefore(AbstractHttpRequest request, AbstractHttpResponse response) throws Exception {
+    public boolean doBefore(HttpRequest request, HttpResponse response) throws Exception {
         //调用链执行
         for (int i = 0; i < filters.size(); i++) {
             if (!filters.get(i).doBefore(request, response)) {
@@ -108,7 +108,7 @@ public class DefaultWebFilter {
     /**
      * 执行过滤器
      */
-    public boolean doAfter(AbstractHttpRequest request, AbstractHttpResponse response) throws Exception {
+    public boolean doAfter(HttpRequest request, HttpResponse response) throws Exception {
         //调用链执行
         for (int i = filters.size() - 1; i >= 0; i--) {
             if (!filters.get(i).doAfter(request, response)) {

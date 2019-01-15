@@ -1,7 +1,7 @@
 package io.netstrap.core.server.http;
 
-import io.netstrap.core.server.http.datagram.AbstractHttpRequest;
-import io.netstrap.core.server.http.datagram.AbstractHttpResponse;
+import io.netstrap.core.server.http.datagram.HttpRequest;
+import io.netstrap.core.server.http.datagram.HttpResponse;
 import io.netstrap.core.server.http.filter.DefaultWebFilter;
 
 /**
@@ -31,7 +31,7 @@ public abstract class AbstractDispatcher {
      * @param response 响应消息体
      * @throws Exception 抛出反射异常
      */
-    protected abstract void dispatcher(AbstractHttpRequest request, AbstractHttpResponse response) throws Exception;
+    protected abstract void dispatcher(HttpRequest request, HttpResponse response) throws Exception;
 
     /**
      * 请求分发
@@ -39,7 +39,7 @@ public abstract class AbstractDispatcher {
      * @param request  请求消息体
      * @param response 响应消息体
      */
-    public void doDispatcher(AbstractHttpRequest request, AbstractHttpResponse response) throws Exception {
+    public void doDispatcher(HttpRequest request, HttpResponse response) throws Exception {
         //执行过滤分发
         try {
             if (filter.doBefore(request, response)) {

@@ -13,7 +13,7 @@ import java.util.Map;
  * @date 2018/11/07
  */
 @Data
-public abstract class AbstractHttpResponse {
+public abstract class HttpResponse {
 
     /**
      * 请求状态码
@@ -51,7 +51,7 @@ public abstract class AbstractHttpResponse {
      *
      * @return this
      */
-    public AbstractHttpResponse setBody(HttpBody body) {
+    public HttpResponse setBody(HttpBody body) {
         this.body = body;
         return this;
     }

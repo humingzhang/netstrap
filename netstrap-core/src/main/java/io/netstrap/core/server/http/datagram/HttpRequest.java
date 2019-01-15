@@ -16,7 +16,7 @@ import java.util.Objects;
  * @date 2018/11/07
  */
 @Data
-public abstract class AbstractHttpRequest {
+public abstract class HttpRequest {
 
     /**
      * 请求方法
@@ -120,74 +120,74 @@ public abstract class AbstractHttpRequest {
      *
      * @return this;
      */
-    public abstract AbstractHttpRequest parseContext();
+    public abstract HttpRequest parseContext();
 
     /**
      * 解析Header
      *
      * @return this;
      */
-    public abstract AbstractHttpRequest parseHeader();
+    public abstract HttpRequest parseHeader();
 
     /**
      * 解析Body
      *
      * @return this;
      */
-    public abstract AbstractHttpRequest parseBody();
+    public abstract HttpRequest parseBody();
 
     /**
      * 解析请求参数
      *
      * @return this;
      */
-    public abstract AbstractHttpRequest parseParam();
+    public abstract HttpRequest parseParam();
 
     /**
      * 解析请求方法
      *
      * @return this;
      */
-    public abstract AbstractHttpRequest parseMethod();
+    public abstract HttpRequest parseMethod();
 
     /**
      * 释放内存
      *
      * @return this;
      */
-    public abstract AbstractHttpRequest release();
+    public abstract HttpRequest release();
 
-    protected AbstractHttpRequest setMethod(HttpMethod method) {
+    protected HttpRequest setMethod(HttpMethod method) {
         this.method = method;
         return this;
     }
 
-    protected AbstractHttpRequest setRequestAttribute(Map<String, Object> requestAttribute) {
+    protected HttpRequest setRequestAttribute(Map<String, Object> requestAttribute) {
         this.requestAttribute = requestAttribute;
         return this;
     }
 
-    protected AbstractHttpRequest setRequestContext(Map<String, String> requestContext) {
+    protected HttpRequest setRequestContext(Map<String, String> requestContext) {
         this.requestContext = requestContext;
         return this;
     }
 
-    protected AbstractHttpRequest setRequestHeader(Map<String, String> requestHeader) {
+    protected HttpRequest setRequestHeader(Map<String, String> requestHeader) {
         this.requestHeader = requestHeader;
         return this;
     }
 
-    protected AbstractHttpRequest setRequestParam(Map<String, String> requestParam) {
+    protected HttpRequest setRequestParam(Map<String, String> requestParam) {
         this.requestParam = requestParam;
         return this;
     }
 
-    protected AbstractHttpRequest setRequestBody(HttpBody requestBody) {
+    protected HttpRequest setRequestBody(HttpBody requestBody) {
         this.requestBody = requestBody;
         return this;
     }
 
-    protected AbstractHttpRequest setRequestForm(HttpForm requestForm) {
+    protected HttpRequest setRequestForm(HttpForm requestForm) {
         this.requestForm = requestForm;
         return this;
     }

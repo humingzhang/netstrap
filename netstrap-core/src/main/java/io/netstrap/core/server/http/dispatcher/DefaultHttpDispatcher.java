@@ -5,8 +5,8 @@ import io.netstrap.common.tool.JsonTool;
 import io.netstrap.core.server.exception.ParameterParseException;
 import io.netstrap.core.server.http.AbstractDispatcher;
 import io.netstrap.core.server.http.router.HttpMethod;
-import io.netstrap.core.server.http.datagram.AbstractHttpRequest;
-import io.netstrap.core.server.http.datagram.AbstractHttpResponse;
+import io.netstrap.core.server.http.datagram.HttpRequest;
+import io.netstrap.core.server.http.datagram.HttpResponse;
 import io.netstrap.core.server.http.filter.DefaultWebFilter;
 import io.netstrap.core.server.http.router.HttpAction;
 import io.netstrap.core.server.http.router.HttpParamMapping;
@@ -50,7 +50,7 @@ public class DefaultHttpDispatcher extends AbstractDispatcher {
     }
 
     @Override
-    protected void dispatcher(AbstractHttpRequest request, AbstractHttpResponse response) {
+    protected void dispatcher(HttpRequest request, HttpResponse response) {
         String uri = request.getRequestContext().get("uri");
         HttpAction router = factory.get(uri);
         if (router.getUri().equals(uri)) {
@@ -74,7 +74,7 @@ public class DefaultHttpDispatcher extends AbstractDispatcher {
     /**
      * 执行调用
      */
-    private void doInvoke(HttpAction router, AbstractHttpRequest request, AbstractHttpResponse response) {
+    private void doInvoke(HttpAction router, HttpRequest request, HttpResponse response) {
         //执行调用
         final Object result;
         try {
@@ -102,19 +102,19 @@ public class DefaultHttpDispatcher extends AbstractDispatcher {
     /**
      * 解析调用参数
      */
-    private Object[] parseParameter(HttpParamMapping[] mappings, AbstractHttpRequest request, AbstractHttpResponse response) {
+    private Object[] parseParameter(HttpParamMapping[] mappings, HttpRequest request, HttpResponse response) {
         Object[] parameters = new Object[mappings.length];
 
         try {
             for (int i = 0; i < mappings.length; i++) {
                 HttpParamMapping mapping = mappings[i];
                 Class<?> paramClass = mapping.getParamClass();
-                if (paramClass.equals(AbstractHttpRequest.class)) {
+                if (paramClass.equals(HttpRequest.class)) {
                     parameters[i] = request;
                     continue;
                 }
 
-                if (paramClass.equals(AbstractHttpResponse.class)) {
+                if (paramClass.equals(HttpResponse.class)) {
                     parameters[i] = response;
                     continue;
                 }
@@ -147,7 +147,7 @@ public class DefaultHttpDispatcher extends AbstractDispatcher {
     /**
      * 解析参数值
      */
-    private Object parseValue(HttpParamMapping mapping, AbstractHttpRequest request, Class<?> paramClass) throws IllegalAccessException, InstantiationException, InvocationTargetException {
+    private Object parseValue(HttpParamMapping mapping, HttpRequest request, Class<?> paramClass) throws IllegalAccessException, InstantiationException, InvocationTargetException {
         String alias = mapping.getAlisName();
         Object value = null;
 
@@ -200,7 +200,7 @@ public class DefaultHttpDispatcher extends AbstractDispatcher {
     /**
      * 表单参数解析
      */
-    private Object formParse(HttpParamMapping mapping, AbstractHttpRequest request) {
+    private Object formParse(HttpParamMapping mapping, HttpRequest request) {
         Object value = null;
 
         if (request.getMethod().equals(HttpMethod.POST)) {

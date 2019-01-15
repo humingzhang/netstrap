@@ -3,7 +3,7 @@ package io.netstrap.core.server.netty.datagram;
 
 import io.netstrap.common.encrypt.MD5;
 import io.netstrap.core.server.http.router.HttpMethod;
-import io.netstrap.core.server.http.datagram.AbstractHttpRequest;
+import io.netstrap.core.server.http.datagram.HttpRequest;
 import io.netstrap.core.server.http.header.HeaderPublicKey;
 import io.netstrap.core.server.http.wrapper.HttpBody;
 import io.netstrap.core.server.http.wrapper.HttpForm;
@@ -32,7 +32,7 @@ import static io.netstrap.core.server.http.router.HttpMethod.POST;
  * @author minghu.zhang
  * @date 2018/11/07
  */
-public class NettyHttpRequest extends AbstractHttpRequest {
+public class NettyHttpRequest extends HttpRequest {
 
     /**
      * 从Netty接收的请求报文
@@ -87,7 +87,7 @@ public class NettyHttpRequest extends AbstractHttpRequest {
     }
 
     @Override
-    public AbstractHttpRequest parseContext() {
+    public HttpRequest parseContext() {
 
         if (Objects.isNull(getRequestContext())) {
             Map<String, String> context = new HashMap<>(3);
@@ -103,7 +103,7 @@ public class NettyHttpRequest extends AbstractHttpRequest {
     }
 
     @Override
-    public AbstractHttpRequest parseHeader() {
+    public HttpRequest parseHeader() {
         if (Objects.isNull(getRequestHeader())) {
             Map<String, String> headers = new HashMap<>(8);
             List<Map.Entry<String, String>> entryList = request.headers().entries();
@@ -118,7 +118,7 @@ public class NettyHttpRequest extends AbstractHttpRequest {
     }
 
     @Override
-    public AbstractHttpRequest parseParam() {
+    public HttpRequest parseParam() {
         if (Objects.isNull(getRequestParam())) {
             Map<String, String> httpParams = new HashMap<>(8);
             Map<String, List<String>> queryParams = new QueryStringDecoder(request.uri())
@@ -134,7 +134,7 @@ public class NettyHttpRequest extends AbstractHttpRequest {
     }
 
     @Override
-    public AbstractHttpRequest parseMethod() {
+    public HttpRequest parseMethod() {
         if (Objects.isNull(getMethod())) {
             String name = request.method().name().toUpperCase();
 
@@ -149,7 +149,7 @@ public class NettyHttpRequest extends AbstractHttpRequest {
     }
 
     @Override
-    public AbstractHttpRequest release() {
+    public HttpRequest release() {
         if (request.refCnt() > 0) {
             request.release();
         }
@@ -157,7 +157,7 @@ public class NettyHttpRequest extends AbstractHttpRequest {
     }
 
     @Override
-    public AbstractHttpRequest parseBody() {
+    public HttpRequest parseBody() {
         if (Objects.isNull(getRequestBody()) || Objects.isNull(getRequestForm())) {
             //POST请求需要解析请求体
             if (POST.equals(getMethod())) {

@@ -1,7 +1,7 @@
 package io.netstrap.core.server.http;
 
-import io.netstrap.core.server.http.datagram.AbstractHttpRequest;
-import io.netstrap.core.server.http.datagram.AbstractHttpResponse;
+import io.netstrap.core.server.http.datagram.HttpRequest;
+import io.netstrap.core.server.http.datagram.HttpResponse;
 
 /**
  * 过滤器接口
@@ -19,7 +19,7 @@ public interface WebFilter {
      * @return boolean 是否继续执行
      * @throws Exception 异常抛出，交给统一异常处理器
      */
-    boolean doBefore(AbstractHttpRequest request, AbstractHttpResponse response) throws Exception;
+    boolean doBefore(HttpRequest request, HttpResponse response) throws Exception;
 
     /**
      * 执行之后，true 表示继续执行，false表示结束
@@ -29,5 +29,5 @@ public interface WebFilter {
      * @return boolean 是否继续执行
      * @throws Exception 异常抛出，交给统一异常处理器
      */
-    boolean doAfter(AbstractHttpRequest request, AbstractHttpResponse response) throws Exception;
+    boolean doAfter(HttpRequest request, HttpResponse response) throws Exception;
 }

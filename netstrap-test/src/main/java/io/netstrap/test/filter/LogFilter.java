@@ -1,7 +1,7 @@
 package io.netstrap.test.filter;
 
-import io.netstrap.core.server.http.datagram.AbstractHttpRequest;
-import io.netstrap.core.server.http.datagram.AbstractHttpResponse;
+import io.netstrap.core.server.http.datagram.HttpRequest;
+import io.netstrap.core.server.http.datagram.HttpResponse;
 import io.netstrap.core.server.context.stereotype.Filterable;
 import io.netstrap.core.server.http.WebFilter;
 import lombok.extern.log4j.Log4j2;
@@ -17,13 +17,13 @@ import lombok.extern.log4j.Log4j2;
 public class LogFilter implements WebFilter {
 
     @Override
-    public boolean doBefore(AbstractHttpRequest request, AbstractHttpResponse response) {
+    public boolean doBefore(HttpRequest request, HttpResponse response) {
         log.info(request.getMethod().name() + "-" + request.getRequestContext().get("uri"));
         return true;
     }
 
     @Override
-    public boolean doAfter(AbstractHttpRequest request, AbstractHttpResponse response) {
+    public boolean doAfter(HttpRequest request, HttpResponse response) {
         log.info(new String(response.getBody().getBytes()));
         response.addHeader("Content-Type", "application/json");
         return true;

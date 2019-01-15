@@ -1,8 +1,8 @@
 package io.netstrap.test.controller;
 
 import com.alibaba.fastjson.JSON;
-import io.netstrap.core.server.http.datagram.AbstractHttpRequest;
-import io.netstrap.core.server.http.datagram.AbstractHttpResponse;
+import io.netstrap.core.server.http.datagram.HttpRequest;
+import io.netstrap.core.server.http.datagram.HttpResponse;
 import io.netstrap.core.server.http.stereotype.RestController;
 import io.netstrap.core.server.http.stereotype.mapping.GetMapping;
 import io.netstrap.core.server.http.stereotype.mapping.PostMapping;
@@ -69,7 +69,7 @@ public class HelloController {
      * 打印配置对象
      */
     @GetMapping("/spring")
-    public WechatConfig config(AbstractHttpRequest request, AbstractHttpResponse response) {
+    public WechatConfig config(HttpRequest request, HttpResponse response) {
         return config;
     }
 
