@@ -54,6 +54,8 @@ public class DefaultWebSocketDispatcher implements WebSocketDispatcher {
                 handler(channel, context, text);
             }
         }
+        //释放内存
+        frame.release();
     }
 
     /**

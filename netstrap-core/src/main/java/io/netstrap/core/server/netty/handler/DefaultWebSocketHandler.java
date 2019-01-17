@@ -52,6 +52,7 @@ public class DefaultWebSocketHandler extends SimpleChannelInboundHandler<Object>
     @Autowired
     public DefaultWebSocketHandler(DefaultHttpHandler httpHandler, NettyConfig nettyConfig,
                                    WebSocketDispatcher dispatcher, ChannelInactiveRunListener listener) {
+        super(false);
         this.httpHandler = httpHandler;
         this.nettyConfig = nettyConfig;
         this.dispatcher = dispatcher;
