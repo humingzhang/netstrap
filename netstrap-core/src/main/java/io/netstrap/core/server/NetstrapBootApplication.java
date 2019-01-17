@@ -130,8 +130,6 @@ public class NetstrapBootApplication {
 
     /**
      * 装配Spring容器
-     *
-     * @return
      */
     private ConfigurableApplicationContext run(String[] configLocations) {
         StopWatch stopWatch = new StopWatch();
@@ -184,9 +182,6 @@ public class NetstrapBootApplication {
             serverType = enableServer.serverType();
             protocol = enableServer.protocol();
         } else {
-            /**
-             * 默认使用Netty HTTP协议
-             */
             serverType = ServerType.Netty;
             protocol = ProtocolType.HTTP;
         }
