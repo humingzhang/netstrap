@@ -110,15 +110,9 @@ public class NettyServer implements Server {
     }
 
     @Override
-    public void join() {
+    public void join() throws InterruptedException {
         status.setCode(Stats.Code.SYNC);
-        new Thread(() -> {
-            try {
-                sync.channel().closeFuture().sync();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();
+        sync.channel().closeFuture().sync();
     }
 
     @Override
