@@ -49,15 +49,3 @@ Websocket应用：[WEB_SOCKET示例](https://github.com/minghu-zhang/netstrap/bl
 
 15:27:46.277 [main] INFO  io.netstrap.core.server.context.LogoApplicationListener - The server started successfully.
 ```
-
-#### 详细示例
-
-##### DEMO简介
-该项目实现了多人点餐和多人聊天儿，基于Netstrap构建 [多人点餐](http://paylist.instanceof.cn)
-```
-用户名：  test01 - test06
-默认密码：123456
-```
-##### 效果如下：
-![用户加入](https://images.gitee.com/uploads/images/2018/1226/155423_b2e782e7_679674.png "QQ截图20181226154628.png")
-![参与聊天](https://images.gitee.com/uploads/images/2018/1226/155501_fc715360_679674.png "QQ截图20181226154743.png")
