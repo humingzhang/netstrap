@@ -1,13 +1,13 @@
 package io.netstrap.test.controller;
 
 import com.alibaba.fastjson.JSON;
-import io.netstrap.core.server.http.datagram.HttpRequest;
-import io.netstrap.core.server.http.datagram.HttpResponse;
-import io.netstrap.core.server.http.stereotype.RestController;
-import io.netstrap.core.server.http.stereotype.mapping.GetMapping;
-import io.netstrap.core.server.http.stereotype.mapping.PostMapping;
-import io.netstrap.core.server.http.stereotype.parameter.RequestContext;
-import io.netstrap.core.server.http.stereotype.parameter.RequestForm;
+import io.netstrap.core.http.datagram.HttpRequest;
+import io.netstrap.core.http.datagram.HttpResponse;
+import io.netstrap.core.http.stereotype.RestController;
+import io.netstrap.core.http.stereotype.mapping.GetMapping;
+import io.netstrap.core.http.stereotype.mapping.PostMapping;
+import io.netstrap.core.http.stereotype.parameter.RequestContext;
+import io.netstrap.core.http.stereotype.parameter.RequestForm;
 import io.netstrap.test.config.WechatConfig;
 import io.netstrap.test.pojo.User;
 import io.netty.handler.codec.http.multipart.MixedFileUpload;

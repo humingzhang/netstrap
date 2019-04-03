@@ -1,8 +1,8 @@
 package io.netstrap.test.filter;
 
-import io.netstrap.core.server.context.stereotype.Filterable;
-import io.netstrap.core.server.websocket.WebSocketContext;
-import io.netstrap.core.server.websocket.WebSocketFilter;
+import io.netstrap.core.context.stereotype.Filterable;
+import io.netstrap.core.websocket.WebSocketContext;
+import io.netstrap.core.websocket.WebSocketFilter;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;

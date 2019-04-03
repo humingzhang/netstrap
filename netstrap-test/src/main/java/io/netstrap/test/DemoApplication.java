@@ -1,9 +1,9 @@
 package io.netstrap.test;
 
-import io.netstrap.core.server.NetstrapBootApplication;
-import io.netstrap.core.server.context.stereotype.EnableNetstrapServer;
-import io.netstrap.core.server.context.stereotype.NetstrapApplication;
-import io.netstrap.core.server.enums.ProtocolType;
+import io.netstrap.core.NetstrapBootApplication;
+import io.netstrap.core.context.stereotype.EnableNetstrapServer;
+import io.netstrap.core.context.stereotype.NetstrapApplication;
+import io.netstrap.core.enums.ProtocolType;
 import lombok.extern.log4j.Log4j2;
 
 /**

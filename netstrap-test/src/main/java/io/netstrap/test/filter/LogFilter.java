@@ -1,9 +1,9 @@
 package io.netstrap.test.filter;
 
-import io.netstrap.core.server.http.datagram.HttpRequest;
-import io.netstrap.core.server.http.datagram.HttpResponse;
-import io.netstrap.core.server.context.stereotype.Filterable;
-import io.netstrap.core.server.http.WebFilter;
+import io.netstrap.core.http.datagram.HttpRequest;
+import io.netstrap.core.http.datagram.HttpResponse;
+import io.netstrap.core.context.stereotype.Filterable;
+import io.netstrap.core.http.WebFilter;
 import lombok.extern.log4j.Log4j2;
 
 /**

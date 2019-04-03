@@ -31,9 +31,9 @@ Websocket应用：[WEB_SOCKET示例](https://github.com/minghu-zhang/netstrap/bl
 #### 启动示例
 
 ```
-15:27:46.229 [main] INFO  io.netstrap.core.server.netty.NettyServer - The server bind IP:0.0.0.0 , PORT:9000
-15:27:46.233 [main] INFO  io.netstrap.core.server.NetstrapBootApplication - The network service is starting.
-15:27:46.276 [main] INFO  io.netstrap.core.server.context.LogoApplicationListener - Printing logo, wait a moment...
+15:27:46.229 [main] INFO  NettyServer - The server bind IP:0.0.0.0 , PORT:9000
+15:27:46.233 [main] INFO  NetstrapBootApplication - The network service is starting.
+15:27:46.276 [main] INFO  LogoApplicationListener - Printing logo, wait a moment...
 
              ***  **
              ***  **          **             **
@@ -47,5 +47,5 @@ Websocket应用：[WEB_SOCKET示例](https://github.com/minghu-zhang/netstrap/bl
                                                                   **
                                                                   **
 
-15:27:46.277 [main] INFO  io.netstrap.core.server.context.LogoApplicationListener - The server started successfully.
+15:27:46.277 [main] INFO  LogoApplicationListener - The server started successfully.
 ```
