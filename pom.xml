@@ -8,8 +8,6 @@
     <artifactId>parent</artifactId>
     <version>0.0.1</version>
     <modules>
-        <module>netstrap-config</module>
-        <module>netstrap-common</module>
         <module>netstrap-core</module>
         <module>netstrap-test</module>
     </modules>

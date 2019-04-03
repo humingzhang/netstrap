@@ -12,17 +12,15 @@
     <artifactId>netstrap-core</artifactId>
 
     <dependencies>
-
         <dependency>
-            <groupId>io.netstrap</groupId>
-            <artifactId>netstrap-common</artifactId>
-            <version>${version}</version>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>io.netstrap</groupId>
-            <artifactId>netstrap-config</artifactId>
-            <version>${version}</version>
+            <groupId>com.esotericsoftware.yamlbeans</groupId>
+            <artifactId>yamlbeans</artifactId>
         </dependency>
 
         <dependency>
